@@ -1,0 +1,179 @@
+# Don't touch this file otherwise your device may stop working.
+# Use override.yaml to modify required settings.
+# You can find a working configuration in /usr/share/kvmd/configs.default/kvmd.
+
+override: !include [override.d, override.yaml]
+
+logging: !include logging.yaml
+
+kvmd:
+    auth: !include auth.yaml
+
+    hid:
+        type: otg
+
+    atx:
+        type: gpio
+
+    msd:
+        type: otg
+
+    server:
+        access_log_format: '[%P / %{X-Real-IP}i] ''%r'' => %s; size=%b --- referer=''%{Referer}i''; user_agent=''%{User-Agent}i'''
+        heartbeat: 15.0
+        unix: /run/kvmd/kvmd.sock
+        unix_mode: 432
+        unix_rm: true
+
+    streamer:
+        quality: 0
+        resolution:
+            default: 640x480
+            available:
+                - 1920x1080
+                - 1600x1200
+                - 1360x768
+                - 1280x1024
+                - 1280x960
+                - 1280x720
+                - 1024x768
+                - 800x600
+                - 720x576
+                - 720x480
+                - 640x480
+        cmd:
+            - "/usr/bin/ustreamer"
+            - "--device=/dev/video0"
+            - "--persistent"
+            - "--format=mjpeg"
+            - "--resolution={resolution}"
+            - "--desired-fps={desired_fps}"
+            - "--drop-same-frames=30"
+            - "--last-as-blank=0"
+            - "--unix={unix}"
+            - "--unix-rm"
+            - "--unix-mode=0660"
+            - "--exit-on-parent-death"
+            - "--process-name-prefix={process_name_prefix}"
+            - "--notify-parent"
+            - "--no-log-colors"
+            - "--sink=kvmd::ustreamer::jpeg"
+            - "--sink-mode=0660"
+        process_name_prefix: kvmd/streamer
+        unix: /run/kvmd/ustreamer.sock
+    streamer2:
+        quality: 0
+        resolution:
+            default: 640x480
+            available:
+                - 1920x1080
+                - 1600x1200
+                - 1360x768
+                - 1280x1024
+                - 1280x960
+                - 1280x720
+                - 1024x768
+                - 800x600
+                - 720x576
+                - 720x480
+                - 640x480
+        cmd:
+            - "/usr/bin/ustreamer"
+            - "--device=/dev/video2"
+            - "--persistent"
+            - "--format=mjpeg"
+            - "--resolution={resolution}"
+            - "--desired-fps={desired_fps}"
+            - "--drop-same-frames=30"
+            - "--last-as-blank=0"
+            - "--unix=/run/kvmd/ustreamer2.sock"
+            - "--unix-rm"
+            - "--unix-mode=0660"
+            - "--exit-on-parent-death"
+            - "--process-name-prefix=kvmd/streamer2"
+            - "--notify-parent"
+            - "--no-log-colors"
+            - "--sink=kvmd::ustreamer::jpeg"
+            - "--sink-mode=0660"
+        process_name_prefix: kvmd/streamer2
+        unix: /run/kvmd/ustreamer2.sock
+          
+    streamer3:
+        quality: 0
+        resolution:
+            default: 640x480
+            available:
+                - 1920x1080
+                - 1600x1200
+                - 1360x768
+                - 1280x1024
+                - 1280x960
+                - 1280x720
+                - 1024x768
+                - 800x600
+                - 720x576
+                - 720x480
+                - 640x480
+        cmd:
+            - "/usr/bin/ustreamer"
+            - "--device=/dev/video3"
+            - "--persistent"
+            - "--format=mjpeg"
+            - "--resolution={resolution}"
+            - "--desired-fps={desired_fps}"
+            - "--drop-same-frames=30"
+            - "--last-as-blank=0"
+            - "--unix=/run/kvmd/ustreamer3.sock"
+            - "--unix-rm"
+            - "--unix-mode=0660"
+            - "--exit-on-parent-death"
+            - "--process-name-prefix=kvmd/streamer3"
+            - "--notify-parent"
+            - "--no-log-colors"
+            - "--sink=kvmd::ustreamer::jpeg"
+            - "--sink-mode=0660"
+        process_name_prefix: kvmd/streamer3
+        unix: /run/kvmd/ustreamer3.sock
+        
+    streamer4:
+        quality: 0
+        resolution:
+            default: 640x480
+            available:
+                - 1920x1080
+                - 1600x1200
+                - 1360x768
+                - 1280x1024
+                - 1280x960
+                - 1280x720
+                - 1024x768
+                - 800x600
+                - 720x576
+                - 720x480
+                - 640x480
+        cmd:
+            - "/usr/bin/ustreamer"
+            - "--device=/dev/video4"
+            - "--persistent"
+            - "--format=mjpeg"
+            - "--resolution={resolution}"
+            - "--desired-fps={desired_fps}"
+            - "--drop-same-frames=30"
+            - "--last-as-blank=0"
+            - "--unix=/run/kvmd/ustreamer4.sock"
+            - "--unix-rm"
+            - "--unix-mode=0660"
+            - "--exit-on-parent-death"
+            - "--process-name-prefix=kvmd/streamer4"
+            - "--notify-parent"
+            - "--no-log-colors"
+            - "--sink=kvmd::ustreamer::jpeg"
+            - "--sink-mode=0660"
+        process_name_prefix: kvmd/streamer4
+        unix: /run/kvmd/ustreamer4.sock
+         
+
+vnc:
+    memsink:
+        jpeg:
+            sink: "kvmd::ustreamer::jpeg"

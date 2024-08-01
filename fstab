@@ -1,0 +1,7 @@
+proc            /proc           proc    defaults          0       0
+PARTUUID=841990f7-01  /boot/firmware  vfat    defaults          0       2
+PARTUUID=841990f7-02  /               ext4    defaults,noatime  0       1
+/dev/sda3 /var/lib/kvmd/pst  ext4  nodev,nosuid,noexec,ro,errors=remount-ro,X-kvmd.pst-user=kvmd-pst  0 2
+/dev/sda4 /var/lib/kvmd/msd  ext4  nodev,nosuid,noexec,ro,errors=remount-ro,X-kvmd.otgmsd-user=kvmd  0 2
+# a swapfile is not a swap partition, no line here
+#   use  dphys-swapfile swap[on|off]  for that

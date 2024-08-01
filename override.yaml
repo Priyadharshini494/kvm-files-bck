@@ -1,0 +1,110 @@
+###############################################################################
+#                                                                             #
+#  Override KVMD settings.                                                    #
+#                                                                             #
+#    * https://docs.pikvm.org/first_steps/#structure-of-configuration-files   #
+#                                                                             #
+#  This file uses YAML syntax. All overridden parameters will be applied      #
+#  AFTER other configs and "!include" directives, and BEFORE validation.      #
+#  Values should be combined under common sections.                           #
+#                                                                             #
+###############################################################################
+#
+#########
+# Wrong #
+#########
+#kvmd:
+#    gpio:
+#        drivers: ...
+#kvmd:
+#    gpio:
+#        scheme: ...
+#
+###########
+# Correct #
+###########
+#kvmd:
+#    gpio:
+#        drivers: ...
+#        scheme: ...
+#
+###########
+# Example #
+###########
+#vnc:
+#    # See https://docs.pikvm.org/vnc
+#    keymap: /usr/share/kvmd/keymaps/ru # Set russian keymap
+#    auth:
+#        vncauth:
+#            enabled: true # Enable auth via /etc/kvmd/vncpasswd
+
+janus:
+    check:
+        interval: 10.0
+        retries: 5
+        retries_delay: 5.0
+
+    cmd:
+        - /usr/bin/janus
+        - --disable-colors
+        - --plugins-folder=/opt/janus/lib/janus/plugins/
+        - --configs-folder=/opt/janus/etc/janus
+        - --interface={src_ip}
+    cmd_append: []
+    cmd_remove: []
+    stun:
+        host: stun.l.google.com
+        port: 19302
+        retries: 5
+        retries_delay: 5.0
+        timeout: 5.0
+
+kvmd:
+    hid:
+        mouse_alt:
+            device: /dev/kvmd-hid-mouse-alt  # allow absolute/relative mouse mode
+    msd:
+        type: otg
+
+    streamer:
+        forever: true
+        cmd_append:
+            - "--slowdown"      # for usb dongle (so target doesn't have to reboot)
+        resolution:
+            default: 640x480
+
+    streamer2:
+        forever: true
+        cmd_append:
+            - "--slowdown"      # for usb dongle (so target doesn't have to reboot)
+        resolution:
+            default: 640x480
+
+    streamer3:
+        forever: true
+        cmd_append:
+            - "--slowdown"      # for usb dongle (so target doesn't have to reboot)
+        resolution:
+            default: 640x480
+
+    streamer4:
+        forever: true
+        cmd_append:
+            - "--slowdown"      # for usb dongle (so target doesn't have to reboot)
+        resolution:
+            default: 640x480
+
+    server:
+        unix: /run/kvmd/kvmd.sock
+    otg:
+      devices:
+        serial:
+          enabled: true
+    drives:
+          enabled: true  # Set it to true to enable
+          count: 1  # +1 drive, default value
+          default:  # Default configuration for the all extra drives
+              cdrom: true  # Default value (false for the generic flash drive)
+              rw: true # Read-only by default
+
+

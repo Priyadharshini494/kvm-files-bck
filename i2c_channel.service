@@ -1,0 +1,10 @@
+Description=I2C Channel Service
+After=multi-user.target
+ 
+[Service]
+Type=simple
+ExecStart= /usr/bin/python /home/rpi/Documents/i2c_channel_set.py
+Restart=always
+ 
+[Install]
+WantedBy=multi-user.target

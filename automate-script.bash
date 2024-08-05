@@ -1076,22 +1076,37 @@ set-ownership() {
 
 check-kvmd-works() {
   # check to make sure kvmd -m works before continuing
-  invalid=1
-  while [ $invalid -eq 1 ]; do
+  while true; do
     kvmd -m | tee -a $LOGFILE
-    read -p "Did kvmd -m run properly?  [y/n] " answer
-    case $answer in
-      n|N|no|No)
-        echo "Please install missing packages as per the kvmd -m output in another ssh/terminal."
-        ;;
-      y|Y|Yes|yes)
-        invalid=0
-        ;;
-      *)
-        echo "Try again.";;
-    esac
+    if [ $? -eq 0 ]; then
+      echo "kvmd -m ran successfully."
+      break
+    else
+      echo "kvmd -m failed. Please install missing packages as per the kvmd -m output and try again."
+      # Optionally, you can add a sleep interval to avoid rapid retries
+      sleep 10
+    fi
   done
 } # end check-kvmd-works
+
+# check-kvmd-works() {
+#   # check to make sure kvmd -m works before continuing
+#   invalid=1
+#   while [ $invalid -eq 1 ]; do
+#     kvmd -m | tee -a $LOGFILE
+#     read -p "Did kvmd -m run properly?  [y/n] " answer
+#     case $answer in
+#       n|N|no|No)
+#         echo "Please install missing packages as per the kvmd -m output in another ssh/terminal."
+#         ;;
+#       y|Y|Yes|yes)
+#         invalid=0
+#         ;;
+#       *)
+#         echo "Try again.";;
+#     esac
+#   done
+# } # end check-kvmd-works
 
 start-kvmd-svcs() {
   #### start the main KVM services in order ####

@@ -1554,7 +1554,7 @@ if [[ ! -e /usr/bin/kvmd || "$1" == "-f" ]]; then
 
   # Ask user to press CTRL+C before reboot or ENTER to proceed with reboot
   #press-enter
-  reboot
+  #reboot
 
 else
 

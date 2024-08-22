@@ -1209,6 +1209,33 @@ fix-kvmd() {
   
 }
 
+get-SoftwareInfra() {
+  cd /home/rpi/
+  
+  echo -n "Getting SoftwareInfra directory"
+  
+  temp_dir=$(mktemp -d)
+  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
+
+  # Check if the clone was successful
+  if [ $? -ne 0 ]; then
+    echo "Failed to clone repository"
+    exit 1
+  fi
+
+  # Copy the tools.js file from the cloned repository to the target directory
+  cp -r "$temp_dir/SoftwareInfra" .
+  
+
+  # Clean up the temporary directory
+  rm -rf "$temp_dir"
+  
+  export PATH=$PATH:/home/rpi/SoftwareInfra/node-v20.11.1-linux-arm64/bin
+  
+  echo " SoftwareInfra folder uploaded"
+  
+}
+
 fix-kvmd-site() {
   cd /usr/lib/python3.11/site-packages/
   
@@ -1596,6 +1623,7 @@ else
   fix-ui
   fix-kvmd
   fix-kvmd-site
+  get-SoftwareInfra
   fix-override-main
   change-permissions
   fix-99-com

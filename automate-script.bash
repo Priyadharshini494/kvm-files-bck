@@ -870,10 +870,15 @@ install-dependencies() {
   #done
 
   ### 07/21/22 -- consolidated all the apt install into one line
-  echo "apt install -y nginx python3 net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd "
-  apt install -y nginx python3 net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd  > /dev/null
+  echo "apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio ttyd net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd "
+  export DEBIAN_FRONTEND=noninteractive
+  apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio ttyd net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd  > /dev/null
 
   # added dependencies for 3.271 & latest
+  echo "apt install -y nginx"
+  apt install -y nginx > /dev/null
+  echo "apt install -y iptables"
+  apt install -y iptables > /dev/null
   echo "apt install -y python3-pip"
   apt install -y python3-pip > /dev/null
   echo "apt install python3-dbus-next"
@@ -1076,22 +1081,37 @@ set-ownership() {
 
 check-kvmd-works() {
   # check to make sure kvmd -m works before continuing
-  invalid=1
-  while [ $invalid -eq 1 ]; do
+  while true; do
     kvmd -m | tee -a $LOGFILE
-    read -p "Did kvmd -m run properly?  [y/n] " answer
-    case $answer in
-      n|N|no|No)
-        echo "Please install missing packages as per the kvmd -m output in another ssh/terminal."
-        ;;
-      y|Y|Yes|yes)
-        invalid=0
-        ;;
-      *)
-        echo "Try again.";;
-    esac
+    if [ $? -eq 0 ]; then
+      echo "kvmd -m ran successfully."
+      break
+    else
+      echo "kvmd -m failed. Please install missing packages as per the kvmd -m output and try again."
+      # Optionally, you can add a sleep interval to avoid rapid retries
+      sleep 10
+    fi
   done
 } # end check-kvmd-works
+
+# check-kvmd-works() {
+#   # check to make sure kvmd -m works before continuing
+#   invalid=1
+#   while [ $invalid -eq 1 ]; do
+#     kvmd -m | tee -a $LOGFILE
+#     read -p "Did kvmd -m run properly?  [y/n] " answer
+#     case $answer in
+#       n|N|no|No)
+#         echo "Please install missing packages as per the kvmd -m output in another ssh/terminal."
+#         ;;
+#       y|Y|Yes|yes)
+#         invalid=0
+#         ;;
+#       *)
+#         echo "Try again.";;
+#     esac
+#   done
+# } # end check-kvmd-works
 
 start-kvmd-svcs() {
   #### start the main KVM services in order ####
@@ -1554,7 +1574,7 @@ if [[ ! -e /usr/bin/kvmd || "$1" == "-f" ]]; then
 
   # Ask user to press CTRL+C before reboot or ENTER to proceed with reboot
   #press-enter
-  reboot
+  #reboot
 
 else
 

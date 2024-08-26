@@ -46,7 +46,7 @@ from .server import KvmdServer
 def main(argv: (list[str] | None)=None) -> None:
     config = init(
         prog="kvmd",
-        description="The main PiKVM daemon",
+        description="The main Rutomatrix daemon",
         argv=argv,
         check_run=True,
         load_auth=True,

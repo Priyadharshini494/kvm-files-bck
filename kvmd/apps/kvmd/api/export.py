@@ -63,17 +63,17 @@ class ExportApi:
         ])
         rows: list[str] = []
 
-        self.__append_prometheus_rows(rows, atx_state["enabled"], "pikvm_atx_enabled")  # type: ignore
-        self.__append_prometheus_rows(rows, atx_state["leds"]["power"], "pikvm_atx_power")  # type: ignore
+        self.__append_prometheus_rows(rows, atx_state["enabled"], "rutomatrix_atx_enabled")  # type: ignore
+        self.__append_prometheus_rows(rows, atx_state["leds"]["power"], "rutomatrix_atx_power")  # type: ignore
 
         for mode in sorted(UserGpioModes.ALL):
             for (channel, ch_state) in gpio_state[f"{mode}s"].items():  # type: ignore
                 if not channel.startswith("__"):  # Hide special GPIOs
                     for key in ["online", "state"]:
-                        self.__append_prometheus_rows(rows, ch_state["state"], f"pikvm_gpio_{mode}_{key}_{channel}")
+                        self.__append_prometheus_rows(rows, ch_state["state"], f"rutomatrix_gpio_{mode}_{key}_{channel}")
 
-        self.__append_prometheus_rows(rows, hw_state["health"], "pikvm_hw")  # type: ignore
-        self.__append_prometheus_rows(rows, fan_state, "pikvm_fan")
+        self.__append_prometheus_rows(rows, hw_state["health"], "rutomatrix_hw")  # type: ignore
+        self.__append_prometheus_rows(rows, fan_state, "rutomatrix_fan")
 
         return "\n".join(rows)
 

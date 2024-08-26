@@ -95,10 +95,10 @@ function __loadKvmdInfo() {
 
 				if (info.meta !== null && info.meta.server && info.meta.server.host) {
 					$("kvmd-meta-server-host").innerHTML = info.meta.server.host;
-					document.title = `Rautomatrix Index: ${info.meta.server.host}`;
+					document.title = `Rutomatrix Index: ${info.meta.server.host}`;
 				} else {
 					$("kvmd-meta-server-host").innerHTML = "";
-					document.title = "Rautomatrix Index";
+					document.title = "Rutomatrix Index";
 				}
 			} else if (http.status === 401 || http.status === 403) {
 				document.location.href = "/login";

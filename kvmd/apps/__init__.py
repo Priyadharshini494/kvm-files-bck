@@ -699,7 +699,7 @@ def _get_config_scheme() -> dict:
         "otg": {
             "vendor_id":      Option(0x1D6B, type=valid_otg_id),  # Linux Foundation
             "product_id":     Option(0x0104, type=valid_otg_id),  # Multifunction Composite Gadget
-            "manufacturer":   Option("PiKVM", type=valid_stripped_string),
+            "manufacturer":   Option("Rutomatrix", type=valid_stripped_string),
             "product":        Option("Composite KVM Device", type=valid_stripped_string),
             "serial":         Option("CAFEBABE", type=valid_stripped_string, if_none=None),
             "device_version": Option(-1,     type=functools.partial(valid_number, min=-1, max=0xFFFF)),
@@ -708,7 +708,7 @@ def _get_config_scheme() -> dict:
             "remote_wakeup":  Option(False,  type=valid_bool),
 
             "gadget":     Option("kvmd", type=valid_otg_gadget),
-            "config":     Option("PiKVM device", type=valid_stripped_string_not_empty),
+            "config":     Option("Rutomatrix device", type=valid_stripped_string_not_empty),
             "udc":        Option("",     type=valid_stripped_string),
             "init_delay": Option(3.0,    type=valid_float_f01),
 

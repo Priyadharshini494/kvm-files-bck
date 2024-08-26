@@ -163,7 +163,7 @@ export function Mouse(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, PiKVM offline";
+				title = "Mouse captured, Rutomatrix offline";
 			}
 		}
 		$("hid-mouse-led").className = led;
@@ -495,7 +495,7 @@ export function Mouse2(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, PiKVM offline";
+				title = "Mouse captured, Rutomatrix offline";
 			}
 		}
 		$("hid-mouse-led2").className = led;
@@ -826,7 +826,7 @@ export function Mouse3(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, PiKVM offline";
+				title = "Mouse captured, Rutomatrix offline";
 			}
 		}
 		$("hid-mouse-led3").className = led;
@@ -1157,7 +1157,7 @@ export function Mouse4(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, PiKVM offline";
+				title = "Mouse captured, Rutomatrix offline";
 			}
 		}
 		$("hid-mouse-led4").className = led;

@@ -35,7 +35,7 @@ export function main() {
 		tools.storage.bindSimpleSwitch($("page-close-ask-switch"), "page.close.ask", true, function(value) {
 			if (value) {
 				window.onbeforeunload = function(event) {
-					let text = "Are you sure you want to close PiKVM session?";
+					let text = "Are you sure you want to close Rutomatrix session?";
 					if (event) {
 						event.returnValue = text;
 					}

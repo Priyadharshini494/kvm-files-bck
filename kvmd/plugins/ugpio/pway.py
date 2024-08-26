@@ -140,7 +140,7 @@ class Plugin(BaseUserGpioDriver):  # pylint: disable=too-many-instance-attribute
 
                     # Switch and then recieve the state.
                     # FIXME: Get actual state without modifying the current.
-                    # I'm lazy and like the idea of the KVM resetting to port 1 on reboot of the PiKVM.
+                    # I'm lazy and like the idea of the KVM resetting to port 1 on reboot of the Rutomatrix.
                     self.__reset(tty)
 
                     while not self.__stop_event.is_set():

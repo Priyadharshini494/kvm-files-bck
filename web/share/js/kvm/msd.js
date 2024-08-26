@@ -86,7 +86,7 @@ export function Msd() {
 
 	var __clickRemoveButton = function() {
 		let name = $("msd-image-selector").value;
-		wm.confirm(`Are you sure you want to remove the image<br><b>${name}</b> from PiKVM?`).then(function(ok) {
+		wm.confirm(`Are you sure you want to remove the image<br><b>${name}</b> from Rutomatrix?`).then(function(ok) {
 			if (ok) {
 				let http = tools.makeRequest("POST", `/api/msd/remove?image=${name}`, function() {
 					if (http.readyState === 4) {

@@ -1,0 +1,10 @@
+[Unit]
+Description=Check USB0 Interface and Assign Static IP
+After=network.target
+ 
+[Service]
+ExecStart=/usr/local/bin/check_usb0.sh
+Restart=on-failure
+ 
+[Install]
+WantedBy=multi-user.target

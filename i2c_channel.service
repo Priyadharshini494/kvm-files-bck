@@ -3,7 +3,7 @@ After=multi-user.target
  
 [Service]
 Type=simple
-ExecStart= /usr/bin/python /home/rpi/Documents/i2c_channel_set.py
+ExecStart= /usr/bin/python /usr/local/bin/i2c_channel_set.py
 Restart=always
  
 [Install]

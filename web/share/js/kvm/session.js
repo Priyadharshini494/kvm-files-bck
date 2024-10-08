@@ -39,6 +39,8 @@ import {Atx2} from "./atx.js";
 import {Atx4} from "./atx.js";
 
 import {Msd} from "./msd.js";
+import {Msd2} from "./msd.js"
+import {Msd4} from "./msd.js"
 import {Streamer} from "./stream.js";
 import {Streamer2} from "./stream.js";
 import {Streamer3} from "./stream.js";
@@ -73,6 +75,8 @@ export function Session() {
 	var __atx2 = new Atx2(__recorder2);
 	var __atx4 = new Atx4(__recorder4);
 	var __msd = new Msd();
+        var __msd2 = new Msd2();
+        var __msd4 = new Msd4();
 	var __gpio = new Gpio(__recorder);
 	var __ocr = new Ocr(__streamer.getGeometry);
 
@@ -89,7 +93,7 @@ export function Session() {
 		if (state !== null) {
 			let text = JSON.stringify(state, undefined, 4).replace(/ /g, "&nbsp;").replace(/\n/g, "<br>");
 			$("about-meta").innerHTML = `
-				<span class="code-comment">// The Rutomatrix metadata.<br>
+				<span class="code-comment">// The Rutomatrix-Hub metadata.<br>
 				// You can get this JSON using handle <a target="_blank" href="/api/info?fields=meta">/api/info?fields=meta</a>.<br>
 				// In the standard configuration this data<br>
 				// is specified in the file /etc/kvmd/meta.yaml.</span><br>
@@ -231,7 +235,7 @@ export function Session() {
 
 	var __setAboutInfoSystem = function(state) {
 		$("about-version").innerHTML = `
-			Rautomatrix: <span class="code-comment">${state.kvmd.version}</span><br>
+			Rutomatrix: <span class="code-comment">${state.kvmd.version}</span><br>
 			<hr>
 			Streamer: <span class="code-comment">${state.streamer.version} (${state.streamer.app})</span>
 			${__formatStreamerFeatures(state.streamer.features)}
@@ -416,7 +420,7 @@ export function Session() {
 			case "hid_keymaps_state": __hid.setKeymaps(data.event);__hid2.setKeymaps(data.event);__hid3.setKeymaps(data.event);__hid4.setKeymaps(data.event); break;
 			case "hid_state": __hid.setState(data.event);__hid2.setState(data.event);__hid3.setState(data.event);__hid4.setState(data.event); break;
 			case "atx_state": __atx.setState(data.event); __atx2.setState(data.event);__atx4.setState(data.event);break;
-			case "msd_state": __msd.setState(data.event); break;
+			case "msd_state": __msd.setState(data.event); __msd2.setState(data.event); __msd4.setState(data.event); break;
 			case "streamer_state": __streamer.setState(data.event);console.log(data.event);__streamer2.setState(data.event);console.log(data.event);__streamer3.setState(data.event); __streamer4.setState(data.event); break;
 		        
 			case "streamer_ocr_state": __ocr.setState(data.event); break;
@@ -459,6 +463,8 @@ export function Session() {
 		__atx2.setState(null);
 		__atx4.setState(null);
 		__msd.setState(null);
+                __msd2.setState(null);
+                __msd4.setState(null);
 		__streamer.setState(null);
 		__streamer2.setState(null);
 		__streamer3.setState(null);

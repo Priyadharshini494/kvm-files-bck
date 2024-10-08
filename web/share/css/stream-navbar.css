@@ -243,3 +243,59 @@ ul#stream-navbar li div.menu img.sign {
     }
   }
 
+div.file-selector {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+div.file-selector input {
+    padding: 5px;
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+div.file-selector button {
+    padding: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+/* adding apc css */
+/* New CSS for input fields alignment */
+ul#stream-navbar li div.menu div.input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* Adds space between input rows */
+    padding: 9px 15px; /* Adds padding for spacing from the edge */
+}
+
+ul#stream-navbar li div.menu div.input-row label {
+    width: 100px; /* Fixed width to align labels properly */
+    margin-right: 10px; /* Space between label and input */
+    font-size: 14px; /* Font size for better readability */
+    white-space: normal;
+}
+
+ul#stream-navbar li div.menu div.input-row input {
+    padding: 5px; /* Adds padding inside the input fields */
+    flex-grow: 1; /* Allows input to take up remaining space */
+    border: 1px solid #ccc; /* Adds border to input fields */
+    border-radius: 4px; /* Adds rounded corners */
+    font-size: 13px; /* Adjust input font size */
+}
+
+ul#stream-navbar li div.menu div.input-row input::placeholder {
+    color: #aaa; /* Adjusts placeholder text color */
+    text-align: center; /* Centers the placeholder text */
+}
+/*apc css ends */
+ul#stream-navbar li div.menu div.input-row input#boot-id {
+    white-space: normal; /* Ensure whitespace behaves normally */
+   /* word-wrap: break-word; /* Allow long text to wrap within the input field */
+   /* text-align: left; /* Align text to the left (instead of center) */
+}

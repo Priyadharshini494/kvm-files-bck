@@ -41,7 +41,7 @@ export function MjpegStreamer(__setActive, __setInactive, __setInfo) {
 
 	/************************************************************************/
 
-	self.getName = () => "MJPEG";
+	self.getName = () => "STREAMER";
 	self.getMode = () => "mjpeg";
 
 	self.getResolution = function() {
@@ -176,7 +176,7 @@ export function MjpegStreamer2(__setActive, __setInactive, __setInfo) {
 
 	/************************************************************************/
 
-	self.getName = () => "MJPEG2";
+	self.getName = () => "STREAMER-2";
 	self.getMode = () => "mjpeg";
 
 	self.getResolution = function() {
@@ -315,7 +315,7 @@ export function MjpegStreamer3(__setActive, __setInactive, __setInfo) {
 
 	/************************************************************************/
 
-	self.getName = () => "MJPEG3";
+	self.getName = () => "STREAMER-3";
 	self.getMode = () => "mjpeg";
 
 	self.getResolution = function() {
@@ -446,7 +446,7 @@ export function MjpegStreamer4(__setActive, __setInactive, __setInfo) {
 
 	/************************************************************************/
 
-	self.getName = () => "MJPEG4";
+	self.getName = () => "STREAMER-4";
 	self.getMode = () => "mjpeg";
 
 	self.getResolution = function() {

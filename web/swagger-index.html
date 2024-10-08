@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" href="/share/css/swagger-ui.css">
+    <link rel="stylesheet" href="/share/css/index.css">
+    <link rel="icon" type="image/png" href="./swagger/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./swagger/favicon-16x16.png" sizes="16x16">
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script src="/share/css/swagger-ui-bundle.js"></script>
+    <script src="/share/css/swagger-ui-standalone-preset.js"></script>
+    <script src="/share/css/swagger-initializer.js"></script>
+    <script>
+            const ui = SwaggerUIBundle({
+            url: "https://10.208.57.90/api/swagger.json", // Update with your API URL
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "StandaloneLayout",
+            onComplete: function() {
+                ui.preauthorizeBasic("basicAuth", "admin", "admin");
+            }
+
+        });
+    </script>
+</body>
+</html>
+
+
+

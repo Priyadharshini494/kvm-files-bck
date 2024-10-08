@@ -26,7 +26,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Rautomatrix Session</title>
+  <title>Rutomatrix Session</title>
   <link rel="apple-touch-icon" sizes="180x180" href="/share/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/share/icons8-r-96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/share/icons8-r-96.png">
@@ -61,7 +61,7 @@
 
 <body class="body-no-select">
   <ul id="navbar">
-    <li class="left"><a id="logo" href="/">&larr;&nbsp;&nbsp; Rautomatrix-Hub</a></li>
+	  <li class="left"><a id="logo" href="/">&larr;&nbsp;&nbsp; Rutomatrix-Hub</a></li>
     <div class="hidden" id="hw-health-dropdown">
       <li class="left"><a class="menu-button" href="#"><img class="hidden" id="hw-health-undervoltage-led"
             src="/share/svg/led-undervoltage.svg"><img class="hidden" id="hw-health-overheating-led"
@@ -114,31 +114,7 @@
     </div>
 
     <li class="left">
-      <div class="led-container">
-        <div class="button-container">
-          <!--button class="refresh-button" id="refresh-button-id">Refresh</button-->
-        </div>
-
-        <div class="ledbox-container">
-          <div class="led-box" id="S0">
-            <div class="led-yellow-box leds0"></div>
-            <p class="displayNo">S0</p>
-          </div>
-          <div class="led-box" id="S3">
-            <div class="led-yellow-box leds3"></div>
-            <p class="displayNo">S3</p>
-          </div>
-          <div class="led-box" id="S4">
-            <div class="led-yellow-box leds4"></div>
-            <p class="displayNo">S4</p>
-          </div>
-          <div class="led-box" id="S5">
-            <div class="led-yellow-box leds5"></div>
-            <p class="displayNo">S5</p>
-          </div>
-        </div>
-
-      </div>
+      <div class="ledbox-container" id="message"></div>
     </li>
     <div class="hidden" id="fan-health-dropdown">
       <li class="left"><a class="menu-button" href="#"><img class="hidden" id="fan-health-led"
@@ -177,7 +153,7 @@
     <li class="right" id="system-dropdown"><a class="menu-button" href="#"><img class="led-gray" id="link-led"
           src="/share/svg/led-link.svg"><img class="led-gray" id="stream-led" src="/share/svg/led-stream.svg"><img
           class="led-gray" id="hid-keyboard-led" src="/share/svg/led-hid-keyboard.svg"><img class="led-gray"
-          id="hid-mouse-led" src="/share/svg/led-hid-mouse.svg"><span>System</span></a>
+          id="hid-mouse-led" src="/share/svg/led-hid-mouse.svg"><span></span></a>
       <div class="menu" id="system-menu">
         <table class="kv">
           <tr>
@@ -455,9 +431,7 @@
     </li>
 
     <li class="right" id="system-dropdown2"><a class="menu-button" href="#"><img class="led-gray" id="link-led2"
-          src="/share/svg/led-link.svg"><img class="led-gray" id="stream-led2" src="/share/svg/led-stream.svg"><img
-          class="led-gray" id="hid-keyboard-led2" src="/share/svg/led-hid-keyboard.svg"><img class="led-gray"
-          id="hid-mouse-led2" src="/share/svg/led-hid-mouse.svg"><span>System 2</span></a>
+          src="/share/svg/led-link.svg"></a>
       <div class="menu" id="system-menu">
         <table class="kv">
           <tr>
@@ -735,9 +709,7 @@
     </li>
 
     <li class="right" id="system-dropdown3"><a class="menu-button" href="#"><img class="led-gray" id="link-led3"
-          src="/share/svg/led-link.svg"><img class="led-gray" id="stream-led3" src="/share/svg/led-stream.svg"><img
-          class="led-gray" id="hid-keyboard-led3" src="/share/svg/led-hid-keyboard.svg"><img class="led-gray"
-          id="hid-mouse-led3" src="/share/svg/led-hid-mouse.svg"><span>System 3</span></a>
+          src="/share/svg/camera.svg"></a>
       <div class="menu" id="system-menu">
         <table class="kv">
           <tr>
@@ -1015,9 +987,7 @@
     </li>
 
     <li class="right" id="system-dropdown4"><a class="menu-button" href="#"><img class="led-gray" id="link-led4"
-          src="/share/svg/led-link.svg"><img class="led-gray" id="stream-led4" src="/share/svg/led-stream.svg"><img
-          class="led-gray" id="hid-keyboard-led4" src="/share/svg/led-hid-keyboard.svg"><img class="led-gray"
-          id="hid-mouse-led4" src="/share/svg/led-hid-mouse.svg"><span>System 4</span></a>
+          src="/share/svg/led-link.svg"></a>
       <div class="menu" id="system-menu">
         <table class="kv">
           <tr>
@@ -1385,7 +1355,7 @@
                       <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
                     </tr>
                     <tr>
-                      <td><sup style="line-height:1">Do not turn off Rutomatrix while this is active to prevent<br>
+                      <td><sup style="line-height:1">Do not turn off PiKVM while this is active to prevent<br>
                           filesystem corruption. Use read-only mode where possible,<br>
                           as writing to SD card often can reduce its lifespan.</sup></td>
                     </tr>
@@ -1398,7 +1368,7 @@
                   <table>
                     <tr>
                       <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
-                      <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix</b></td>
+                      <td style="line-height:1.5"><b>The image is being downloaded from PiKVM</b></td>
                     </tr>
                     <tr>
                       <td><sup style="line-height:1">Please wait</sup></td>
@@ -1521,7 +1491,7 @@
       </li-->
     <!--li class="right" id="macro-dropdown"><a class="menu-button" href="#"><img class="led-gray" id="hid-recorder-led" src="/share/svg/led-gear.svg"><span>Macro</span></a>
         <div class="menu">
-          <div class="text"><b>Record and play HID/ATX/GPIO actions<br></b><sub>For security reasons, the record will not be saved on the Rutomatrix</sub></div>
+          <div class="text"><b>Record and play HID/ATX/GPIO actions<br></b><sub>For security reasons, the record will not be saved on the PiKVM</sub></div>
           <hr>
           <div class="buttons buttons-row">
             <button class="row25" disabled data-force-hide-menu id="hid-recorder-record">&bull; Rec</button>
@@ -1563,7 +1533,7 @@
       </li-->
     <!--li class="right" id="text-dropdown"><a class="menu-button" href="#"><img class="feature-disabled" id="stream-ocr-led" src="/share/svg/led-gear.svg"><span>Text</span></a>
         <div class="menu" id="text-menu">
-          <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rutomatrix cannot switch the keyboard layout</sub></div>
+          <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that PiKVM cannot switch the keyboard layout</sub></div>
           <hr>
           <div class="text" style="margin-right: 20px">
             <textarea id="hid-pak-text" data-focus placeholder="Enter your text here"></textarea>
@@ -1602,7 +1572,7 @@
           <div class="feature-disabled" id="stream-ocr">
             <hr><br>
             <hr>
-            <div class="text"><b>Text recognition <sup><i>&beta;</i></sup><br></b><sub><a target="_blank" href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rutomatrix</sub></div>
+            <div class="text"><b>Text recognition <sup><i>&beta;</i></sup><br></b><sub><a target="_blank" href="https://docs.pikvm.org/ocr">OCR</a> works locally on PiKVM</sub></div>
             <hr>
             <table class="kv">
               <tr>
@@ -1716,7 +1686,7 @@
   </div>
   <div class="window window-resizable" id="stream-window3" style="padding: 23px 9px 46px 9px;">
     <div class="window-header" id="stream-window-header3" style="height:36px;">
-      <div class="window-grab">MJPEG-3</div>
+      <div class="window-grab">STREAMER-3</div>
       <button class="window-button-close"><b>&times;</b></button>
       <button class="window-button-maximize">&#9744;</button>
       <button class="window-button-original">&bull;</button>
@@ -1777,7 +1747,7 @@
 
   <div class="window window-resizable" id="stream-window">
     <div class="window-header" id="stream-window-header">
-      <div class="window-grab">MJPEG</div>
+      <div class="window-grab">STREAMER</div>
       <div class="window-postcode">Postcode</div>
       <button class="window-button-close"><b>&times;</b></button>
       <button class="window-button-maximize">&#9744;</button>
@@ -1785,9 +1755,9 @@
       <button class="window-button-enter-full-tab">&#9650;</button>
       <button class="window-button-full-screen">&#10530;</button>
       <button class="window-button-postcode" id="postcode">Logs</button>
-      
+
       <ul id="stream-navbar">
-        <li class="right feature-disabled" id="atx-dropdown"><a class="menu-button" href="#"><img class="led-gray"
+        <li class="right" id="atx-dropdown"><a class="menu-button" href="#"><img class="led-gray"
               id="atx-power-led" src="/share/svg/led-atx-power.svg"><img class="led-gray" id="atx-hdd-led"
               src="/share/svg/led-atx-hdd.svg"><span>ATX</span></a>
           <div class="menu">
@@ -1881,7 +1851,7 @@
                     <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
                   </tr>
                   <tr>
-                    <td><sup style="line-height:1">Do not turn off Rautomatrix-Hub while this is active to prevent<br>
+                    <td><sup style="line-height:1">Do not turn off Rutomatrix-Hub while this is active to prevent<br>
                         filesystem corruption. Use read-only mode where possible,<br>
                         as writing to SD card often can reduce its lifespan.</sup></td>
                   </tr>
@@ -1894,7 +1864,7 @@
                 <table>
                   <tr>
                     <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
-                    <td style="line-height:1.5"><b>The image is being downloaded from Rautomatrix-Hub</b></td>
+                    <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix-Hub</b></td>
                   </tr>
                   <tr>
                     <td><sup style="line-height:1">Please wait</sup></td>
@@ -2018,11 +1988,145 @@
             </div>
           </div>
         </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Switch Interfaces</a>
+          <div class="menu" id="interface-menu">
+	   <div class="text">
+      		<b>Current Interface:</b>
+      		<span id="interface1"></span> <!-- This span will be populated later -->
+    		</div>
+            <div class="text">
+              <b>Choose the interface to switch</b>
+            </div>
+            <hr>
+            <div class="buttons">
+              <button id="switchSerialButton">&bull; Switch to serial</button>
+              <hr>
+              <button id="switchEthernetButton">&bull; Switch to ethernet</button>
+            </div>
+          </div>
+        </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Command</a>
+          <div class="menu" id="interface-menu">
+            <div class="text">
+              <b>Current Interface:</b>
+              <span id="interface"></span> <!-- This span will be populated later -->
+            </div>
+            <div class="text" style="margin-right: 20px">
+              <textarea id="interface-input" data-focus placeholder="Enter your commands here"></textarea>
+            </div>
+            <table class="kv">
+              <tr>
+                <td>
+                  <button id="send-button" data-force-hide-menu>&bull; Send</button>
+                </td>
+              </tr>
+            </table>
+            <div id="output-area" class="text" style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; display: none;">
+              <!-- Output will be displayed here -->
+            </div>
+          </div>
+        </li> 
+        <li class="right">
+          <a class="menu-button" href="#">EDK</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>EDK Settings<br></b></div>
+              <div class="buttons">
+                <div class="buttons-row" style="display: flex; align-items: center;">
+                        <button id="get-boot-order" class="row50" data-force-hide-menu>&bull; Get Current Boot-order</button>
+                        <!-- Inline response box next to the button -->
+                        <span id="boot-order-response" > <!--style="margin-left: 15px; border: 1px solid #ccc; padding: 5px;"> -->
+                            <!-- The response will be displayed here -->
+                        </span>
+                </div>
+                    </div>
+        
+              <!-- ID -->
+              <div class="input-row">
+                <label for="boot-id"><b>Enter the ID of Boot Device to move first</b></label>
+                <input type="text" id="boot-id" name="boot-id" placeholder="Enter Boot ID">
+              </div>
+              <div class="buttons">
+                <button id="change-bootorder" class="row50" data-force-hide-menu>&bull; Change Boot-order</button>
+              </div>
+                      <!-- Buttons for Power Control -->
+              <div class="right">
+                <div class="buttons">
+                  <button id="edk-reset" class="row50" data-force-hide-menu>&bull; Reset</button>
+                </div>
+                    </div>
+                    <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">Firmware</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>Firmware File<br></b></div>
+        
+              <!-- Browse Files Button with Dropdown -->
+              <div class="input-row">
+                <label for="file-selection">Browse Files: </label>
+                <div class="file-selector">
+                <!-- <input type="text" id="file-selection" placeholder="Nothing selected" readonly>
+                  <button id="dropdown-btn" class="dropdown-arrow">Ã¢â€“Â¼</button>
+                  <ul id="file-dropdown" class="dropdown-menu" style="display: none;"></ul> -->
+                  <select id="file-selection">
+                  <option value="">-- Select a file --</option></select>
+                </div>
+              </div>
+        
+              <!-- Loading Spinner -->
+              <div id="loading-spinner" style="display: none;">Loading...</div>
+        
+              <div class="buttons">
+              <button id="ifwi-flash" class="row50" data-force-hide-menu>&bull; Flash Firmware</button>
+              </div>
+        
+            <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">APC</a>
+          <div class="menu" data-dont-hide-menu>
+          <div class="text"><b>APC Settings<br></b></div>
+           
+                        <!-- IP Address -->
+          <div class="input-row">
+          <label for="apc-ip-address"><b>IP Address</b></label>
+          <input type="text" id="apc-ip-address" name="apc-ip-address" placeholder="Enter IP address">
+          </div>
+           
+                        <!-- Username -->
+          <div class="input-row">
+          <label for="apc-username"><b>Username</b></label>
+          <input type="text" id="apc-username" name="apc-username" placeholder="Enter username">
+          </div>
+           
+                        <!-- Password -->
+          <div class="input-row">
+          <label for="apc-password"><b>Password</b></label>
+          <input type="password" id="apc-password" name="apc-password" placeholder="Enter password">
+          </div>
+           
+                        <hr>
+           
+                        <!-- Buttons for Power Control -->
+          <div class="buttons">
+          <div class="buttons-row">
+          <button id= "apc-power-off" class="row50" data-force-hide-menu>&bull; APC Power Off</button>
+          <button id = "apc-power-on" class="row50" data-force-hide-menu>&bull; APC Power On</button>
+          </div>
+          </div>
+           
+                        <hr>
+          </div>
+          </li>  
         <li class="right" id="macro-dropdown"><a class="menu-button" href="#"><img class="led-gray"
               id="hid-recorder-led" src="/share/svg/led-gear.svg"><span>Macro</span></a>
           <div class="menu">
             <div class="text"><b>Record and play HID/ATX/GPIO actions<br></b><sub>For security reasons, the record will
-                not be saved on the Rautomatrix-Hub</sub></div>
+                not be saved on the Rutomatrix-Hub</sub></div>
             <hr>
             <div class="buttons buttons-row">
               <button class="row25" disabled data-force-hide-menu id="hid-recorder-record">&bull; Rec</button>
@@ -2066,7 +2170,7 @@
         <li class="right" id="text-dropdown"><a class="menu-button" href="#"><img class="feature-disabled"
               id="stream-ocr-led" src="/share/svg/led-gear.svg"><span>Text</span></a>
           <div class="menu" id="text-menu">
-            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rautomatrix-hub cannot
+            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rutomatrix-hub cannot
                 switch the keyboard layout</sub></div>
             <hr>
             <div class="text" style="margin-right: 20px">
@@ -2109,7 +2213,7 @@
               <hr><br>
               <hr>
               <div class="text"><b>Text recognition <sup><i>&beta;</i></sup><br></b><sub><a target="_blank"
-                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rautomatrix-hub</sub></div>
+                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rutomatrix-hub</sub></div>
               <hr>
               <table class="kv">
                 <tr>
@@ -2404,6 +2508,29 @@
               </div>
             </div>
         </li>
+                    
+
+      
+
+
+<!--
+</li>
+      <li class="right">
+        <a class="menu-button" href="#">PCI2</a>
+                <div class="menu" data-dont-hide-menu>
+                        <div class="text"><b>PCI check<br></b> </div>
+
+                        <!-- Loading Spinner -->
+    <!--                    <div id="loading-spinner" style="display: none;">Loading...</div>
+
+                        <div class="buttons">
+                        <button id="pci-enumerate2" class="row50" data-force-hide-menu>&bull; Pci</button>
+                        </div>
+
+                <hr>
+                </div>
+</li> -->
+     
       </ul>
     </div>
     <div id="stream-info"></div>
@@ -2449,16 +2576,17 @@
 
   <div class="window window-resizable" id="stream-window2">
     <div class="window-header" id="stream-window-header2">
-      <div class="window-grab">MJPEG2</div>
+      <div class="window-grab">STREAMER-2</div>
       <div class="window-postcode">Postcode</div>
       <button class="window-button-close"><b>&times;</b></button>
       <button class="window-button-maximize">&#9744;</button>
       <button class="window-button-original">&bull;</button>
       <button class="window-button-enter-full-tab">&#9650;</button>
       <button class="window-button-full-screen">&#10530;</button>
+      <button class="window-button-postcode" id="postcode2">Logs</button>
 
       <ul id="stream-navbar">
-        <li class="right feature-disabled" id="atx-dropdown2"><a class="menu-button" href="#"><img class="led-gray"
+        <li class="right" id="atx-dropdown2"><a class="menu-button" href="#"><img class="led-gray"
               id="atx-power-led2" src="/share/svg/led-atx-power.svg"><img class="led-gray" id="atx-hdd-led2"
               src="/share/svg/led-atx-hdd.svg"><span>ATX</span></a>
           <div class="menu">
@@ -2480,14 +2608,14 @@
             <div class="buttons">
               <button disabled data-force-hide-menu id="atx-power-button2">&bull; Click Power
                 <sup><i>short</i></sup></button>
-              <button disabled data-force-hide-menu id="atx-power-button-long2">&bull; Click Power
-                <sup><i>long</i></sup></button>
+             <!-- <button disabled data-force-hide-menu id="atx-power-button-long2">&bull; Click Power
+                <sup><i>long</i></sup></button> -->
               <hr>
               <button disabled data-force-hide-menu id="atx-reset-button2">&bull; Click Reset</button>
             </div>
           </div>
         </li>
-        <li class="right feature-disabled" id="msd-dropdown"><a class="menu-button" href="#"><img class="led-gray"
+<!--        <li class="right" id="msd-dropdown"><a class="menu-button" href="#"><img class="led-gray"
               id="msd-led" src="/share/svg/led-msd.svg"><span>Drive</span></a>
           <div class="menu" id="msd-menu">
             <div class="text"><b>Mass Storage Drive: </b><span id="msd-status"></span><br></div>
@@ -2553,7 +2681,7 @@
                     <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
                   </tr>
                   <tr>
-                    <td><sup style="line-height:1">Do not turn off Rautomatrix-hub while this is active to prevent<br>
+                    <td><sup style="line-height:1">Do not turn off Rutomatrix-hub while this is active to prevent<br>
                         filesystem corruption. Use read-only mode where possible,<br>
                         as writing to SD card often can reduce its lifespan.</sup></td>
                   </tr>
@@ -2566,7 +2694,7 @@
                 <table>
                   <tr>
                     <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
-                    <td style="line-height:1.5"><b>The image is being downloaded from Rautomatrix-hub</b></td>
+                    <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix-hub</b></td>
                   </tr>
                   <tr>
                     <td><sup style="line-height:1">Please wait</sup></td>
@@ -2689,12 +2817,349 @@
               <button class="row25" disabled id="msd-reset-button">Reset</button>
             </div>
           </div>
+        </li> -->
+        <li class="right" id="msd-dropdown2"><a class="menu-button" href="#"><img class="led-gray"
+              id="msd-led2" src="/share/svg/led-msd.svg"><span>Drive</span></a>
+          <div class="menu" id="msd-menu2">
+            <div class="text"><b>Mass Storage Drive: </b><span id="msd-status2"></span><br></div>
+            <hr>
+            <div class="hidden" id="msd-message-offline2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Mass Storage Drive is offline</b></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-image-broken2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is broken!</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Perhaps uploading was interrupted<br></sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-too-big-for-cdrom2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is too big for CD-ROM!</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">The device filesystem will be truncated to 2.2GiB</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-out-of-storage2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is out of storage</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">This image was connected manually using <b>kvmd-otgmsd</b></sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-rw-enabled2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Do not turn off Rutomatrix-hub while this is active to prevent<br>
+                        filesystem corruption. Use read-only mode where possible,<br>
+                        as writing to SD card often can reduce its lifespan.</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-downloads2">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
+                    <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix-hub</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Please wait</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <table class="kv">
+              <tr>
+                <td>Image:</td>
+                <td width="100%">
+                  <select disabled id="msd-image-selector2"></select>
+                </td>
+                <td>
+                  <button disabled id="msd-download-button2"
+                    title="Download image"><b>&nbsp;&nbsp;&#x21E9;&nbsp;&nbsp;</b></button>
+                </td>
+                <td>
+                  <button disabled id="msd-remove-button2"
+                    title="Remove image"><b>&nbsp;&nbsp;&times;&nbsp;&nbsp;</b></button>
+                </td>
+              </tr>
+            </table>
+            <table class="kv">
+              <tr>
+                <td>Drive <a target="_blank" href="https://docs.pikvm.org/msd">mode</a>:</td>
+                <td>
+                  <div class="radio-box">
+                    <input checked type="radio" id="msd-mode-radio-cdrom2" name="msd-mode-radio" value="1">
+                    <label for="msd-mode-radio-cdrom">CD-ROM</label>
+                    <input type="radio" id="msd-mode-radio-flash2" name="msd-mode-radio" value="0">
+                    <label for="msd-mode-radio-flash">Flash</label>
+                  </div>
+                </td>
+                <td>&nbsp;</td>
+                <td>Writable:</td>
+                <td align="right">
+                  <div class="switch-box">
+                    <input disabled type="checkbox" id="msd-rw-switch2">
+                    <label for="msd-rw-switch"><span class="switch-inner"></span><span class="switch"></span></label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <hr>
+            <div id="msd-storages2"></div>
+            <hr>
+            <div class="buttons buttons-row">
+              <button class="row50" disabled id="msd-select-new-button2">Select image to upload</button>
+              <button class="row25" disabled id="msd-upload-new-button2">Upload</button>
+              <button class="row25" disabled id="msd-abort-new-button2">Abort</button>
+            </div>
+            <div class="hidden" id="msd-message-another-user-uploads2">
+              <hr>
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
+                    <td style="line-height:1.5"><b>Another user uploads an image</b></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="hidden" id="msd-new-sub2">
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td>Specify a local file:</td>
+                  <td>
+                    <input type="file" id="msd-new-file2">
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Or</b> paste a URL:</td>
+                  <td>
+                    <input type="text" id="msd-new-url2" style="width: 100%">
+                  </td>
+                </tr>
+                <tr class="hidden" id="msd-new-part2">
+                  <td>Upload partition:</td>
+                  <td width="100%">
+                    <select id="msd-new-part-selector2"></select>
+                  </td>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td class="value">Note:</td>
+                  <td>&bull; Don't close the browser page until the upload is complete.</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>&bull; To speed up the upload, close the stream window.</td>
+                </tr>
+              </table>
+            </div>
+            <div class="hidden" id="msd-uploading-sub2">
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td>New image:</td>
+                  <td class="value" id="msd-uploading-name2"></td>
+                </tr>
+                <tr>
+                  <td>Upload size:</td>
+                  <td class="value" id="msd-uploading-size2"></td>
+                </tr>
+              </table>
+              <div class="text">
+                <div class="progress" id="msd-uploading-progress2"><span class="progress-value"
+                    id="msd-uploading-progress-value2"></span></div>
+              </div>
+            </div>
+            <hr>
+            <div class="buttons buttons-row">
+              <button class="row50" disabled id="msd-connect-button2">Connect drive to Server</button>
+              <button class="row25" disabled id="msd-disconnect-button2">Disconnect</button>
+              <button class="row25" disabled id="msd-reset-button2">Reset</button>
+            </div>
+          </div>
         </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Switch Interfaces</a>
+          <div class="menu" id="interface-menu">
+	   <div class="text">
+      		<b>Current Interface:</b>
+      		<span id="interface2"></span> <!-- This span will be populated later -->
+    		</div>
+            <div class="text">
+              <b>Choose the interface to switch</b>
+            </div>
+            <hr>
+            <div class="buttons">
+              <button id="switchSerialButton2">&bull; Switch to serial</button>
+              <hr>
+              <button id="switchEthernetButton2">&bull; Switch to ethernet</button>
+            </div>
+          </div>
+        </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Command</a>
+          <div class="menu" id="interface-menu">
+            <div class="text">
+              <b>Current Interface:</b>
+              <span id="interface21"></span> <!-- This span will be populated later -->
+            </div>
+            <div class="text" style="margin-right: 20px">
+              <textarea id="interface-input2" data-focus placeholder="Enter your commands here"></textarea>
+            </div>
+            <table class="kv">
+              <tr>
+                <td>
+                  <button id="send-button2" data-force-hide-menu>&bull; Send</button>
+                </td>
+              </tr>
+            </table>
+            <div id="output-area" class="text" style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; display: none;">
+              <!-- Output will be displayed here -->
+            </div>
+          </div>
+        </li> 
+        <li class="right">
+          <a class="menu-button" href="#">EDK</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>EDK Settings<br></b></div>
+              <div class="buttons">
+                <div class="buttons-row" style="display: flex; align-items: center;">
+                        <button id="get-boot-order2" class="row50" data-force-hide-menu>&bull; Get Current Boot-order</button>
+                        <!-- Inline response box next to the button -->
+                        <span id="boot-order-response" > <!--style="margin-left: 15px; border: 1px solid #ccc; padding: 5px;"> -->
+                            <!-- The response will be displayed here -->
+                        </span>
+                </div>
+                    </div>
+        
+              <!-- ID -->
+              <div class="input-row">
+                <label for="boot-id"><b>Enter the ID of Boot Device to move first</b></label>
+                <input type="text" id="boot-id2" name="boot-id" placeholder="Enter Boot ID">
+              </div>
+              <div class="buttons">
+                <button id="change-bootorder2" class="row50" data-force-hide-menu>&bull; Change Boot-order</button>
+              </div>
+                      <!-- Buttons for Power Control -->
+              <div class="right">
+                <div class="buttons">
+                  <button id="edk-reset2" class="row50" data-force-hide-menu>&bull; Reset</button>
+                </div>
+                    </div>
+                    <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">Firmware</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>Firmware File<br></b></div>
+        
+              <!-- Browse Files Button with Dropdown -->
+              <div class="input-row">
+                <label for="file-selection">Browse Files: </label>
+                <div class="file-selector">
+                <!-- <input type="text" id="file-selection" placeholder="Nothing selected" readonly>
+                  <button id="dropdown-btn" class="dropdown-arrow">Ã¢â€“Â¼</button>
+                  <ul id="file-dropdown" class="dropdown-menu" style="display: none;"></ul> -->
+                  <select id="file-selection2">
+                  <option value="">-- Select a file --</option></select>
+                </div>
+              </div>
+        
+              <!-- Loading Spinner -->
+              <div id="loading-spinner" style="display: none;">Loading...</div>
+        
+              <div class="buttons">
+              <button id="ifwi-flash2" class="row50" data-force-hide-menu>&bull; Flash Firmware</button>
+              </div>
+        
+            <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">APC</a>
+          <div class="menu" data-dont-hide-menu>
+          <div class="text"><b>APC Settings<br></b></div>
+           
+                        <!-- IP Address -->
+          <div class="input-row">
+          <label for="apc-ip-address"><b>IP Address</b></label>
+          <input type="text" id="apc-ip-address2" name="apc-ip-address" placeholder="Enter IP address">
+          </div>
+          
+                        <!-- Username -->
+          <div class="input-row">
+          <label for="apc-username"><b>Username</b></label>
+          <input type="text" id="apc-username2" name="apc-username" placeholder="Enter username">
+          </div>
+           
+                        <!-- Password -->
+          <div class="input-row">
+          <label for="apc-password"><b>Password</b></label>
+          <input type="password" id="apc-password2" name="apc-password" placeholder="Enter password">
+          </div>
+           
+                        <hr>
+           
+                        <!-- Buttons for Power Control -->
+          <div class="buttons">
+          <div class="buttons-row">
+          <button id= "apc-power-off2" class="row50" data-force-hide-menu>&bull; APC Power Off</button>
+          <button id = "apc-power-on2" class="row50" data-force-hide-menu>&bull; APC Power On</button>
+          </div>
+          </div>
+           
+                        <hr>
+          </div>
+          </li>  
         <li class="right" id="macro-dropdown2"><a class="menu-button" href="#"><img class="led-gray"
               id="hid-recorder-led2" src="/share/svg/led-gear.svg"><span>Macro</span></a>
           <div class="menu">
             <div class="text"><b>Record and play HID/ATX/GPIO actions<br></b><sub>For security reasons, the record will
-                not be saved on the Rautomatrix-hub</sub></div>
+                not be saved on the Rutomatrix-hub</sub></div>
             <hr>
             <div class="buttons buttons-row">
               <button class="row25" disabled data-force-hide-menu id="hid-recorder-record2">&bull; Rec</button>
@@ -2738,7 +3203,7 @@
         <li class="right" id="text-dropdown"><a class="menu-button" href="#"><img class="feature-disabled"
               id="stream-ocr-led" src="/share/svg/led-gear.svg"><span>Text</span></a>
           <div class="menu" id="text-menu">
-            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rautomatrix-hub cannot
+            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rutomatrix-hub cannot
                 switch the keyboard layout</sub></div>
             <hr>
             <div class="text" style="margin-right: 20px">
@@ -2781,7 +3246,7 @@
               <hr><br>
               <hr>
               <div class="text"><b>Text recognition <sup><i>&beta;</i></sup><br></b><sub><a target="_blank"
-                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rautomatrix-hub</sub></div>
+                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rutomatrix-hub</sub></div>
               <hr>
               <table class="kv">
                 <tr>
@@ -2953,7 +3418,7 @@
             <hr>
           </div>
         </li>
-        <li class="right"><a class="menu-button" href="#" id="battery-link">Battery</a>
+<!--        <li class="right"><a class="menu-button" href="#" id="battery-link">Battery</a>
           <div class="menu" data-dont-hide-menu>
             <div class="text">
               <b>Battery Settings<br></b>
@@ -3074,7 +3539,132 @@
                 <button id="detachButton" onclick="detach()" disabled>Detach</button>
               </div>
             </div>
-        </li>
+        </li> -->
+       <li class="right"><a class="menu-button" href="#" id="battery-link2">Battery</a>
+          <div class="menu" data-dont-hide-menu>
+            <div class="text">
+              <b>Battery Settings<br></b>
+            </div>
+            <hr>
+            <div class="text">
+              <b>Battery status: </b><span id="battery-status2"></span><br>
+            </div>
+            <hr>
+            <div class="radio-box">
+              <input checked type="radio" id="Battery-Option-Simulation2" name="Battery-options2" value="simulation">
+              <label for="Battery-Option-Simulation2" style="padding: 4px 40px;">Simulation </label>
+              <input type="radio" id="Battery-Option-Realbattery2" name="Battery-options2" value="realbattery">
+              <label for="Battery-Option-Realbattery2" style="left: 3px; padding: 4px 40px;"> Real-Battery</label>
+            </div>
+            <div id="SimulationOption2" class="battery-dropdowns">
+              <table class="kv battery-percentage">
+                <div class="text"><b>Simulation Settings<br></b></div>
+                <hr>
+                <tr>
+                  <td>Percentage:</td>
+                  <td width="50%">
+
+                    <input class="slider" type="range" id="percentageRange2" min="0" max="100" value="15"
+                      style="width: 100%;">
+                  </td>
+                  <td>
+                    <span id="selectedPercentage2">15%</span>
+                  </td>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                      var percentageRange = document.getElementById("percentageRange2");
+                      var selectedPercentage = document.getElementById("selectedPercentage2");
+                      percentageRange.addEventListener("input", function () {
+                        //selectedPercentage.textContent = percentageRange.value + "%";
+                        var roundedValue = Math.round(percentageRange.value / 10) * 10;
+                        selectedPercentage.textContent = roundedValue + "%";
+                        fetch('/battery/set_simulation_percent', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ percent: roundedValue }),
+                        })
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data);
+                          })
+                          .catch(error => {
+                            console.error('Error:', error);
+                          });
+                      });
+                    });
+                  </script>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv battery-current">
+                <tr>
+                  <td>Current :</td>
+                  <td width="50%">
+                    <select id="hid-percentage2">
+                      <option value="ar">1mA</option>
+                      <option value="bepo">2mA</option>
+                      <option value="cz">3mA</option>
+                      <option value="da">4mA</option>
+                      <option value="de">5mA</option>
+                      <option value="de-ch">6mA</option>
+                      <option value="en-gb">7mA</option>
+                      <option value="en-us">8mA</option>
+                      <option value="es">9mA</option>
+                      <option value="et">10mA</option>
+                      <option value="fi">15mA</option>
+                      <option value="fo">20mA</option>
+                      <option value="fr">25mA</option>
+                      <option value="fr-be">30mA</option>
+                      <option value="fr-ca">35mA</option>
+                      <option value="fr-ch">40mA</option>
+                      <option value="hr">45mA</option>
+                      <option value="hu">50mA</option>
+                      <option value="is">55mA</option>
+                      <option value="it">60mA</option>
+                      <option value="ja">65mA</option>
+                      <option value="lt">70mA</option>
+                      <option value="lv">75mA</option>
+                      <option value="mk">80mA</option>
+                      <option value="nl">85mA</option>
+                      <option value="no">90mA</option>
+                      <option value="pl">95mA</option>
+                      <option value="pt" selected="">100mA</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv battery-voltage">
+                <td> Voltage : </td>
+                <td width="50%">
+                  <div class="radio-box">
+                    <input type="radio" id="stream-mode-radio2-12v" name="stream-mode-radio" value="12v">
+                    <label for="stream-mode-radio-12v">12 V</label>
+                    <input checked type="radio" id="stream-mode-radio2-9v" name="stream-mode-radio" value="9v">
+                    <label for="stream-mode-radio-9v" style="padding-left: 10px;">9 V</label>
+                  </div>
+                <td>
+              </table>
+              <hr>
+              <div id="attach-detach2">
+                <button id="attachSimulatedBattery2">Attach</button>
+                <button id="detachBattery2">Detach</button>
+              </div>
+
+            </div>
+
+            <div id="RealbatteryOption2" class="battery-dropdowns">
+              <div class="text"><b>Real-Battery Settings<br></b></div>
+              <div>
+                <button id="attachRealBattery2">Attach</button>
+                <button id="detachRealBattery2">Detach</button>
+              </div>
+            </div>
+        </li>         
+         
+       
       </ul>
     </div>
     <div id="stream-info2"></div>
@@ -3120,13 +3710,15 @@
 
   <div class="window window-resizable" id="stream-window4">
     <div class="window-header" id="stream-window-header4">
-      <div class="window-grab">MJPEG4</div>
+      <div class="window-grab">STREAMER-4</div>
       <div class="window-postcode">Postcode</div>
       <button class="window-button-close"><b>&times;</b></button>
       <button class="window-button-maximize">&#9744;</button>
       <button class="window-button-original">&bull;</button>
       <button class="window-button-enter-full-tab">&#9650;</button>
       <button class="window-button-full-screen">&#10530;</button>
+      <button class="window-button-postcode" id="postcode4">Logs</button>
+
 
       <ul id="stream-navbar">
         <li class="right feature-disabled" id="atx-dropdown4"><a class="menu-button" href="#"><img class="led-gray"
@@ -3151,14 +3743,14 @@
             <div class="buttons">
               <button disabled data-force-hide-menu id="atx-power-button4">&bull; Click Power
                 <sup><i>short</i></sup></button>
-              <button disabled data-force-hide-menu id="atx-power-button-long4">&bull; Click Power
-                <sup><i>long</i></sup></button>
+             <!-- <button disabled data-force-hide-menu id="atx-power-button-long4">&bull; Click Power
+                <sup><i>long</i></sup></button> -->
               <hr>
               <button disabled data-force-hide-menu id="atx-reset-button4">&bull; Click Reset</button>
             </div>
           </div>
         </li>
-        <li class="right feature-disabled" id="msd-dropdown"><a class="menu-button" href="#"><img class="led-gray"
+<!--        <li class="right feature-disabled" id="msd-dropdown"><a class="menu-button" href="#"><img class="led-gray"
               id="msd-led" src="/share/svg/led-msd.svg"><span>Drive</span></a>
           <div class="menu" id="msd-menu">
             <div class="text"><b>Mass Storage Drive: </b><span id="msd-status"></span><br></div>
@@ -3224,7 +3816,7 @@
                     <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
                   </tr>
                   <tr>
-                    <td><sup style="line-height:1">Do not turn off Rautomatrix-hub while this is active to prevent<br>
+                    <td><sup style="line-height:1">Do not turn off Rutomatrix-hub while this is active to prevent<br>
                         filesystem corruption. Use read-only mode where possible,<br>
                         as writing to SD card often can reduce its lifespan.</sup></td>
                   </tr>
@@ -3237,7 +3829,7 @@
                 <table>
                   <tr>
                     <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
-                    <td style="line-height:1.5"><b>The image is being downloaded from Rautomatrix-hub</b></td>
+                    <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix-hub</b></td>
                   </tr>
                   <tr>
                     <td><sup style="line-height:1">Please wait</sup></td>
@@ -3360,12 +3952,346 @@
               <button class="row25" disabled id="msd-reset-button">Reset</button>
             </div>
           </div>
+        </li> -->
+        <li class="right feature-disabled" id="msd-dropdown4"><a class="menu-button" href="#"><img class="led-gray"
+              id="msd-led4" src="/share/svg/led-msd.svg"><span>Drive</span></a>
+          <div class="menu" id="msd-menu4">
+            <div class="text"><b>Mass Storage Drive: </b><span id="msd-status4"></span><br></div>
+            <hr>
+            <div class="hidden" id="msd-message-offline4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Mass Storage Drive is offline</b></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-image-broken4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is broken!</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Perhaps uploading was interrupted<br></sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-too-big-for-cdrom4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is too big for CD-ROM!</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">The device filesystem will be truncated to 2.2GiB</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-out-of-storage4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Current image is out of storage</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">This image was connected manually using <b>kvmd-otgmsd</b></sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-rw-enabled4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/warning.svg"></td>
+                    <td style="line-height:1.5"><b>Read-write mode is enabled</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Do not turn off Rutomatrix-hub while this is active to prevent<br>
+                        filesystem corruption. Use read-only mode where possible,<br>
+                        as writing to SD card often can reduce its lifespan.</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <div class="hidden" id="msd-message-downloads4">
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
+                    <td style="line-height:1.5"><b>The image is being downloaded from Rutomatrix-hub</b></td>
+                  </tr>
+                  <tr>
+                    <td><sup style="line-height:1">Please wait</sup></td>
+                  </tr>
+                </table>
+              </div>
+              <hr>
+            </div>
+            <table class="kv">
+              <tr>
+                <td>Image:</td>
+                <td width="100%">
+                  <select disabled id="msd-image-selector4"></select>
+                </td>
+                <td>
+                  <button disabled id="msd-download-button4"
+                    title="Download image"><b>&nbsp;&nbsp;&#x21E9;&nbsp;&nbsp;</b></button>
+                </td>
+                <td>
+                  <button disabled id="msd-remove-button4"
+                    title="Remove image"><b>&nbsp;&nbsp;&times;&nbsp;&nbsp;</b></button>
+                </td>
+              </tr>
+            </table>
+            <table class="kv">
+              <tr>
+                <td>Drive <a target="_blank" href="https://docs.pikvm.org/msd">mode</a>:</td>
+                <td>
+                  <div class="radio-box">
+                    <input checked type="radio" id="msd-mode-radio-cdrom4" name="msd-mode-radio" value="1">
+                    <label for="msd-mode-radio-cdrom">CD-ROM</label>
+                    <input type="radio" id="msd-mode-radio-flash4" name="msd-mode-radio" value="0">
+                    <label for="msd-mode-radio-flash4">Flash</label>
+                  </div>
+                </td>
+                <td>&nbsp;</td>
+                <td>Writable:</td>
+                <td align="right">
+                  <div class="switch-box">
+                    <input disabled type="checkbox" id="msd-rw-switch4">
+                    <label for="msd-rw-switch"><span class="switch-inner"></span><span class="switch"></span></label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <hr>
+            <div id="msd-storages4"></div>
+            <hr>
+            <div class="buttons buttons-row">
+              <button class="row50" disabled id="msd-select-new-button4">Select image to upload</button>
+              <button class="row25" disabled id="msd-upload-new-button4">Upload</button>
+              <button class="row25" disabled id="msd-abort-new-button4">Abort</button>
+            </div>
+            <div class="hidden" id="msd-message-another-user-uploads4">
+              <hr>
+              <div class="text">
+                <table>
+                  <tr>
+                    <td rowspan="2"><img class="sign " src="/share/svg/info.svg"></td>
+                    <td style="line-height:1.5"><b>Another user uploads an image</b></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="hidden" id="msd-new-sub4">
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td>Specify a local file:</td>
+                  <td>
+                    <input type="file" id="msd-new-file4">
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Or</b> paste a URL:</td>
+                  <td>
+                    <input type="text" id="msd-new-url4" style="width: 100%">
+                  </td>
+                </tr>
+                <tr class="hidden" id="msd-new-part4">
+                  <td>Upload partition:</td>
+                  <td width="100%">
+                    <select id="msd-new-part-selector4"></select>
+                  </td>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td class="value">Note:</td>
+                  <td>&bull; Don't close the browser page until the upload is complete.</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>&bull; To speed up the upload, close the stream window.</td>
+                </tr>
+              </table>
+            </div>
+            <div class="hidden" id="msd-uploading-sub4">
+              <hr>
+              <table class="kv">
+                <tr>
+                  <td>New image:</td>
+                  <td class="value" id="msd-uploading-name4"></td>
+                </tr>
+                <tr>
+                  <td>Upload size:</td>
+                  <td class="value" id="msd-uploading-size4"></td>
+                </tr>
+              </table>
+              <div class="text">
+                <div class="progress" id="msd-uploading-progress4"><span class="progress-value"
+                    id="msd-uploading-progress-value4"></span></div>
+              </div>
+            </div>
+            <hr>
+            <div class="buttons buttons-row">
+              <button class="row50" disabled id="msd-connect-button4">Connect drive to Server</button>
+              <button class="row25" disabled id="msd-disconnect-button4">Disconnect</button>
+              <button class="row25" disabled id="msd-reset-button4">Reset</button>
+            </div>
+          </div>
         </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Switch Interfaces</a>
+          <div class="menu" id="interface-menu">
+	   <div class="text">
+      		<b>Current Interface:</b>
+      		<span id="interface4"></span> <!-- This span will be populated later -->
+    		</div>
+            <div class="text">
+              <b>Choose the interface to switch</b>
+            </div>
+            <hr>
+            <div class="buttons">
+              <button id="switchSerialButton4">&bull; Switch to serial</button>
+              <hr>
+              <button id="switchEthernetButton4">&bull; Switch to ethernet</button>
+            </div>
+          </div>
+        </li>
+        <li class="right" id="interface-dropdown">
+          <a class="menu-button" href="#">Command</a>
+          <div class="menu" id="interface-menu">
+            <div class="text">
+              <b>Current Interface:</b>
+              <span id="interface41"></span> <!-- This span will be populated later -->
+            </div>
+            <div class="text" style="margin-right: 20px">
+              <textarea id="interface-input4" data-focus placeholder="Enter your commands here"></textarea>
+            </div>
+            <table class="kv">
+              <tr>
+                <td>
+                  <button id="send-button4" data-force-hide-menu>&bull; Send</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </li> 
+        <li class="right">
+          <a class="menu-button" href="#">EDK</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>EDK Settings<br></b></div>
+              <div class="buttons">
+                <div class="buttons-row" style="display: flex; align-items: center;">
+                        <button id="get-boot-order4" class="row50" data-force-hide-menu>&bull; Get Current Boot-order</button>
+                        <!-- Inline response box next to the button -->
+                        <span id="boot-order-response" > <!--style="margin-left: 15px; border: 1px solid #ccc; padding: 5px;"> -->
+                            <!-- The response will be displayed here -->
+                        </span>
+                </div>
+                    </div>
+        
+              <!-- ID -->
+              <div class="input-row">
+                <label for="boot-id"><b>Enter the ID of Boot Device to move first</b></label>
+                <input type="text" id="boot-id4" name="boot-id" placeholder="Enter Boot ID">
+              </div>
+              <div class="buttons">
+                <button id="change-bootorder4" class="row50" data-force-hide-menu>&bull; Change Boot-order</button>
+              </div>
+                      <!-- Buttons for Power Control -->
+              <div class="right">
+                <div class="buttons">
+                  <button id="edk-reset4" class="row50" data-force-hide-menu>&bull; Reset</button>
+                </div>
+                    </div>
+                    <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">Firmware</a>
+            <div class="menu" data-dont-hide-menu>
+              <div class="text"><b>Firmware File<br></b></div>
+        
+              <!-- Browse Files Button with Dropdown -->
+              <div class="input-row">
+                <label for="file-selection">Browse Files: </label>
+                <div class="file-selector">
+                <!-- <input type="text" id="file-selection" placeholder="Nothing selected" readonly>
+                  <button id="dropdown-btn" class="dropdown-arrow">Ã¢â€“Â¼</button>
+                  <ul id="file-dropdown" class="dropdown-menu" style="display: none;"></ul> -->
+                  <select id="file-selection4">
+                  <option value="">-- Select a file --</option></select>
+                </div>
+              </div>
+        
+              <!-- Loading Spinner -->
+              <div id="loading-spinner" style="display: none;">Loading...</div>
+        
+              <div class="buttons">
+              <button id="ifwi-flash4" class="row50" data-force-hide-menu>&bull; Flash Firmware</button>
+              </div>
+        
+            <hr>
+            </div>
+        </li>
+        <li class="right">
+          <a class="menu-button" href="#">APC</a>
+          <div class="menu" data-dont-hide-menu>
+          <div class="text"><b>APC Settings<br></b></div>
+           
+                        <!-- IP Address -->
+          <div class="input-row">
+          <label for="apc-ip-address"><b>IP Address</b></label>
+          <input type="text" id="apc-ip-address4" name="apc-ip-address" placeholder="Enter IP address">
+          </div>
+           
+                        <!-- Username -->
+          <div class="input-row">
+          <label for="apc-username"><b>Username</b></label>
+          <input type="text" id="apc-username4" name="apc-username" placeholder="Enter username">
+          </div>
+           
+                        <!-- Password -->
+          <div class="input-row">
+          <label for="apc-password"><b>Password</b></label>
+          <input type="password" id="apc-password4" name="apc-password" placeholder="Enter password">
+          </div>
+           
+                        <hr>
+           
+                        <!-- Buttons for Power Control -->
+          <div class="buttons">
+          <div class="buttons-row">
+          <button id= "apc-power-off4" class="row50" data-force-hide-menu>&bull; APC Power Off</button>
+          <button id = "apc-power-on4" class="row50" data-force-hide-menu>&bull; APC Power On</button>
+          </div>
+          </div>
+           
+                        <hr>
+          </div>
+          </li>  
         <li class="right" id="macro-dropdown4"><a class="menu-button" href="#"><img class="led-gray"
               id="hid-recorder-led4" src="/share/svg/led-gear.svg"><span>Macro</span></a>
           <div class="menu">
             <div class="text"><b>Record and play HID/ATX/GPIO actions<br></b><sub>For security reasons, the record will
-                not be saved on the Rautomatrix-hub</sub></div>
+                not be saved on the Rutomatrix-hub</sub></div>
             <hr>
             <div class="buttons buttons-row">
               <button class="row25" disabled data-force-hide-menu id="hid-recorder-record4">&bull; Rec</button>
@@ -3409,7 +4335,7 @@
         <li class="right" id="text-dropdown"><a class="menu-button" href="#"><img class="feature-disabled"
               id="stream-ocr-led" src="/share/svg/led-gear.svg"><span>Text</span></a>
           <div class="menu" id="text-menu">
-            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rautomatrix-hub cannot
+            <div class="text"><b>Paste text as keypress sequence<br></b><sub>Please note that Rutomatrix-hub cannot
                 switch the keyboard layout</sub></div>
             <hr>
             <div class="text" style="margin-right: 20px">
@@ -3452,7 +4378,7 @@
               <hr><br>
               <hr>
               <div class="text"><b>Text recognition <sup><i>&beta;</i></sup><br></b><sub><a target="_blank"
-                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rautomatrix-hub</sub></div>
+                    href="https://docs.pikvm.org/ocr">OCR</a> works locally on Rutomatrix-hub</sub></div>
               <hr>
               <table class="kv">
                 <tr>
@@ -3620,7 +4546,7 @@
             <hr>
           </div>
         </li>
-        <li class="right"><a class="menu-button" href="#" id="battery-link">Battery</a>
+<!--        <li class="right"><a class="menu-button" href="#" id="battery-link">Battery</a>
           <div class="menu" data-dont-hide-menu>
             <div class="text">
               <b>Battery Settings<br></b>
@@ -3739,6 +4665,130 @@
               <div>
                 <button id="attachButton" onclick="enableDetach()">Attach</button>
                 <button id="detachButton" onclick="detach()" disabled>Detach</button>
+              </div>
+            </div>
+        </li> -->
+
+       <li class="right"><a class="menu-button" href="#" id="battery-link4">Battery</a>
+          <div class="menu" data-dont-hide-menu>
+            <div class="text">
+              <b>Battery Settings<br></b>
+            </div>
+            <hr>
+            <div class="text">
+              <b>Battery status: </b><span id="battery-status4"></span><br>
+            </div>
+            <hr>
+            <div class="radio-box">
+              <input checked type="radio" id="Battery-Option-Simulation4" name="Battery-options4" value="simulation">
+              <label for="Battery-Option-Simulation4" style="padding: 4px 40px;">Simulation </label>
+              <input type="radio" id="Battery-Option-Realbattery4" name="Battery-options4" value="realbattery">
+              <label for="Battery-Option-Realbattery4" style="left: 3px; padding: 4px 40px;"> Real-Battery</label>
+            </div>
+            <div id="SimulationOption4" class="battery-dropdowns">
+              <table class="kv battery-percentage">
+                <div class="text"><b>Simulation Settings<br></b></div>
+                <hr>
+                <tr>
+                  <td>Percentage:</td>
+                  <td width="50%">
+
+                    <input class="slider" type="range" id="percentageRange4" min="0" max="100" value="15"
+                      style="width: 100%;">
+                  </td>
+                  <td>
+                    <span id="selectedPercentage4">15%</span>
+                  </td>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                      var percentageRange = document.getElementById("percentageRange4");
+                      var selectedPercentage = document.getElementById("selectedPercentage4");
+                      percentageRange.addEventListener("input", function () {
+                        //selectedPercentage.textContent = percentageRange.value + "%";
+                        var roundedValue = Math.round(percentageRange.value / 10) * 10;
+                        selectedPercentage.textContent = roundedValue + "%";
+                        fetch('/battery/set_simulation_percent', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ percent: roundedValue }),
+                        })
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data);
+                          })
+                          .catch(error => {
+                            console.error('Error:', error);
+                          });
+                      });
+                    });
+                  </script>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv battery-current">
+                <tr>
+                  <td>Current :</td>
+                  <td width="50%">
+                    <select id="hid-percentage4">
+                      <option value="ar">1mA</option>
+                      <option value="bepo">2mA</option>
+                      <option value="cz">3mA</option>
+                      <option value="da">4mA</option>
+                      <option value="de">5mA</option>
+                      <option value="de-ch">6mA</option>
+                      <option value="en-gb">7mA</option>
+                      <option value="en-us">8mA</option>
+                      <option value="es">9mA</option>
+                      <option value="et">10mA</option>
+                      <option value="fi">15mA</option>
+                      <option value="fo">20mA</option>
+                      <option value="fr">25mA</option>
+                      <option value="fr-be">30mA</option>
+                      <option value="fr-ca">35mA</option>
+                      <option value="fr-ch">40mA</option>
+                      <option value="hr">45mA</option>
+                      <option value="hu">50mA</option>
+                      <option value="is">55mA</option>
+                      <option value="it">60mA</option>
+                      <option value="ja">65mA</option>
+                      <option value="lt">70mA</option>
+                      <option value="lv">75mA</option>
+                      <option value="mk">80mA</option>
+                      <option value="nl">85mA</option>
+                      <option value="no">90mA</option>
+                      <option value="pl">95mA</option>
+                      <option value="pt" selected="">100mA</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              <hr>
+              <table class="kv battery-voltage">
+                <td> Voltage : </td>
+                <td width="50%">
+                  <div class="radio-box">
+                    <input type="radio" id="stream-mode-radio-12v" name="stream-mode-radio" value="12v">
+                    <label for="stream-mode-radio-12v">12 V</label>
+                    <input checked type="radio" id="stream-mode-radio-9v" name="stream-mode-radio" value="9v">
+                    <label for="stream-mode-radio-9v" style="padding-left: 10px;">9 V</label>
+                  </div>
+                <td>
+              </table>
+              <hr>
+              <div id="attach-detach4">
+                <button id="attachSimulatedBattery4">Attach</button>
+                <button id="detachBattery4">Detach</button>
+              </div>
+
+            </div>
+
+            <div id="RealbatteryOption4" class="battery-dropdowns">
+              <div class="text"><b>Real-Battery Settings<br></b></div>
+              <div>
+                <button id="attachRealBattery4">Attach</button>
+                <button id="detachRealBattery4">Detach</button>
               </div>
             </div>
         </li>
@@ -4400,13 +5450,13 @@
         <hr>
         <div class="keypad-row">
           <div class="key small" data-code="IntlYen">
-            <div class="label">¥<br>_
+            <div class="label">Ã¯Â¿Â½<br>_
             </div>
           </div>
         </div>
         <div class="keypad-row">
           <div class="key small" data-code="IntlRo">
-            <div class="label">&bsol;<br>ろ
+            <div class="label">&bsol;<br>?
             </div>
           </div>
         </div>
@@ -4877,16 +5927,18 @@
     <div id="about">
       <table>
         <tr>
-          <td class="logo"><a href="https://pikvm.org" target="_blank">RAUTOMATRIX</a></td>
+		<td class="logo">RUTOMATRIX-HUB</td>
+		  <!--<a href="https://pikvm.org" target="_blank"><img class="svg-gray" src="/share/svg/logo.svg"
+			  alt="Rutomatrix-hub" height="40"></a></td>-->
           <td>
             <table>
               <tr>
                 <td class="title" colspan="2">The Open Source KVM over IP</td>
               </tr>
-             <!-- <tr>
+              <!--<tr>
                 <td class="copyright" colspan="2">Copyright &copy; 2018-2023 <a target="_blank"
                     href="mailto:mdevaev@gmail.com">Maxim Devaev</a></td>
-	     </tr>-->
+	      </tr>-->
             </table>
           </td>
         </tr>
@@ -4910,11 +5962,11 @@
           <div class="code" id="about-version"><span class="code-comment">No data</span>
           </div>
         </div>
-       <!-- <input type="radio" name="about-tab-button" id="about-tab-thanks-button">
+        <!--<input type="radio" name="about-tab-button" id="about-tab-thanks-button">
         <label for="about-tab-thanks-button">Thanks</label>
         <div class="tab">
           <div class="code" id="about-thanks"><span class="code-comment">// These kind people donated money to the
-              Rautomatrix-hub project<br>
+              Rutomatrix-hub project<br>
               // and supported the work on it. We are very grateful<br>
               // for their help, and memorializing their names<br>
               // is the least we can do in gratitude.<br>
@@ -4967,7 +6019,7 @@
               <li>Aron Perelman</li>
               <li>Artem Simonov</li>
               <li>Arthur Mayer</li>
-              <li>Arthur Woimbée</li>
+              <li>Arthur WoimbÃ¯Â¿Â½e</li>
               <li>Ashlesh Chaudhari</li>
               <li>Asim Shakour</li>
               <li>Augusto Becciu</li>
@@ -4995,7 +6047,7 @@
               <li>Bjoern Petsch</li>
               <li>Blindside</li>
               <li>Blue Frog LLC</li>
-              <li>Bootstrapper - Programmierung erklärt</li>
+              <li>Bootstrapper - Programmierung erklÃ¯Â¿Â½rt</li>
               <li>Bosco</li>
               <li>Bradford King</li>
               <li>Brainspore Networks</li>
@@ -5025,7 +6077,7 @@
               <li>Chris Lewis</li>
               <li>Chris Rizio</li>
               <li>Christi King</li>
-              <li>Christian Schlögl</li>
+              <li>Christian SchlÃ¯Â¿Â½gl</li>
               <li>Christian Svensson</li>
               <li>Christof Maluck</li>
               <li>Christoph Dette</li>
@@ -5113,7 +6165,7 @@
               <li>Frank</li>
               <li>Frank Sander</li>
               <li>Frederick Czajka</li>
-              <li>Fredrik Idréus</li>
+              <li>Fredrik IdrÃ¯Â¿Â½us</li>
               <li>Garrett Dangerfield</li>
               <li>Ge Men</li>
               <li>Geekworm</li>
@@ -5123,7 +6175,7 @@
               <li>Georgy Brodsky</li>
               <li>Gerald</li>
               <li>Gerardus Vernimmen</li>
-              <li>Gernot Neuschröer</li>
+              <li>Gernot NeuschrÃ¯Â¿Â½er</li>
               <li>Giovanni Fulco</li>
               <li>GK</li>
               <li>Glen Dragon</li>
@@ -5134,13 +6186,13 @@
               <li>Guenter Honisch</li>
               <li>Guido Bernacchi</li>
               <li>Gustin Johnson</li>
-              <li>György Tamás Vizi</li>
+              <li>GyÃ¯Â¿Â½rgy TamÃ¯Â¿Â½s Vizi</li>
               <li>Haiberg GmbH</li>
               <li>Haven Zheng</li>
               <li>Heibunny</li>
               <li>Heikki Tiittanen</li>
               <li>Helio Leonardo Pinheiro e Mota</li>
-              <li>Henrik Ählström</li>
+              <li>Henrik Ã¯Â¿Â½hlstrÃ¯Â¿Â½m</li>
               <li>Henry Hood</li>
               <li>HimKo</li>
               <li>HouseFPV</li>
@@ -5219,7 +6271,7 @@
               <li>Josh VanDeraa</li>
               <li>Joshua Futterer</li>
               <li>Jozef Riha</li>
-              <li>Jörgen Fredriksson</li>
+              <li>JÃ¯Â¿Â½rgen Fredriksson</li>
               <li>Julian Forero</li>
               <li>Julian Schneider</li>
               <li>Julien Angelier</li>
@@ -5242,7 +6294,7 @@
               <li>Kiran Schuler</li>
               <li>Koloman</li>
               <li>Konrad Neitzel</li>
-              <li>Krzysztof Żelaśkiewicz</li>
+              <li>Krzysztof Zelaskiewicz</li>
               <li>Lance Ward</li>
               <li>Larry Meaney</li>
               <li>Lars</li>
@@ -5257,15 +6309,15 @@
               <li>LoCascio</li>
               <li>Lordbob75</li>
               <li>Lothar Schweikle-Droll</li>
-              <li>Louis Müller</li>
+              <li>Louis MÃ¯Â¿Â½ller</li>
               <li>LSDTripp</li>
-              <li>Ľubor Slušný</li>
+              <li>Lubor SluÃ¯Â¿Â½nÃ¯Â¿Â½</li>
               <li>Luca Di Diomede</li>
               <li>Lucio De Carli</li>
               <li>Luiz Bizzio</li>
               <li>Lukas Bischof</li>
               <li>Lukas Kammerer</li>
-              <li>Lukas Söder</li>
+              <li>Lukas SÃ¯Â¿Â½der</li>
               <li>Maksim Terehin</li>
               <li>Malcolm Cameron</li>
               <li>Manfred Radeschnig</li>
@@ -5274,7 +6326,7 @@
               <li>Marcio Zimbres</li>
               <li>Marco Rossi</li>
               <li>Marcos Wolf</li>
-              <li>Marek Marczykowski-Górecki</li>
+              <li>Marek Marczykowski-GÃ¯Â¿Â½recki</li>
               <li>Marius</li>
               <li>Mar. Balske</li>
               <li>Mark Farrell</li>
@@ -5299,7 +6351,7 @@
               <li>Mauricio Allende</li>
               <li>Max Evans</li>
               <li>Mecky</li>
-              <li>Mehmet Aydoğdu</li>
+              <li>Mehmet Aydogdu</li>
               <li>Michael Bartholomew</li>
               <li>Michael Bell</li>
               <li>Michael Bombe</li>
@@ -5314,9 +6366,9 @@
               <li>Michael Wu</li>
               <li>MichaelZ</li>
               <li>Michel Bissonnette</li>
-              <li>Mikael Wikström</li>
+              <li>Mikael WikstrÃ¯Â¿Â½m</li>
               <li>Mike Mason</li>
-              <li>Milan Múčka</li>
+              <li>Milan MÃ¯Â¿Â½cka</li>
               <li>Miles Davis</li>
               <li>Minh Tang</li>
               <li>Moez Tharani</li>
@@ -5371,7 +6423,7 @@
               <li>Pierre Peine</li>
               <li>posicat</li>
               <li>pozitron03</li>
-              <li>Przemysław Szypowicz</li>
+              <li>Przemyslaw Szypowicz</li>
               <li>P_Dmitrij</li>
               <li>Qteal</li>
               <li>Quattro Uno</li>
@@ -5382,7 +6434,7 @@
               <li>RandomJerk</li>
               <li>Raphael Schitz</li>
               <li>Ref Chowdhury</li>
-              <li>René Rathenau</li>
+              <li>RenÃ¯Â¿Â½ Rathenau</li>
               <li>ReysDad</li>
               <li>Ricardo Marques</li>
               <li>Richard</li>
@@ -5438,7 +6490,7 @@
               <li>Solve Technology</li>
               <li>srepac</li>
               <li>Stefan Bautz</li>
-              <li>Stefan Müller</li>
+              <li>Stefan MÃ¯Â¿Â½ller</li>
               <li>Stefan Stemmer</li>
               <li>Stefan Vaillant</li>
               <li>Stephan Schmidt</li>
@@ -5465,7 +6517,7 @@
               <li>Thomas Hagenmaier</li>
               <li>Thomas Hedberg Jensen</li>
               <li>Thomas Price</li>
-              <li>Thomas Søfteland</li>
+              <li>Thomas SÃ¯Â¿Â½fteland</li>
               <li>Tim Lenz</li>
               <li>Tim Wilkinson</li>
               <li>Timo Brinkmann</li>
@@ -5474,7 +6526,7 @@
               <li>Tom Lawson</li>
               <li>Tom York</li>
               <li>Tomas Kuchta</li>
-              <li>Tomáš hrubý</li>
+              <li>TomÃ¯Â¿Â½ hrubÃ¯Â¿Â½</li>
               <li>Torsten Droste</li>
               <li>Tracy Fitch</li>
               <li>Tristan Schoening</li>
@@ -5514,12 +6566,10 @@
               <li>Zoltan Magyari</li>
               <li>Zsombor Vari</li>
             </ul>
-	  </div>-->
-        </div>
+          </div>
+	</div>-->
       </div><br>
-      <p class="text credits"><a target="_blank" href="https://pikvm.org">Rautomatrix Project</a>&nbsp; | &nbsp;<a
-          target="_blank" href="https://docs.pikvm.org">Documentation</a>&nbsp; | &nbsp;<a target="_blank"
-          href="https://pikvm.org/support">Support</a></p>
+      <p class="text credits">Rutomatrix Project&nbsp; | &nbsp;Documentation&nbsp; | &nbsp;Support</p>
     </div>
   </div>
   <div class="window window-resizable" id="webterm-window" style="width: 640px; height: 480px">
@@ -5527,7 +6577,7 @@
       <div class="window-grab">Terminal</div>
       <button class="window-button-close"><b>&times;</b></button>
       <button class="window-button-maximize">&#9744;</button>
-      <!-- Терминал глючит из-за зажимаемой клавиши ESC для выхода-->
+      <!-- ???????? ?????? ??-?? ?????????? ??????? ESC ??? ??????-->
       <!-- button(class="window-button-full-screen") &#10530;-->
     </div>
     <iframe id="webterm-iframe" src="" style="width: 100%; height: 100%"></iframe>
@@ -5536,9 +6586,7 @@
     <li class="footer-left"><span id="kvmd-meta-server-host" title="Server name (see System/About)"></span>&nbsp; |
       &nbsp;<span id="kvmd-version-kvmd" title="KVMD version"></span>&nbsp; | &nbsp;<span id="kvmd-version-streamer"
         title="Streamer version"></span></li>
-    <li class="footer-right"><a target="_blank" href="https://pikvm.org">Rautomatrix Project</a>&nbsp; | &nbsp;<a
-        target="_blank" href="https://docs.pikvm.org">Documentation</a>&nbsp; | &nbsp;<a target="_blank"
-        href="https://pikvm.org/support">Support</a></li>
+    <li class="footer-right">Rutomatix Project&nbsp; | &nbsp;Documentation&nbsp; | &nbsp;Support</li>
   </ul>
 </body>
 

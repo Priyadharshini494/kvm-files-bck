@@ -109,10 +109,13 @@ export function Streamer() {
 	//	tools.el.setOnClick($("refresh-button-id"), __set_system_state);
                 setInterval(__set_system_state, 2500);
                 setInterval(__set_interface_state, 2500);
+                //setInterval(__setPostcode, 2500);
+                //setInterval(__updateText, 2500);
 		$("stream-window").show_hook = () => __applyState(__state);
 		$("stream-window").close_hook = () => __applyState(null);
                 self.runInBackground();
                 self.updateText();
+                //self.startUpdateTextInterval();
         };
 	/************************************************************************/
         self.runInBackground = async function() {
@@ -136,10 +139,19 @@ export function Streamer() {
                         setTimeout(() => {self.updateText();}, 100);
                 } else {
                         console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
                         sessionStorage.removeItem('hexdata');
                         sessionStorage.setItem('updating', '0');
                 }
         };
+
         var __show_postcode = function(){
                    let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
                            if (http.readyState === 4) {
@@ -153,7 +165,8 @@ export function Streamer() {
                             });
 
                         };
-        var __setPostcode = async function() {
+        var __setPostcode = function() {
+                console.log("Calling __setPostcode function");
                 let postcodeValues = [];
                 function handleResponse() {
                     if (http.readyState === 4 && http.status === 200) {
@@ -872,7 +885,7 @@ const query = `reqcmd=${command}`;
         }, rawBody, "application/json");
     }
     else if (interfaceElement === 'Ethernet') {
-        const etherneturl = `/api/ethernet-usb?${query}`;
+        const etherneturl = `/api/ethernet?${query}`;
         http = tools.makeRequest("GET", etherneturl, function () {
             if (http.readyState === 4) {
                 if (http.status === 200) {
@@ -926,7 +939,7 @@ const query = `reqcmd=${command}`;
         }, rawBody, "application/json");
     }
     else if (interfaceElement === 'Ethernet') {
-        const etherneturl = `/api/ethernet-usb?${query}`;
+        const etherneturl = `/api/ethernet?${query}`;
         http = tools.makeRequest("GET", etherneturl, function () {
             if (http.readyState === 4) {
                 if (http.status === 200) {
@@ -978,7 +991,7 @@ const query = `reqcmd=${command}`;
         }, rawBody, "application/json");
     }
     else if (interfaceElement === 'Ethernet') {
-        const etherneturl = `/api/ethernet-usb?${query}`;
+        const etherneturl = `/api/ethernet?${query}`;
         http = tools.makeRequest("GET", etherneturl, function () {
             if (http.readyState === 4) {
                 if (http.status === 200) {
@@ -1472,6 +1485,14 @@ export function Streamer2() {
                         setTimeout(() => {self.updateText();}, 100);
                 } else {
                         console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
                         sessionStorage.removeItem('hexdata');
                         sessionStorage.setItem('updating', '0');
                 }
@@ -2085,6 +2106,14 @@ export function Streamer4() {
                         setTimeout(() => {self.updateText();}, 100);
                 } else {
                         console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
                         sessionStorage.removeItem('hexdata');
                         sessionStorage.setItem('updating', '0');
                 }

@@ -56,10 +56,10 @@ export function main() {
 			wm.toggleFullTabWindow($("stream-window3"), true);
 			wm.toggleFullTabWindow($("stream-window4"), true);
 		}
-		wm.showWindow($("stream-window"));
-        wm.showWindow($("stream-window2"));
-		wm.showWindow($("stream-window3"));
 		wm.showWindow($("stream-window4"));
+        wm.showWindow($("stream-window3"));
+		wm.showWindow($("stream-window2"));
+		wm.showWindow($("stream-window"));
 		new Session();
 	}
 }

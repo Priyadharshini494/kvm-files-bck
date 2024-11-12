@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Postcode Logs Service Every 5 Minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Unit=postcodelogs.service
+
+[Install]
+WantedBy=timers.target

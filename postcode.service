@@ -1,0 +1,28 @@
+[Unit]
+Description=postcode.py Service
+After=multi-user.target
+
+[Service]
+#Type=simple
+#Environment=TERM=xterm
+#ExecStart=/usr/local/bin/minicom_start.sh
+#ExecStart=/usr/bin/minicom -b 115200 -o -D /dev/ttyAMA0 -C /home/kvmd-webterm/minicom_output_edited.txt
+#ExecStart=python /home/kvmd-webterm/serial_printer.py
+#Restart=always
+#RestartSec=10
+#User=root
+#Group=root
+
+
+User=root
+WorkingDirectory=/home/kvmd-webterm
+ExecStart=/home/kvmd-webterm/serialfile
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=serial_printer
+Environment=TERM=xterm
+
+[Install]
+WantedBy=multi-user.target

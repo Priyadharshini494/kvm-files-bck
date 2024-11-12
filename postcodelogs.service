@@ -1,0 +1,15 @@
+[Unit]
+Description=postcode.py Service
+After=multi-user.target
+
+[Service]
+User=root
+WorkingDirectory=/home/kvmd-webterm
+ExecStart=python /home/kvmd-webterm/logcpy.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=serial_logs
+Environment=TERM=xterm
+
+[Install]
+WantedBy=multi-user.target

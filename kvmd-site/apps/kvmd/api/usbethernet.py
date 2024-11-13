@@ -3,13 +3,19 @@ import re
 import socket
 import threading
 import serial
+import os
 from aiohttp import web
 from functools import wraps
 from aiohttp.web import Request, Response
 from ....htserver import exposed_http, make_json_response
 
+serial_port_path = "/dev/ttyGS0"
+if os.path.exists(serial_port_path):
+    port = serial.Serial(serial_port_path, baudrate=115200, timeout=2, xonxoff=False)
+else:
+    print(f"Serial port {serial_port_path} not found.")
 # Initialize the serial port
-port = serial.Serial("/dev/ttyGS0", baudrate=115200, timeout=2, xonxoff=False)
+#port = serial.Serial("/dev/ttyGS0", baudrate=115200, timeout=2, xonxoff=False)
 
 # Regex to remove ANSI escape sequences
 regex = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
@@ -25,7 +31,7 @@ class UdpHandler:
         self.port = None
         self.address = None
         self.lock = threading.Lock()
-        self.start_udp_server() 
+        self.start_udp_server()
 
     def start_udp_server(self):
         threading.Thread(target=self.udp_server, daemon=True).start()
@@ -113,19 +119,19 @@ class UsbethernetApi:
     async def send_command(self, request: Request) -> Response:
         global cond_var
         cmd = request.query.get('cmd')
-        
+
         if not cmd:
             return make_json_response({"error": "No command provided"}, status=400)
-        
+
         read_thread = threading.Thread(target=asyncio.run, args=(self.taskRead(),))
         write_thread = threading.Thread(target=asyncio.run, args=(self.taskWrite(cmd),))
-        
+
         read_thread.start()
         write_thread.start()
-        
+
         read_thread.join()
         write_thread.join()
-        
+
         return make_json_response({"status": "Command processed successfully"})
 
     @exposed_http('GET', '/ethernet')
@@ -139,7 +145,7 @@ class UsbethernetApi:
             if port and address:
                 udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 udp_sock.sendto(reqcmd.encode('utf-8'), (address, port))
-                
+
                 self.udp_handler.clear_message()  # Clear previous messages
 
                 # Wait for responses

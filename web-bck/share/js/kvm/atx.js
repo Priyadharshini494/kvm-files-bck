@@ -35,7 +35,7 @@ export function Atx4(__recorder) {
             $("atx-power-led4").title = "Power Led";
             $("atx-hdd-led4").title = "Disk Activity Led";
 
-            tools.storage.bindSimpleSwitch($("atx-ask-switch"), "atx.ask", true);
+            tools.storage.bindSimpleSwitch($("atx-ask-switch4"), "atx.ask", true);
 
             // for (let args of [
             //         ["atx-power-button", "power", "Are you sure you want to press the power button?"],
@@ -121,14 +121,7 @@ export function Atx(__recorder) {
 
 		for (let args of [
 			["atx-power-button4", "power", "Are you sure you want to press the power button?"],
-			["atx-power-button-long4", "power_long", `
-				Are you sure you want to long press the power button?<br>
-				Warning! This could cause data loss on the server.
-			`],
-			["atx-reset-button4", "reset", `
-				Are you sure you want to press the reset button?<br>
-				Warning! This could case data loss on the server.
-			`],
+			["atx-reset-button4", "reset", "Are you sure you want to press the reset button?"],
 		]) {
 			tools.el.setOnClick($(args[0]), () => __clickButton(args[1], args[2]));
 		}
@@ -147,14 +140,14 @@ export function Atx(__recorder) {
 			$("atx-power-led").className = "led-gray";
 			$("atx-hdd-led").className = "led-gray";
 		}
-		for (let id of ["atx-power-button4", "atx-power-button-long4", "atx-reset-button4"]) {
+		for (let id of ["atx-power-button4", "atx-reset-button4"]) {
 			tools.el.setEnabled($(id), buttons_enabled);
 		}
 	};
 
 	var __clickButton = function(button, confirm_msg) {
 		let click_button = function() {
-			let http = tools.makeRequest("POST", `/api/atx/click?button=${button}`, function() {
+			let http = tools.makeRequest("GET", `/api/atx/${button}`, function() {
 				if (http.readyState === 4) {
 					if (http.status === 409) {
 						wm.error("Performing another ATX operation for other client.<br>Please try again later");
@@ -189,18 +182,11 @@ export function Atx2(__recorder) {
 		$("atx-power-led2").title = "Power Led";
 		$("atx-hdd-led2").title = "Disk Activity Led";
 
-		tools.storage.bindSimpleSwitch($("atx-ask-switch"), "atx.ask", true);
+		tools.storage.bindSimpleSwitch($("atx-ask-switch2"), "atx.ask", true);
 
 		for (let args of [
 			["atx-power-button2", "power", "Are you sure you want to press the power button?"],
-			["atx-power-button-long2", "power_long", `
-				Are you sure you want to long press the power button?<br>
-				Warning! This could cause data loss on the server.
-			`],
-			["atx-reset-button2", "reset", `
-				Are you sure you want to press the reset button?<br>
-				Warning! This could case data loss on the server.
-			`],
+			["atx-reset-button2", "reset", "Are you sure you want to press the reset button?"],
 		]) {
 			tools.el.setOnClick($(args[0]), () => __clickButton(args[1], args[2]));
 		}
@@ -219,14 +205,14 @@ export function Atx2(__recorder) {
 			$("atx-power-led2").className = "led-gray";
 			$("atx-hdd-led2").className = "led-gray";
 		}
-		for (let id of ["atx-power-button2", "atx-power-button-long2", "atx-reset-button2"]) {
+		for (let id of ["atx-power-button2", "atx-reset-button2"]) {
 			tools.el.setEnabled($(id), buttons_enabled);
 		}
 	};
 
 	var __clickButton = function(button, confirm_msg) {
 		let click_button = function() {
-			let http = tools.makeRequest("POST", `/api/atx/click?button=${button}`, function() {
+			let http = tools.makeRequest("GET", `/api/atx/${button}`, function() {
 				if (http.readyState === 4) {
 					if (http.status === 409) {
 						wm.error("Performing another ATX operation for other client.<br>Please try again later");

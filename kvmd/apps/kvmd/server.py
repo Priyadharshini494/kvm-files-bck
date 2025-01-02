@@ -119,7 +119,8 @@ from .api.streamer4 import StreamerApi4
 from .api.export import ExportApi
 from .api.redfish import RedfishApi
 from .api.swinterface import switchInterfaceApi
-
+from .api.managesleepstate import SleepstateApi
+from .api.usbdrive import GetDriveApi
 # =====
 class StreamerQualityNotSupported(OperationError):
     def __init__(self) -> None:
@@ -246,6 +247,8 @@ class KvmdServer(HttpServer):  # pylint: disable=too-many-arguments,too-many-ins
         self.__lantestcase_api = LanApi()
         self.__rastestcase_api = RasApi()
         self.__apc_api = ApcApi()
+        self.__usbdrive_api = GetDriveApi()
+        self.__sleepstate_api = SleepstateApi()
         self.__hid_api = HidApi(hid, keymap_path, ignore_keys, mouse_x_range, mouse_y_range)  # Ugly hack to get keymaps state
         self.__camera_api = CameraApi()
         self.__battery_api = BatteryApi()
@@ -276,9 +279,11 @@ class KvmdServer(HttpServer):  # pylint: disable=too-many-arguments,too-many-ins
             self.__wifitestcase_api,
             self.__lantestcase_api,
             self.__rastestcase_api,
+            self.__sleepstate_api,
             self.__camera_api,
             self.__battery_api,
             self.__switchInterface_api,
+            self.__usbdrive_api,
             AtxApi(atx),
             MsdApi(msd),
            # self.__streamer_api,
@@ -494,7 +499,7 @@ class KvmdServer(HttpServer):  # pylint: disable=too-many-arguments,too-many-ins
     "openapi": "3.0.3",
     "info": {
         "title": "Rutomatrix Swagger - OpenAPI 3.0",
-        "description": "This is a sample Rutomatrix API Server based on the OpenAPI 3.0 specification. You can learn more about Swagger at https://swagger.io. In this version of the Rutomatrix API, weâ€™ve embraced the design-first approach! This allows us to collaborate more efficiently and continuously improve the API. Whether you're contributing to the API's code or making changes to the definition, your feedback will help us make the API more robust and feature-rich over time.",
+        "description": "This is a sample Rutomatrix API Server based on the OpenAPI 3.0 specification. You can learn more about Swagger at https://swagger.io. In this version of the Rutomatrix API, weÃ¢â‚¬â„¢ve embraced the design-first approach! This allows us to collaborate more efficiently and continuously improve the API. Whether you're contributing to the API's code or making changes to the definition, your feedback will help us make the API more robust and feature-rich over time.",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "email": "ruto111222@gmail.com"
@@ -5931,6 +5936,86 @@ class KvmdServer(HttpServer):  # pylint: disable=too-many-arguments,too-many-ins
             }
           },
           "400": { "description": "Invalid parameters provided" }
+        }
+      }
+    },
+    "/manage_sleep_state": {
+      "get": {
+        "summary": "Manage Sleep State",
+        "description": "Controls the sleep state of a device based on the operating system, sleep state, and location.",
+        "tags": ["Power"],
+        "parameters": [
+          {
+            "name": "os",
+            "in": "query",
+            "required": True,
+            "description": "Operating system (windows, linux, edk)",
+            "schema": {
+              "type": "string",
+              "enum": ["windows", "linux", "edk"],
+              "default": "windows"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": True,
+            "description": "Sleep state (S3, S4, S5)",
+            "schema": {
+              "type": "string",
+              "enum": ["S3", "S4", "S5"],
+              "default": "S3"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": False,
+            "description": "Location of the device (host or target). Managing sleep states on host is not supported.",
+            "schema": {
+              "type": "string",
+              "enum": ["host", "target"],
+              "default": "target"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successful or error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "description": "Error message if the operation failed." },
+                    "message": { "type": "string", "description": "Success message if the operation succeeded." },
+                    "response": { "type": "string", "description": "Response from the serial device, if applicable." }
+                  },
+                  "example": {
+                    "message": "Command processed successfully",
+                    "response": "Command executed",
+                    "error": "null"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  },
+                  "example": {
+                    "error": "Invalid sleep state"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

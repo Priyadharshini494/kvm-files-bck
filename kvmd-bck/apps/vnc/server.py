@@ -63,7 +63,7 @@ from .render import make_text_jpeg
 class _SharedParams:
     width: int = dataclasses.field(default=800)
     height: int = dataclasses.field(default=600)
-    name: str = dataclasses.field(default="Rutomatrix")
+    name: str = dataclasses.field(default="PiKVM")
 
 
 class _Client(RfbClient):  # pylint: disable=too-many-instance-attributes
@@ -181,7 +181,7 @@ class _Client(RfbClient):  # pylint: disable=too-many-instance-attributes
                 host = None
             else:
                 if isinstance(host, str):
-                    name = f"Rutomatrix: {host}"
+                    name = f"PiKVM: {host}"
                     if self._encodings.has_rename:
                         await self._send_rename(name)
                     self.__shared_params.name = name

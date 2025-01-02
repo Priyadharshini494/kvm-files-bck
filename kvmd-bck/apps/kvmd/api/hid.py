@@ -19,7 +19,7 @@
 #                                                                            #
 # ========================================================================== #
 
-import re
+
 import os
 import stat
 import functools
@@ -28,12 +28,11 @@ import serial
 import asyncio
 import subprocess
 from typing import Callable
-
+import re
 from aiohttp.web import Request
 from aiohttp.web import Response
-# from .simulationPercent  import write
-# from .batterymode  import attach
-from .batterysimulator  import write
+from .simulationPercent  import write
+from .batterymode  import attach
 from ....mouse import MouseRange
 
 from ....keyboard.keysym import build_symmap
@@ -58,10 +57,7 @@ from ....validators.hid import valid_hid_mouse_button
 from ....validators.hid import valid_hid_mouse_delta
 
 
-from .Focuser import Focuser
-from ....logging import get_logger
-from .AutoFocus import AutoFocus
-from .RpiCamera import Camera
+
 
 # =====
 class HidApi:
@@ -90,203 +86,46 @@ class HidApi:
     # =====
 
     def execute_i2cset(self, address, register, value):
+
+        # subprocess.run(["i2cset", "-y", "1", str(address), str(register), str(value)])
         subprocess.run(["i2cset", "-y", "1", hex(address), hex(register), hex(value)])
 
 
     def execute_i2cget(self, address, register):
+        #result = subprocess.run(["i2cget", "-y", "1", hex(address), hex(register)], capture_output=True, text=True)
+        #result = subprocess.run(["i2cget", "-y", "1", str(address), str(register)], capture_output=True, text=True)
         result = subprocess.run(["i2cget", "-y", "1", hex(address), hex(register)], capture_output=True, text=True)
         return result.stdout.strip()
- 
+
+    # def prepare_device(self, channel):
+    #     self.execute_i2cset(0x72, 0x00, 0x03)
+    #     # self.execute_i2cset(0x72, 0x00, 1 << channel)
+    #     self.execute_i2cset(0x24, 0x12, 0x00)
 
     def select_mux_channel(self,channel):
         subprocess.run(["i2cset", "-y", "1", "0x72", "0x00", hex(1 << channel)])
 
     @exposed_http("GET", "/hid/system_state")
     async def __system_state(self, _: Request) -> Response:
-       
+        # self.prepare_device(1)
         self.select_mux_channel(1)
         self.execute_i2cset(0x24, 0x00, 0x3f)
         self.execute_i2cset(0x24, 0x0c, 0xff)
         input_status_hex = self.execute_i2cget(0x24, 0x12)
-        if not input_status_hex:
-            error_message = "Empty input status retrieved from I2C device"
-            print(error_message)
-            return make_json_response({
-                'error': error_message,
-                'input_status_binary': '00000000',
-                'input_status_hexadecimal': '00'
-            })
         input_status_bin = bin(int(input_status_hex, 16))[2:].zfill(8)
         self.execute_i2cset(0x24, 0x12, 0x00)
         return make_json_response({
             'input_status_binary': input_status_bin,
             'input_status_hexadecimal': input_status_hex
         })
-    
+
 
     @exposed_http("GET", "/hid")
     async def __state_handler(self, _: Request) -> Response:
         return make_json_response(await self.__hid.get_state())
 
-    # @exposed_http("POST", "/battery/set_simulation_percent")
-    # async def set_simulation_percent(self, request: Request) -> Response:
-    #     data = await request.json()
-    #     percent = data.get('percent')
-    #     hex_value = hex(percent // 10)
-    #     formatted_str = '0x' + hex_value[2:].zfill(1)
-    #     write(formatted_str, percent)
-    #     return make_json_response({"ok": True, "message": "Simulation Percentage set!", "percent": [formatted_str, percent]})
 
-    # @exposed_http("POST", "/battery/simulated")
-    # async def set_simulated_battery_mode(self, request: Request) -> Response:
-    #     attach("simulated")
-    #     return make_json_response({"ok": True, "message": "Mode set to Simulated battery"})
-    
-    # @exposed_http("POST", "/battery/ac-source")
-    # async def set_ac_source_battery_mode(self, request: Request) -> Response:
-    #     commands = [
-    #         ["raspi-gpio", "set", "24", "op", "dl"],
-    #         ["raspi-gpio", "set", "13", "op", "dl"]
-           
-    #     ]
-    #     for command_args in commands:
-    #         subprocess.run(command_args)
-    #     return make_json_response({"ok": True, "message": "Mode set to AC source"})
 
-    # @exposed_http("POST", "/battery/real")
-    # async def set_real_battery_mode(self, request: Request) -> Response:
-    #     attach("real")
-    #     return make_json_response({"ok": True, "message": "Mode set to real battery"})
-    
-
-    @exposed_http("POST", "/battery/set_simulation_percent")
-    async def set_simulation_percent(self, request: Request) -> Response:
-        data = await request.json()
-        percent = data.get('percent')
-        hex_value = hex(percent // 10)
-        formatted_str = '0x' + hex_value[2:].zfill(1)
-        write(15,percent,"simulated")
-        return make_json_response({"ok": True, "message": "Simulation Percentage set!", "percent": [formatted_str, percent]})
-
-    @exposed_http("POST", "/battery/simulated")
-    async def set_simulated_battery_mode(self, request: Request) -> Response:
-        write(None,None,"simulated-attach")
-        return make_json_response({"ok": True, "message": "Mode set to Simulated battery"})
-    
-    @exposed_http("POST", "/battery/real")
-    async def set_real_battery_mode(self, request: Request) -> Response:
-        write(None,None,"real-attach")
-        return make_json_response({"ok": True, "message": "Mode set to real battery"})
-    
-    @exposed_http("POST", "/battery/ac-source")
-    async def set_ac_source_battery_mode(self, request: Request) -> Response:
-        commands = [
-            ["raspi-gpio", "set", "24", "op", "dl"],
-            ["raspi-gpio", "set", "13", "op", "dl"]
-
-        ]
-        for command_args in commands:
-            subprocess.run(command_args)
-        return make_json_response({"ok": True, "message": "Mode set to AC source"})
-    
-
-    def move_right(self):
-        motor_step=5
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) + motor_step)
-        get_logger(0).info("Right Camera api call ")
- 
-    @exposed_http("GET", "/camera/right")
-    async def __right_handler(self, _: Request) -> Response:
-        self.move_right()
-        return make_json_response({"ok":True })
-   
-    def move_left(self):
-        motor_step=5
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) - motor_step)
-        get_logger(0).info("Left Camera api call ")
- 
-    @exposed_http("GET", "/camera/left")
-    async def __left_handler(self, _: Request) -> Response:
-        self.move_left()
-        return make_json_response({"ok":True })
-   
-    def move_down(self):
-        motor_step=5
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X)- motor_step)
-        get_logger(0).info("Camera down api call")
- 
-    @exposed_http("GET", "/camera/down")
-    async def __down_handler(self, _: Request) -> Response:
-        self.move_down()
-        return make_json_response({"ok":True })
-   
-    def move_up(self):
-        motor_step=5
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X)+ motor_step)
-        get_logger(0).info("Camera up api call")
- 
-    @exposed_http("GET", "/camera/up")
-    async def __up_handler(self, _: Request) -> Response:
-        self.move_up()
-        return make_json_response({"ok":True })
-   
-    def zoom_in(self):
-        zoom_step = 100
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_ZOOM,focuser.get(Focuser.OPT_ZOOM) + zoom_step)
-        get_logger(0).info("Camera zoom-in api call")
- 
-    @exposed_http("GET", "/camera/zoomin")
-    async def __zoomin_handler(self, _: Request) -> Response:
-        self.zoom_in()
-        return make_json_response({"ok":True })
-   
-    def zoom_out(self):
-        zoom_step = 100
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_ZOOM,focuser.get(Focuser.OPT_ZOOM) - zoom_step)
-        get_logger(0).info("Camera zoom-in api call")
- 
-    @exposed_http("GET", "/camera/zoomout")
-    async def __zoomout_handler(self, _: Request) -> Response:
-        self.zoom_out()
-        return make_json_response({"ok":True })
-   
-    def focus_in(self):
-        focus_step = 100
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_FOCUS,focuser.get(Focuser.OPT_FOCUS)+ focus_step)
-        get_logger(0).info("Camera focus-in api call")
- 
-    @exposed_http("GET", "/camera/focusin")
-    async def __focusin_handler(self, _: Request) -> Response:
-        self.focus_in()
-        return make_json_response({"ok":True })
-   
-    def focus_out(self):
-        focus_step = 100
-        i2c_bus=1
-        focuser = Focuser(i2c_bus)
-        focuser.set(Focuser.OPT_FOCUS,focuser.get(Focuser.OPT_FOCUS)- focus_step)
-        get_logger(0).info("Camera focus-out api call")
- 
-    @exposed_http("GET", "/camera/focusout")
-    async def __focusout_handler(self, _: Request) -> Response:
-        self.focus_out()
-        return make_json_response({"ok":True })
-    
-    
 
     @exposed_http("POST", "/hid/set_params")
     async def __set_params_handler(self, request: Request) -> Response:
@@ -307,52 +146,16 @@ class HidApi:
         self.__hid.set_connected(valid_bool(request.query.get("connected")))
         return make_json_response()
 
-    # @exposed_http("GET", "/postcode/get_data")
-    # async def __getData_handler(self, request: Request) -> Response:
-    #     ser = serial.Serial('/dev/ttyAMA0', 115200, timeout=1)
-    #     iteration_count = 0  
- 
-    #     try:
-    #         while True:
-    #             line = await asyncio.to_thread(ser.readline)
-    #             if line:
-    #                 line = line.decode('utf-8', errors='replace').strip()
-    #                 result = {"data": line}
-    #                 return make_json_response(result)
-    #             iteration_count += 1
-    #             if iteration_count >= 50:
-    #                 break
- 
-    #     except asyncio.TimeoutError:
-    #         pass
-    #     finally:
-    #         ser.close()
- 
-    #     iteration_count = 0
 
     @exposed_http("POST", "/hid/reset")
     async def __reset_handler(self, _: Request) -> Response:
         await self.__hid.reset()
         return make_json_response()
-    
 
-    def auto_focus(self):
-        focuser = Focuser(1)
-        camera = Camera()
-        auto_focus = AutoFocus(focuser,camera)
-        auto_focus.startFocus()
-        get_logger(0).info("Autofocus api call")
- 
- 
- 
-    @exposed_http("GET", "/camera/autofocus")
-    async def __autofocus_handler(self, _: Request) -> Response:
-        self.auto_focus()
-        return make_json_response({"ok":True })
 
-    # =====
 
-    async def get_keymaps(self) -> dict:  
+
+    async def get_keymaps(self) -> dict:
         keymaps: set[str] = set()
         for keymap_name in os.listdir(self.__keymaps_dir_path):
             path = os.path.join(self.__keymaps_dir_path, keymap_name)
@@ -497,7 +300,64 @@ class HidApi:
         self.__send_mouse_delta_event(deltas, squash, handler)
 
     # =====
+    def is_integer(self, s):
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
 
+    @exposed_http("GET", "/postcode/get_data")
+    async def __getData_handler(self, request: Request) -> Response:
+        values = request.query.get('lastline')
+       # with open('/output/minicom_output.txt', 'r') as file:
+        with open('/home/kvmd-webterm/postcodelog.txt', 'r', encoding='utf-8', errors='ignore') as file:
+            line_number = 1
+            api_line_number = int(values) if values and self.is_integer(values) else 1
+            pattern = re.compile(r"--- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) ---")
+            last_match = None
+            match_line = 1
+            hex_data = []
+            for line in file:
+                if line_number >= api_line_number:
+                    match = pattern.search(line.strip())
+
+                    # If a match is found, update last_match
+                    if match:
+                        last_match = match
+                        match_line = line_number
+                        hex_data = []
+                    #else:
+                    elif line.strip():
+                        print(f"Line {line_number}: {line.strip()}")
+                        hex_data.append(f"{line.strip()[-4:]}")
+
+                # Increment line number
+                line_number += 1
+
+                # If a match was found, print the last occurrence
+        if last_match:
+                #print("Last occurrence found on " + str(match_line) + " : ", last_match.group(1))
+                #print(line_number, hex_data)
+            return make_json_response({"Linenumber":line_number,"hexdata":hex_data})
+        else:
+                #print("Pattern not found in the file.")
+                #print(line_number, hex_data)
+            return make_json_response({"Linenumber":line_number,"hexdata":hex_data})
+
+    @exposed_http("GET", "/postcode/get_logs")
+    async def __getlog_handler(self, request: Request) -> Response:
+        api_response = []
+        with open('/home/kvmd-webterm/archived_logs.txt', 'r', encoding='utf-8', errors='ignore') as file:
+            for line in file:
+                if not line.startswith('---'):
+                    value = re.sub(r'^\d+\) |[\r]', '', line)
+                    cleaned_value = value.strip()
+                    if cleaned_value:
+
+                        api_response.append(cleaned_value)
+
+        return make_json_response({"Logs":api_response})
     @exposed_http("POST", "/hid/events/send_key")
     async def __events_send_key_handler(self, request: Request) -> Response:
         key = valid_hid_key(request.query.get("key"))
@@ -534,53 +394,6 @@ class HidApi:
     @exposed_http("POST", "/hid/events/send_mouse_wheel")
     async def __events_send_mouse_wheel_handler(self, request: Request) -> Response:
         return self.__process_http_delta_event(request, self.__hid.send_mouse_wheel_event)
-    
-    @exposed_http("GET", "/postcode/get_data")
-    async def __getData_handler(self, request: Request) -> Response:
-        values = request.query.get('lastline')
-        with open('/home/kvmd-webterm/minicom_output_edited.txt', 'r') as file:
-            line_number = 1
-            api_line_number = int(values) if values and self.is_integer(values) else 1
-            pattern = re.compile(r"--- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) ---")
-            last_match = None
-            match_line = 1
-            hex_data = []
-            for line in file:
-                if line_number > api_line_number:
-                    match = pattern.search(line.strip())
-        
-                    # If a match is found, update last_match
-                    if match:
-                        last_match = match
-                        match_line = line_number
-                        hex_data = []
-                    else:
-                        print(f"Line {line_number}: {line.strip()}")
-                        hex_data.append(f"{line.strip()[-2:]}")
-        
-                # Increment line number
-                line_number += 1
-            
-                # If a match was found, print the last occurrence
-        if last_match:
-                #print("Last occurrence found on " + str(match_line) + " : ", last_match.group(1))
-                #print(line_number, hex_data)
-            return make_json_response({"Linenumber":line_number,"hexdata":hex_data})
-        else:
-                #print("Pattern not found in the file.")
-                #print(line_number, hex_data)
-            return make_json_response({"Linenumber":line_number,"hexdata":hex_data})
-    
-    @exposed_http("GET", "/postcode/get_logs")
-    async def __getlog_handler(self, request: Request) -> Response:
-        api_response = []
-        with open('/home/kvmd-webterm/minicom_output_edited.txt', 'r') as file:
-            for line in file:
-                if not line.startswith('---'):
-                     value = re.sub(r'^\d+\) |[\r]', '', line)
-                     api_response.append(value.strip())
-        
-        return make_json_response({"Logs":api_response})   
 
     def __process_http_delta_event(self, request: Request, handler: Callable[[int, int], None]) -> Response:
         delta_x = valid_hid_mouse_delta(request.query.get("delta_x"))

@@ -43,7 +43,38 @@ export function Streamer() {
 		tools.el.setOnClick($("detachBattery"), __detachBattery);
 		tools.el.setOnClick($("attachSimulatedBattery"), __attachSimulatedBattery);
 		tools.el.setOnClick($("detachRealBattery"), __detachBattery);
-		$("stream-led").title = "Stream inactive";
+                tools.el.setOnClick($("apc-power-off"), __apcpoweroff);
+                tools.el.setOnClick($("apc-power-on"), __apcpoweron);
+                tools.el.setOnClick($("apc-power-off2"), __apcpoweroff2);
+                tools.el.setOnClick($("apc-power-on2"), __apcpoweron2);
+                tools.el.setOnClick($("apc-power-off4"), __apcpoweroff4);
+                tools.el.setOnClick($("apc-power-on4"), __apcpoweron4);
+                tools.el.setOnClick($("get-boot-order"), __getbootorder);
+                tools.el.setOnClick($("get-boot-order2"), __getbootorder);
+                tools.el.setOnClick($("get-boot-order4"), __getbootorder);
+                tools.el.setOnClick($("change-bootorder"), __changebootorder);
+                tools.el.setOnClick($("change-bootorder2"), __changebootorder2);
+                tools.el.setOnClick($("change-bootorder4"), __changebootorder4);
+                tools.el.setOnClick($("edk-reset"), __resetedk);
+                tools.el.setOnClick($("edk-reset2"), __resetedk);
+                tools.el.setOnClick($("edk-reset4"), __resetedk);
+                tools.el.setOnClick($("ifwi-flash"), __flashifwi);
+                tools.el.setOnClick($("ifwi-flash2"), __flashifwi2);
+                tools.el.setOnClick($("ifwi-flash4"), __flashifwi4);
+                tools.el.setOnClick($("file-selection"), __getbinfiles);
+      		tools.el.setOnClick($("file-selection2"), __getbinfiles2);
+                tools.el.setOnClick($("file-selection4"), __getbinfiles4);
+                tools.el.setOnClick($("switchSerialButton"),__switchSerialButton);
+                tools.el.setOnClick($("switchEthernetButton"),__switchEthernetButton);
+                tools.el.setOnClick($("switchSerialButton2"),__switchSerialButton);
+                tools.el.setOnClick($("switchEthernetButton2"),__switchEthernetButton);
+                tools.el.setOnClick($("switchSerialButton4"),__switchSerialButton);
+                tools.el.setOnClick($("switchEthernetButton4"),__switchEthernetButton);
+                tools.el.setOnClick($("send-button"), __sendcommand);
+                tools.el.setOnClick($("send-button2"), __sendcommand2);
+                tools.el.setOnClick($("send-button4"), __sendcommand4);
+                tools.el.setOnClick($("postcode"), __show_postcode);
+                $("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value").innerHTML = `${value}%`;
 		});
@@ -77,47 +108,87 @@ export function Streamer() {
 		tools.el.setOnClick($("stream-reset-button"), __clickResetButton);
 	//	tools.el.setOnClick($("refresh-button-id"), __set_system_state);
                 setInterval(__set_system_state, 2500);
+                setInterval(__set_interface_state, 2500);
+                //setInterval(__setPostcode, 2500);
+                //setInterval(__updateText, 2500);
 		$("stream-window").show_hook = () => __applyState(__state);
 		$("stream-window").close_hook = () => __applyState(null);
-		tools.el.setOnClick($("postcode"), __show_postcode);
-
-		self.updateText();
-	};
+                self.runInBackground();
+                self.updateText();
+                //self.startUpdateTextInterval();
+        };
 	/************************************************************************/
+        self.runInBackground = async function() {
+                while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        __setPostcode();
+                }
+        };
+        self.updateText = function() {
+                console.log("Update Text called");
+                let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                const el_grab2 = document.querySelector("#stream-window-header .window-postcode");
+                let el_info = $("stream-info");
+                if (dataArray.length > 0) {
+                        sessionStorage.setItem('last_item', dataArray[0])
+                        const newText = 'Postcode: ' + sessionStorage.getItem('last_item');
+                        el_grab2.innerHTML = el_info.innerHTML = newText;
+                        dataArray.shift();
+                        console.log(dataArray);
+                        sessionStorage.setItem('hexdata', JSON.stringify(dataArray));
+                        setTimeout(() => {self.updateText();}, 100);
+                } else {
+                        console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
+                        sessionStorage.removeItem('hexdata');
+                        sessionStorage.setItem('updating', '0');
+                }
+        };
 
-	self.updateText = function() {
-		console.log("Update Text called");
-		let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
-		const el_grab2 = document.querySelector("#stream-window-header .window-postcode");
-		let el_info = $("stream-info");
-		if (dataArray.length > 0) {
-			sessionStorage.setItem('last_item', dataArray[0])
-			const newText = 'Postcode: ' + sessionStorage.getItem('last_item');
-			el_grab2.innerHTML = el_info.innerHTML = newText;
-			dataArray.shift();
-			console.log(dataArray);
-			sessionStorage.setItem('hexdata', JSON.stringify(dataArray));
-			setTimeout(() => {self.updateText();}, 100);
-		} else {
-			console.log("Hex Data deleted");
-			sessionStorage.removeItem('hexdata');
-			sessionStorage.setItem('updating', '0');
-		}
-	};
+        var __show_postcode = function(){
+                   let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
+                           if (http.readyState === 4) {
+                                   if (http.status === 200) {
+                                            let response = JSON.parse(http.responseText);
+                                            let logs = response.result.Logs;
+                                            let logsString = logs.join("<br>");
+                                           wm.info("Postcode Logs:<br>" + logsString);
+                                   }
+                               }
+                            });
 
-	var __show_postcode = function(){
-		let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
-			if (http.readyState === 4) {
-				if (http.status === 200) {
-					 let response = JSON.parse(http.responseText);
-					 let logs = response.result.Logs;
-							 let logsString = logs.join("<br>");
-							wm.info("Postcode Logs:<br>" + logsString);
-				}
-					}
-				 });
-					
-			 }; 
+                        };
+        var __setPostcode = function() {
+                console.log("Calling __setPostcode function");
+                let postcodeValues = [];
+                function handleResponse() {
+                    if (http.readyState === 4 && http.status === 200) {
+                        const data = JSON.parse(http.responseText);
+                        if (data && data.result && data.result.hexdata) {
+                            sessionStorage.setItem("lastline",data.result.Linenumber);
+                            postcodeValues = data.result.hexdata;
+                            let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                            let full_data = dataArray.concat(postcodeValues);
+                            if (full_data.length > 0) {
+                                    sessionStorage.setItem('hexdata', JSON.stringify(dataArray.concat(postcodeValues)));
+                                    if (sessionStorage.getItem('updating') || '0' === '0') {
+                                            self.updateText();
+                                            sessionStorage.setItem('updating', '1');
+                                    }
+                            }
+                        }
+                    }
+                }
+                let http = tools.makeRequest("GET", "/api/postcode/get_data?lastline=" + sessionStorage.getItem('lastline'), handleResponse);
+        };
+        
 	var __detachBattery = function () {
 		let http = tools.makeRequest("POST", `/api/battery/ac-source`, function () {
 			if (http.readyState === 4) {
@@ -130,6 +201,818 @@ export function Streamer() {
 			}
 		});
 	};
+        var __apcpoweroff = function () {
+                wm.confirm("Are you sure you want to Power Off?").then(function (ok) {
+                        if (ok) {
+                                // Gather the input values from the HTML
+                                let ipAddress = document.getElementById("apc-ip-address").value;
+                                let username = document.getElementById("apc-username").value;
+                                let password = document.getElementById("apc-password").value;
+ 
+                                // Create a JSON object with the gathered values
+                                let data = JSON.stringify({
+                                "ip_address": ipAddress,
+                                "username": username,
+                                "password": password
+                                });/*
+                                let formattedData = data.replace(/"/g,'""');
+                                // Log or use formattedData
+                                console.log(formattedData);
+ */
+                                // Use the updated makeRequest function
+                                tools.makeRequest("POST", `/api/apc-power-off`, function () {
+                                if (this.readyState === 4) {
+                                        if (this.status !== 200) {
+                                                console.log("Click error:<br>", this.responseText);
+                                        }
+                                }
+                                }, data, "application/json"); // Pass the JSON data and content type
+                        }
+                        });
+        };
+
+       var __apcpoweroff2 = function () {
+                wm.confirm("Are you sure you want to Power Off?").then(function (ok) {
+                        if (ok) {
+                                // Gather the input values from the HTML
+                                let ipAddress = document.getElementById("apc-ip-address2").value;
+                                let username = document.getElementById("apc-username2").value;
+                                let password = document.getElementById("apc-password2").value;
+
+                                // Create a JSON object with the gathered values
+                                let data = JSON.stringify({
+                                "ip_address": ipAddress,
+                                "username": username,
+                                "password": password
+                                });/*
+                                let formattedData = data.replace(/"/g,'""');
+                                // Log or use formattedData
+                                console.log(formattedData);
+ */
+                                // Use the updated makeRequest function
+                                tools.makeRequest("POST", `/api/apc-power-off`, function () {
+                                if (this.readyState === 4) {
+                                        if (this.status !== 200) {
+                                                console.log("Click error:<br>", this.responseText);
+                                        }
+                                }
+                                }, data, "application/json"); // Pass the JSON data and content type
+                        }
+                        });
+        };
+
+        var __apcpoweroff4 = function () {
+                wm.confirm("Are you sure you want to Power Off?").then(function (ok) {
+                        if (ok) {
+                                // Gather the input values from the HTML
+                                let ipAddress = document.getElementById("apc-ip-address4").value;
+                                let username = document.getElementById("apc-username4").value;
+                                let password = document.getElementById("apc-password4").value;
+
+                                // Create a JSON object with the gathered values
+                                let data = JSON.stringify({
+                                "ip_address": ipAddress,
+                                "username": username,
+                                "password": password
+                                });/*
+                                let formattedData = data.replace(/"/g,'""');
+                                // Log or use formattedData
+                                console.log(formattedData);
+ */
+                                // Use the updated makeRequest function
+                                tools.makeRequest("POST", `/api/apc-power-off`, function () {
+                                if (this.readyState === 4) {
+                                        if (this.status !== 200) {
+                                                console.log("Click error:<br>", this.responseText);
+                                        }
+                                }
+                                }, data, "application/json"); // Pass the JSON data and content type
+                        }
+                        });
+        };
+
+
+        var __apcpoweron = function () {
+		wm.confirm("Are you sure you want to Power On?").then(function (ok) {
+				if (ok) {
+						// Gather the input values from the HTML
+						let ipAddress = document.getElementById("apc-ip-address").value;
+						let username = document.getElementById("apc-username").value;
+						let password = document.getElementById("apc-password").value;
+ 
+						// Create a JSON object with the gathered values
+						let data = JSON.stringify({
+						"ip_address": ipAddress,
+						"username": username,
+						"password": password
+						});/*
+                                                let formattedData = data.replace(/"/g,'""');
+                                                // Log or use formattedData
+                                                console.log(formattedData);*/
+
+						// Use the updated makeRequest function
+						tools.makeRequest("POST", `/api/apc-power-on`, function () {
+						 if (this.readyState === 4) {
+								if (this.status !== 200) {
+										console.log("Click error:<br>", this.responseText);
+								}
+						}
+						}, data, "application/json"); // Pass the JSON data and content type
+				}
+				});
+        };
+
+         var __apcpoweron2 = function () {
+                wm.confirm("Are you sure you want to Power On?").then(function (ok) {
+                                if (ok) {
+                                                // Gather the input values from the HTML
+                                                let ipAddress = document.getElementById("apc-ip-address2").value;
+                                                let username = document.getElementById("apc-username2").value;
+                                                let password = document.getElementById("apc-password2").value;
+
+                                                // Create a JSON object with the gathered values
+                                                let data = JSON.stringify({
+                                                "ip_address": ipAddress,
+                                                "username": username,
+                                                "password": password
+                                                });/*
+                                                let formattedData = data.replace(/"/g,'""');
+                                                // Log or use formattedData
+                                                console.log(formattedData);*/
+
+                                                // Use the updated makeRequest function
+                                                tools.makeRequest("POST", `/api/apc-power-on`, function () {
+                                                 if (this.readyState === 4) {
+                                                                if (this.status !== 200) {
+                                                                                console.log("Click error:<br>", this.responseText);
+                                                                }
+                                                }
+                                                }, data, "application/json"); // Pass the JSON data and content type
+                                }
+                                });
+        };
+
+         var __apcpoweron4 = function () {
+                wm.confirm("Are you sure you want to Power On?").then(function (ok) {
+                                if (ok) {
+                                                // Gather the input values from the HTML
+                                                let ipAddress = document.getElementById("apc-ip-address4").value;
+                                                let username = document.getElementById("apc-username4").value;
+                                                let password = document.getElementById("apc-password4").value;
+
+                                                // Create a JSON object with the gathered values
+                                                let data = JSON.stringify({
+                                                "ip_address": ipAddress,
+                                                "username": username,
+                                                "password": password
+                                                });/*
+                                                let formattedData = data.replace(/"/g,'""');
+                                                // Log or use formattedData
+                                                console.log(formattedData);*/
+
+                                                // Use the updated makeRequest function
+                                                tools.makeRequest("POST", `/api/apc-power-on`, function () {
+                                                 if (this.readyState === 4) {
+                                                                if (this.status !== 200) {
+                                                                                console.log("Click error:<br>", this.responseText);
+                                                                }
+                                                }
+                                                }, data, "application/json"); // Pass the JSON data and content type
+                                }
+                                });
+        };
+
+
+/*        var __getbootorder = function () {
+    const bootId = $("boot-id").value;
+    const rawBody = JSON.stringify({ order: bootId });
+
+    let http = tools.makeRequest("POST", "/api/get-bootorder-edk", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order fetched successfully:<br>", bootId);
+                } catch (e) {
+                    wm.error("Can't get boot order:<br>", http.responseText);
+                }
+            } else {
+                wm.error("Can't get boot order:<br>", http.responseText);
+            }
+        }
+    }, rawBody, "application/json");
+
+};*/
+/*var __getbootorder = function () {
+    let http = tools.makeRequest("POST", "/api/get-bootorder-edk", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                   
+                    let responseData = JSON.parse(http.responseText);
+                   
+                    $("boot-order-response").innerText = responseData.result.response || "Null";
+                } catch (e) {
+                    wm.error("Can't parse the boot order response:<br>", e.message);
+                }
+            } else {
+                    const errorResponse = JSON.parse(http.responseText);  // Parse error response
+                    wm.error("Can't get boot order:<br>", errorResponse.result.error || "Unknown error");
+            }
+        }
+    });
+};*/
+var __getbootorder = function () {
+    let http = tools.makeRequest("POST", "/api/get-bootorder-edk", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    // Parse the JSON response
+                    let responseData = JSON.parse(http.responseText);
+                    
+                    // Check if result and result.response are present
+                    if (responseData.result && responseData.result.response) {
+                   //     wm.info("Boot order response:<br>" + responseData.result.response);
+                    let responseLines = responseData.result.response.split('\r\n').filter(line => line.trim() !== '');
+                        let formattedResponse = responseLines.join('<br>');
+                        
+                        // Display the formatted response
+                        wm.info("Boot order response:<br>" + formattedResponse);
+                    } else {
+                        wm.info("No boot order response available.");
+                    }
+                } catch (e) {
+                    // Handle JSON parsing errors
+                    wm.error("Can't parse the boot order response:<br>" + e.message);
+                }
+            } else {
+                try {
+                    // Parse and display error response
+                    const errorResponse = JSON.parse(http.responseText);
+                    wm.error("Can't get boot order:<br>" + (errorResponse.result.error || "Unknown error"));
+                } catch (e) {
+                    wm.error("Error parsing error response:<br>" + e.message);
+                }
+            }
+        }
+    });
+};
+/*var __changebootorder = function (elementId) {
+    const bootId = document.getElementById(elementId).value;
+    const rawBody = JSON.stringify({ order: bootId });
+
+    let http = tools.makeRequest("POST", "/api/flash-os", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order changed successfully:<br>", bootId);
+                } catch (e) {
+                    wm.error("Can't change boot order:<br>", http.responseText);
+                }
+            } else {
+                wm.error("Can't change boot order:<br>", http.responseText);
+            }
+        }
+    }, rawBody, "application/json");
+};*/
+
+var __changebootorder = function () {
+    const bootId = document.getElementById("boot-id").value;
+    const rawBody = JSON.stringify({ order: bootId });
+
+    let http = tools.makeRequest("POST", "/api/flash-os", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order changed successfully:<br>", bootId);
+                } catch (e) {
+                    wm.error("Can't change boot order:<br>", http.responseText);
+                }
+            } else {
+                wm.error("Can't change boot order:<br>", http.responseText);
+            }
+        }
+    }, rawBody, "application/json");
+
+};
+var __changebootorder2 = function () {
+    const bootId = document.getElementById("boot-id2").value;
+    const rawBody = JSON.stringify({ order: bootId });
+
+    let http = tools.makeRequest("POST", "/api/flash-os", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order changed successfully:<br>", bootId);
+                } catch (e) {
+                    wm.error("Can't change boot order:<br>", http.responseText);
+                }
+            } else {
+                wm.error("Can't change boot order:<br>", http.responseText);
+            }
+        }
+    }, rawBody, "application/json");
+
+};
+
+var __changebootorder4 = function () {
+    const bootId = document.getElementById("boot-id4").value;
+    const rawBody = JSON.stringify({ order: bootId });
+
+    let http = tools.makeRequest("POST", "/api/flash-os", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order changed successfully:<br>", bootId);
+                } catch (e) {
+                    wm.error("Can't change boot order:<br>", http.responseText);
+                }
+            } else {
+                wm.error("Can't change boot order:<br>", http.responseText);
+            }
+        }
+    }, rawBody, "application/json");
+
+};
+
+
+var __resetedk = function () {
+
+    let http = tools.makeRequest("POST", "/api/reset-edk", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    const response = JSON.parse(http.responseText);
+                    wm.info("Boot order reset successfully");
+                } catch (e) {
+                    wm.error("Can't reset boot order:<br>", http.responseText);
+                }
+            } else {
+                console.log("No response from serial device");
+            }
+        }
+    });
+
+};
+
+var __flashifwi = function () {
+	wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
+		if (ok) {
+			// Gather the input value from the HTML
+			let ifwi_file = encodeURIComponent(document.getElementById("file-selection").value);
+
+			// Construct the query string
+			let query = `ifwi_file=${ifwi_file}`;
+
+			// Use the updated makeRequest function with the query string
+			tools.makeRequest("GET", `/api/flash_ifwi?${query}`, function () {
+				if (this.readyState === 4) {
+					if (this.status !== 200) {
+						wm.error("Click error:<br>", this.responseText);
+					}
+				}
+			}, null, "application/x-www-form-urlencoded"); // Set content type for query parameters
+		}
+	});
+};
+var __flashifwi2 = function () {
+        wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
+                if (ok) {
+                        // Gather the input value from the HTML
+                        let ifwi_file = encodeURIComponent(document.getElementById("file-selection2").value);
+
+                        // Construct the query string
+                        let query = `ifwi_file=${ifwi_file}`;
+
+                        // Use the updated makeRequest function with the query string
+                        tools.makeRequest("GET", `/api/flash_ifwi?${query}`, function () {
+                                if (this.readyState === 4) {
+                                        if (this.status !== 200) {
+                                                wm.error("Click error:<br>", this.responseText);
+                                        }
+                                }
+                        }, null, "application/x-www-form-urlencoded"); // Set content type for query parameters
+                }
+        });
+};
+var __flashifwi4 = function () {
+        wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
+                if (ok) {
+                        // Gather the input value from the HTML
+                        let ifwi_file = encodeURIComponent(document.getElementById("file-selection4").value);
+
+                        // Construct the query string
+                        let query = `ifwi_file=${ifwi_file}`;
+
+                        // Use the updated makeRequest function with the query string
+                        tools.makeRequest("GET", `/api/flash_ifwi?${query}`, function () {
+                                if (this.readyState === 4) {
+                                        if (this.status !== 200) {
+                                                wm.error("Click error:<br>", this.responseText);
+                                        }
+                                }
+                        }, null, "application/x-www-form-urlencoded"); // Set content type for query parameters
+                }
+        });
+};
+
+/*var __flashIfwi = function (elementId) {
+    wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
+        if (ok) {
+            // Gather the input value from the HTML
+            let ifwi_file = encodeURIComponent(document.getElementById(elementId).value);
+
+            // Construct the query string
+            let query = `ifwi_file=${ifwi_file}`;
+
+            // Use the updated makeRequest function with the query string
+            tools.makeRequest("GET", `/api/flash_ifwi?${query}`, function () {
+                if (this.readyState === 4) {
+                    if (this.status !== 200) {
+                        wm.error("Click error:<br>", this.responseText);
+                    }
+                }
+            }, null, "application/x-www-form-urlencoded"); // Set content type for query parameters
+        }
+    });
+};*/
+
+
+let filesLoaded = false;
+var __getbinfiles = function () {
+let http = tools.makeRequest("GET", "/api/bin-files", function () {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
+            try {
+                let responseData = JSON.parse(http.responseText);
+                if (Array.isArray(responseData)) {
+                    if (!filesLoaded) {
+                        const selector = document.getElementById('file-selection');
+                        if (selector) {
+                            selector.innerHTML = '<option value="">-- Select a file --</option>';
+                            const files = responseData;
+                            files.forEach(file => {
+                                const option = document.createElement('option');
+                                option.value = file;
+                                option.textContent = file;
+                                selector.appendChild(option);
+                            });
+                            filesLoaded = true; // Mark files as loaded to prevent resetting
+                        }
+                    }
+                } else {
+                    console.error("Unexpected response format:", responseData);
+                }
+            } catch (e) {
+                console.error("Error parsing JSON response:", e);
+            }
+        } else {
+            console.error("Request failed with status", http.status);
+        }
+    }
+});
+}
+
+document.getElementById('file-selection').addEventListener('change', function() {
+    const selectedFile = this.value;
+    if (selectedFile) {
+        // console.log("Selected file:", selectedFile);
+        // Ensure the dropdown does not get reset after selection
+        filesLoaded = true;  // Keep files loaded so it won't reset again
+    }
+});
+
+let filesLoaded2 = false;
+var __getbinfiles2 = function () {
+let http = tools.makeRequest("GET", "/api/bin-files", function () {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
+            try {
+                let responseData = JSON.parse(http.responseText);
+                if (Array.isArray(responseData)) {
+                    if (!filesLoaded2) {
+                        const selector = document.getElementById('file-selection2');
+                        if (selector) {
+                            selector.innerHTML = '<option value="">-- Select a file --</option>';
+                            const files = responseData;
+                            files.forEach(file => {
+                                const option = document.createElement('option');
+                                option.value = file;
+                                option.textContent = file;
+                                selector.appendChild(option);
+                            });
+                            filesLoaded2 = true; // Mark files as loaded to prevent resetting
+                        }
+                    }
+                } else {
+                    console.error("Unexpected response format:", responseData);
+                }
+            } catch (e) {
+                console.error("Error parsing JSON response:", e);
+            }
+        } else {
+            console.error("Request failed with status", http.status);
+        }
+    }
+});
+}
+
+document.getElementById('file-selection2').addEventListener('change', function() {
+    const selectedFile = this.value;
+    if (selectedFile) {
+        // console.log("Selected file:", selectedFile);
+        // Ensure the dropdown does not get reset after selection
+        filesLoaded2 = true;  // Keep files loaded so it won't reset again
+    }
+});
+
+let filesLoaded4 = false;
+var __getbinfiles4 = function () {
+let http = tools.makeRequest("GET", "/api/bin-files", function () {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
+            try {
+                let responseData = JSON.parse(http.responseText);
+                if (Array.isArray(responseData)) {
+                    if (!filesLoaded4) {
+                        const selector = document.getElementById('file-selection4');
+                        if (selector) {
+                            selector.innerHTML = '<option value="">-- Select a file --</option>';
+                            const files = responseData;
+                            files.forEach(file => {
+                                const option = document.createElement('option');
+                                option.value = file;
+                                option.textContent = file;
+                                selector.appendChild(option);
+                            });
+                            filesLoaded4 = true; // Mark files as loaded to prevent resetting
+                        }
+                    }
+                } else {
+                    console.error("Unexpected response format:", responseData);
+                }
+            } catch (e) {
+                console.error("Error parsing JSON response:", e);
+            }
+        } else {
+            console.error("Request failed with status", http.status);
+        }
+    }
+});
+}
+
+document.getElementById('file-selection4').addEventListener('change', function() {
+    const selectedFile = this.value;
+    if (selectedFile) {
+        // console.log("Selected file:", selectedFile);
+        // Ensure the dropdown does not get reset after selection
+        filesLoaded4 = true;  // Keep files loaded so it won't reset again
+    }
+});
+
+
+
+        var __set_interface_state = function () {
+                let http = tools.makeRequest("GET", `/api/current-interface`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        console.log("Can't get current interface state:<br>", http.responseText);
+                                }
+                                else if (http.status === 200) {
+                                        const data = JSON.parse(http.responseText);
+                                        const current_interface = data.result.current_interface;
+                                        if (current_interface === 'ACM (Serial)') {
+                                                const messageElement = document.getElementById('interface');
+                                                const messageElement2 = document.getElementById('interface1');
+                                                const messageElement3 = document.getElementById('interface2');
+                                                const messageElement4 = document.getElementById('interface21');
+                                                const messageElement5 = document.getElementById('interface4');
+                                                const messageElement6 = document.getElementById('interface41');
+                                                messageElement.textContent = "Serial";
+                                                messageElement.style.color = "orange";
+                                                messageElement2.textContent = "Serial";
+                                                messageElement2.style.color = "orange";
+                                                messageElement3.textContent = "Serial";
+                                                messageElement3.style.color = "orange";
+                                                messageElement4.textContent = "Serial";
+                                                messageElement4.style.color = "orange";
+                                                messageElement5.textContent = "Serial";
+                                                messageElement5.style.color = "orange";
+                                                messageElement6.textContent = "Serial";
+                                                messageElement6.style.color = "orange";
+
+
+                                        }
+                                        else if (current_interface === 'NCM (Ethernet)') {
+                                                const messageElement = document.getElementById('interface');
+                                                const messageElement2 = document.getElementById('interface1');
+                                                const messageElement3 = document.getElementById('interface2');
+                                                const messageElement4 = document.getElementById('interface21');
+                                                const messageElement5 = document.getElementById('interface4');
+                                                const messageElement6 = document.getElementById('interface41');
+
+                                                messageElement.textContent = "Ethernet";
+                                                messageElement.style.color = "orange";
+                                                messageElement2.textContent = "Ethernet";
+                                                messageElement2.style.color = "orange";
+                                                messageElement3.textContent = "Ethernet";
+                                                messageElement3.style.color = "orange";
+                                                messageElement4.textContent = "Ethernet";
+                                                messageElement4.style.color = "orange";
+                                                messageElement5.textContent = "Ethernet";
+                                                messageElement5.style.color = "orange";
+                                                messageElement6.textContent = "Ethernet";
+                                                messageElement6.style.color = "orange";
+
+                                        }
+                                        else{
+                                                const messageElement = document.getElementById('interface');
+                                                const messageElement2 = document.getElementById('interface1');
+                                                const messageElement3 = document.getElementById('interface2');
+                                                const messageElement4 = document.getElementById('interface21');
+                                                const messageElement5 = document.getElementById('interface4');
+                                                const messageElement6 = document.getElementById('interface41');
+                                                messageElement.textContent = "Can't get Current Interface";
+                                                messageElement.style.color = "red";
+                                                messageElement2.textContent = "Can't get Current Interface";
+                                                messageElement2.style.color = "red";
+                                                messageElement3.textContent = "Can't get Current Interface";
+                                                messageElement3.style.color = "orange";
+                                                messageElement4.textContent = "Can't get Current Interface";
+                                                messageElement4.style.color = "orange";
+                                                messageElement5.textContent = "Can't get Current Interface";
+                                                messageElement5.style.color = "orange";
+                                                messageElement6.textContent = "Can't get Current Interface";
+                                                messageElement6.style.color = "orange";
+                                        }
+                                }
+                        }
+                })
+        }
+
+        var __sendcommand2 = function() {
+    const interfaceElement = document.getElementById('interface').textContent.trim();
+    console.log("Checkinterface",interfaceElement);
+    let command = document.getElementById('interface-input2').value; // Fetch and trim command text
+    //const command = "dir";
+    console.log("Command to send:", command); // Log command value for debugging
+     if (!command) {
+        wm.error("No command provided");
+        return;
+    }
+const rawBody = JSON.stringify({ cmd: command });
+const query = `reqcmd=${command}`;
+    let http; // Declare `http` here, to avoid redefining it in the blocks
+
+    if (interfaceElement === 'Serial') {
+        http = tools.makeRequest("POST", "/api/serial", function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.response);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        }, rawBody, "application/json");
+    }
+    else if (interfaceElement === 'Ethernet') {
+        const etherneturl = `/api/ethernet?${query}`;
+        http = tools.makeRequest("GET", etherneturl, function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.stdout);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        });
+    }
+    else {
+        wm.error("Invalid interface selected");
+    }
+}
+
+
+
+        var __sendcommand = function() {
+    const interfaceElement = document.getElementById('interface').textContent.trim();
+    console.log("Checkinterface",interfaceElement);
+    let command = document.getElementById('interface-input').value; // Fetch and trim command text
+    //const command = "dir";
+    console.log("Command to send:", command); // Log command value for debugging
+     if (!command) {
+        wm.error("No command provided");
+        return;
+    }
+const rawBody = JSON.stringify({ cmd: command });
+const query = `reqcmd=${command}`; 
+    let http; // Declare `http` here, to avoid redefining it in the blocks
+    
+    if (interfaceElement === 'Serial') {
+        http = tools.makeRequest("POST", "/api/serial", function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.response);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        }, rawBody, "application/json");
+    }
+    else if (interfaceElement === 'Ethernet') {
+        const etherneturl = `/api/ethernet?${query}`;
+        http = tools.makeRequest("GET", etherneturl, function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.stdout);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        });
+    } 
+    else {
+        wm.error("Invalid interface selected");
+    }
+}
+
+var __sendcommand4 = function() {
+    const interfaceElement = document.getElementById('interface').textContent.trim();
+    console.log("Checkinterface",interfaceElement);
+    let command = document.getElementById('interface-input4').value; // Fetch and trim command text
+    //const command = "dir";
+    console.log("Command to send:", command); // Log command value for debugging
+     if (!command) {
+        wm.error("No command provided");
+        return;
+    }
+const rawBody = JSON.stringify({ cmd: command });
+const query = `reqcmd=${command}`;
+    let http; // Declare `http` here, to avoid redefining it in the blocks
+
+    if (interfaceElement === 'Serial') {
+        http = tools.makeRequest("POST", "/api/serial", function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.response);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        }, rawBody, "application/json");
+    }
+    else if (interfaceElement === 'Ethernet') {
+        const etherneturl = `/api/ethernet?${query}`;
+        http = tools.makeRequest("GET", etherneturl, function () {
+            if (http.readyState === 4) {
+                if (http.status === 200) {
+                    try {
+                        const response = JSON.parse(http.responseText);
+                        wm.info("Fetched successfully:<br>", response.result.stdout);
+                    } catch (e) {
+                        wm.error("Can't process:<br>", http.responseText);
+                    }
+                } else {
+                    wm.error("Unsuccessful:<br>", http.responseText);
+                }
+            }
+        });
+    }
+    else {
+        wm.error("Invalid interface selected");
+    }
+}
+
+
 	var __attachSimulatedBattery = function () {
 		let http = tools.makeRequest("POST", `/api/battery/simulated`, function () {
 			if (http.readyState === 4) {
@@ -142,6 +1025,33 @@ export function Streamer() {
 			}
 		});
 	};
+	var __switchSerialButton = function(){
+		let http = tools.makeRequest("POST", `/api/enable_acm`, function () {
+			if (http.readyState === 4) {
+				if (http.status !== 200) {
+					wm.error("Click error:<br>", http.responseText);
+				}
+                                else if (http.status == 200) {
+                                        wm.info("Switched to serial Successfully")
+                                }
+			}
+		});
+	};
+
+	var __switchEthernetButton = function(){
+		let http = tools.makeRequest("POST", `/api/enable_ncm`, function () {
+			if (http.readyState === 4) {
+				if (http.status !== 200) {
+					wm.error("Click error:<br>", http.responseText);
+				}
+                                else if (http.status == 200) {
+                                        wm.info("Switched to Ethernet Successfully")
+                                }
+
+			}
+		});
+	};
+
 	var __applyBatteryStatus = function (status) {
 		//	let msg = "Unavailable";
 		$("battery-status").innerHTML = status;
@@ -204,61 +1114,45 @@ export function Streamer() {
 		let http = tools.makeRequest("GET", `/api/hid/system_state`, function () {
 			if (http.readyState === 4) {
 				if (http.status !== 200) {
-					wm.error("Can't get system state:<br>", http.responseText);
+					//wm.error("Can't get system state:<br>", http.responseText);
+                                        console.log("Can't get system state:<br>", http.responseText);
 				}
 				else if (http.status === 200) {
 					const data = JSON.parse(http.responseText);
 					const ledValue = data.result.input_status_binary;
-	
-					const ledS0 = document.getElementById('S0').querySelector('.leds0');
-					const ledS3 = document.getElementById('S3').querySelector('.leds3');
-					const ledS4 = document.getElementById('S4').querySelector('.leds4');
-					const ledS5 = document.getElementById('S5').querySelector('.leds5');
-
-
-					var elements = ['S0', 'S3', 'S4', 'S5'];
-/*                                        for (var i = 0; i < elementIds.length; i++) {
-                                            var element = document.getElementById(elementIds[i]);
-	                                     if (element.classList.contains('led-green-box')) {
-        
-                                                    element.classList.remove('led-green-box');
-                                                    element.classList.add('led-yellow-box');
-                                              }
-                                          }*/
-                                         elements.forEach(elementId => {
-    const element = document.getElementById(elementId);
-    const greenBox = element.querySelector('.led-green-box');
-    if (greenBox) {
-        greenBox.classList.remove('led-green-box');
-        greenBox.classList.add('led-yellow-box');
-    }
-});
-					
 					if (ledValue === '00110000') {
-						//ledS0.classList.add('led-green-box');
-						ledS0.classList.remove('led-yellow-box');
-                                                ledS0.classList.add('led-green-box');
+						const messageElement = document.getElementById('message');
+						messageElement.textContent = "Active";
+						messageElement.style.color = "orange";
+						
 					}
 					else if (ledValue === '00110100') {
-						//ledS3.classList.add('led-green-box');
-						ledS3.classList.remove('led-yellow-box');
-                                                ledS3.classList.add('led-green-box');
+						const messageElement = document.getElementById('message');
+						messageElement.textContent = "Sleep";
+						messageElement.style.color = "orange";
 					}
 					else if (ledValue === '00110110') {
-						//ledS4.classList.add('led-green-box');
-						ledS4.classList.remove('led-yellow-box');
-                                                ledS4.classList.add('led-green-box');
+						const messageElement = document.getElementById('message');
+						messageElement.textContent = "Hibernate";
+						messageElement.style.color = "orange";
+						
 					}
 					else if (ledValue === '00110111') {
-						//ledS5.classList.add('led-green-box');
-						ledS5.classList.remove('led-yellow-box');
-                                                ledS5.classList.add('led-green-box');
+						const messageElement = document.getElementById('message');
+						messageElement.textContent = "Shutdown";
+						messageElement.style.color = "orange";
+						
+					}
+					else{
+						const messageElement = document.getElementById('message');
+						messageElement.textContent = "Disabled";
+						messageElement.style.color = "red";
 					}
 				}
 			}
 		})
 	}
-	
+
 	var __clickSimulationButton = function () {
 		let mode = tools.radio.getValue("Battery-options");
 		if (mode === 'simulation') {
@@ -348,87 +1242,29 @@ export function Streamer() {
 		tools.el.setEnabled($("stream-screenshot-button"), false);
 		tools.el.setEnabled($("stream-reset-button"), false);
 	};
-	// var __setInfo = function (is_active, online, text) {
-	// 	$("stream-box").classList.toggle("stream-box-offline", !online);
-	// 	let el_grab = document.querySelector("#stream-window-header .window-grab");
-	// 	let el_info = $("stream-info");
-	// 	let title = `${__streamer.getName()} &ndash; `;
-	// 	let el_grab2 = document.querySelector("#stream-window-header .window-postcode");
-	// 	let title2 = "Postcode :";
-	// 	function handleResponse() {
-	// 		if (http.readyState === 4 && http.status === 200) {
-	// 			const data = JSON.parse(http.responseText);
-	// 			if (data && data.result && data.result.data) {
-	// 				let postcodeValue = data.result.data.split(":")[1].trim();
-	// 				title2 = "Postcode : " + postcodeValue;
-	// 				el_grab2.innerHTML = el_info.innerHTML = title2;
-	// 			}
-	// 		}
-	// 	}
-	// 	//	let http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
-	// 	//	setInterval(function() {
-	// 	//		http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
-	// 	//	}, 10000);
-	// 	if (is_active) {
-	// 		if (!online) {
-	// 			title += "No signal / ";
-	// 		}
-	// 		title += __makeStringResolution(__resolution);
-	// 		if (text.length > 0) {
-	// 			title += " / " + text;
-	// 		}
-	// 	} else {
-	// 		if (text.length > 0) {
-	// 			title += text;
-	// 		} else {
-	// 			title += "Inactive";
-	// 		}
-	// 	}
-	// 	el_grab.innerHTML = el_info.innerHTML = title;
-	// };
-	var __setInfo = function(is_active, online, text) {
+	var __setInfo = function (is_active, online, text) {
 		$("stream-box").classList.toggle("stream-box-offline", !online);
 		let el_grab = document.querySelector("#stream-window-header .window-grab");
 		let el_info = $("stream-info");
 		let title = `${__streamer.getName()} &ndash; `;
 		let el_grab2 = document.querySelector("#stream-window-header .window-postcode");
 		let title2 = "Postcode :";
-		let currentIndex = 0; 
-		let postcodeValues = [];
-		function handleResponse() {
-			if (http.readyState === 4 && http.status === 200) {
-				const data = JSON.parse(http.responseText);
-				if (data && data.result && data.result.hexdata) {
-					sessionStorage.setItem("lastline",data.result.Linenumber);
-			postcodeValues = data.result.hexdata;
-			let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
-			let full_data = dataArray.concat(postcodeValues);
-			if (full_data.length > 0) {
-				sessionStorage.setItem('hexdata', JSON.stringify(dataArray.concat(postcodeValues)));
-				if (sessionStorage.getItem('updating') || '0' === '0') {
-					self.updateText();
-					sessionStorage.setItem('updating', '1');
-				}
-			}
-			//currentIndex %= postcodeValues.length;
-	
-					
-					//let postcodeValue = postcodeValues[currentIndex];
-					//title2 = "Postcode : " + postcodeValue;
-					//el_grab2.innerHTML = el_info.innerHTML = title2;
-	
-				  
-			//currentIndex++;
-				}
-			}
-		}
-		let http = tools.makeRequest("GET", "/api/postcode/get_data?lastline=" + sessionStorage.getItem('lastline'), handleResponse)  
-	
-	   // let http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
-	   // setInterval(function() {
-		 //   http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
-	   // }, 10000);
-	
+                let currentIndex = 0;
+                let postcodeValues = [];
+		//function handleResponse() {
+		//	if (http.readyState === 4 && http.status === 200) {
+		//		const data = JSON.parse(http.responseText);
+		//		if (data && data.result && data.result.data) {
+		//			let postcodeValue = data.result.data.split(":")[1].trim();
+		//           		title2 = "Postcode : " + postcodeValue;
+		//			el_grab2.innerHTML = el_info.innerHTML = title2;
+		//		}
+		//	}
+		//}
+		//	let http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
+		//	setInterval(function() {
+		//		http = tools.makeRequest("GET", "/api/postcode/get_data", handleResponse);
+		//	}, 10000);
 		if (is_active) {
 			if (!online) {
 				title += "No signal / ";
@@ -444,10 +1280,67 @@ export function Streamer() {
 				title += "Inactive";
 			}
 		}
-	
 		el_grab.innerHTML = el_info.innerHTML = title;
 	};
-	
+	/*var __setInfo = function(is_active, online, text) {
+		$("stream-box").classList.toggle("stream-box-offline", !online);
+		let el_grab = document.querySelector("#stream-window-header .window-grab");
+		let el_info = $("stream-info");
+		let title = `${__streamer.getName()} &ndash; `;
+		let title2 ="Postcode : 0123";
+		let el_grab2 = document.querySelector("#stream-window-header .window-postcode");
+		if (is_active) {
+			if (!online) {
+				title += "No signal / ";
+			}
+			title += __makeStringResolution(__resolution);
+			if (text.length > 0) {
+				title += " / " + text;
+			}
+		} else {
+			if (text.length > 0) {
+				title += text;
+			} else {
+				title += "Inactive";
+			}
+		}
+		el_grab.innerHTML = el_info.innerHTML = title;
+		el_grab2.innerHTML = el_info.innerHTML = title2;
+	};*/
+	/*var __setInfo = function(is_active, online, text) {
+	 $("stream-box").classList.toggle("stream-box-offline", !online);
+	 let el_grab = document.querySelector("#stream-window-header .window-grab");
+	 let el_info = $("stream-info");
+	 let title = `${__streamer.getName()} &ndash; `;
+	 let el_grab2 = document.querySelector("#stream-window-header .window-postcode");
+	 let title2 = "Postcode :";
+	 let http = tools.makeRequest("GET", "/api/postcode/get_data", function () {
+					 tools.info("postcode value:",http.responseText);
+					 const data = JSON.parse(http.responseText);
+					 let postcodeValue = data.result.data.split(":")[1].trim();
+					 title2 += postcodeValue;
+								 tools.info("postcode_value:", title2);
+		  el_grab2.innerHTML = el_info.innerHTML = title2;
+	 });
+		 tools.info("postcode_value after request:", title2);
+	 if (is_active) {
+		 if (!online) {
+			 title += "No signal / ";
+		 }
+		 title += __makeStringResolution(__resolution);
+		 if (text.length > 0) {
+			 title += " / " + text;
+		 }
+	 } else {
+		 if (text.length > 0) {
+			 title += text;
+		 } else {
+			 title += "Inactive";
+		 }
+	 }
+	 el_grab.innerHTML = el_info.innerHTML = title;
+ //	el_grab2.innerHTML = el_info.innerHTML = title2;
+ };*/
 	var __setLimitsAndValue = function (el, limits, value) {
 		tools.slider.setRange(el, limits.min, limits.max);
 		tools.slider.setValue(el, value);
@@ -521,9 +1414,15 @@ export function Streamer2() {
 	var __resolution = { "width": 640, "height": 480 };
 	var __init__ = function () {
 		__streamer2 = new MjpegStreamer2(__setActive, __setInactive, __setInfo);
-		tools.radio.setOnClick("Battery-options", __clickSimulationButton, false);
-		tools.el.setOnClick($("battery-link"), __applyBatteryStatus);
-		$("stream-led2").title = "Stream inactive";
+		tools.radio.setOnClick("Battery-options2", __clickSimulationButton, false);
+		tools.el.setOnClick($("battery-link2"), __applyBatteryStatus);
+                tools.el.setOnClick($("attachRealBattery2"), __attachRealBattery);
+                tools.el.setOnClick($("detachBattery2"), __detachBattery);
+                tools.el.setOnClick($("attachSimulatedBattery2"), __attachSimulatedBattery);
+                tools.el.setOnClick($("detachRealBattery2"), __detachBattery);
+                __applyBatteryStatus("Unavailable");
+                tools.el.setOnClick($("postcode2"), __show_postcode);
+		$("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider2"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value2").innerHTML = `${value}%`;
 		});
@@ -557,12 +1456,84 @@ export function Streamer2() {
 		tools.el.setOnClick($("stream-reset-button2"), __clickResetButton);
 		$("stream-window2").show_hook = () => __applyState(__state);
 		$("stream-window2").close_hook = () => __applyState(null);
+                self.runInBackground();
+                self.updateText();
 	};
 	/************************************************************************/
-	var __applyBatteryStatus = function () {
-		let msg = "Unavailable";
-		$("battery-status").innerHTML = msg;
-	}
+	var __applyBatteryStatus = function (status) {
+                //      let msg = "Unavailable";
+                $("battery-status2").innerHTML = status;
+        }
+         self.runInBackground = async function() {
+                while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        __setPostcode();
+                }
+        };
+        self.updateText = function() {
+                console.log("Update Text called");
+                let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                const el_grab2 = document.querySelector("#stream-window-header2 .window-postcode");
+                let el_info = $("stream-info");
+                if (dataArray.length > 0) {
+                        sessionStorage.setItem('last_item', dataArray[0])
+                        const newText = 'Postcode: ' + sessionStorage.getItem('last_item');
+                        el_grab2.innerHTML = el_info.innerHTML = newText;
+                        dataArray.shift();
+                        console.log(dataArray);
+                        sessionStorage.setItem('hexdata', JSON.stringify(dataArray));
+                        setTimeout(() => {self.updateText();}, 100);
+                } else {
+                        console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
+                        sessionStorage.removeItem('hexdata');
+                        sessionStorage.setItem('updating', '0');
+                }
+        };
+        var __show_postcode = function(){
+                   let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
+                           if (http.readyState === 4) {
+                                   if (http.status === 200) {
+                                            let response = JSON.parse(http.responseText);
+                                            let logs = response.result.Logs;
+                                            let logsString = logs.join("<br>");
+                                           wm.info("Postcode Logs:<br>" + logsString);
+                                   }
+                               }
+                            });
+
+                        };
+
+         var __setPostcode = async function() {
+                let postcodeValues = [];
+                function handleResponse() {
+                    if (http.readyState === 4 && http.status === 200) {
+                        const data = JSON.parse(http.responseText);
+                        if (data && data.result && data.result.hexdata) {
+                            sessionStorage.setItem("lastline",data.result.Linenumber);
+                            postcodeValues = data.result.hexdata;
+                            let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                            let full_data = dataArray.concat(postcodeValues);
+                            if (full_data.length > 0) {
+                                    sessionStorage.setItem('hexdata', JSON.stringify(dataArray.concat(postcodeValues)));
+                                    if (sessionStorage.getItem('updating') || '0' === '0') {
+                                            self.updateText();
+                                            sessionStorage.setItem('updating', '1');
+                                    }
+                            }
+                        }
+                    }
+                }
+                let http = tools.makeRequest("GET", "/api/postcode/get_data?lastline=" + sessionStorage.getItem('lastline'), handleResponse);
+        };
+
 	self.getGeometry = function () {
 		// Первоначально обновление геометрии считалось через ResizeObserver.
 		// Но оно не ловило некоторые события, например в последовательности:
@@ -616,27 +1587,64 @@ export function Streamer2() {
 		}
 	};
 	var __clickSimulationButton = function () {
-		let mode = tools.radio.getValue("Battery-options");
+		let mode = tools.radio.getValue("Battery-options2");
 		if (mode === 'simulation') {
-			let simulationOptionElement = document.querySelector('#SimulationOption');
+			let simulationOptionElement = document.querySelector('#SimulationOption2');
 			if (simulationOptionElement) {
 				simulationOptionElement.style.display = 'block';
-				let realBatteryOptionElement = document.querySelector('#RealbatteryOption');
+				let realBatteryOptionElement = document.querySelector('#RealbatteryOption2');
 				if (realBatteryOptionElement) {
 					realBatteryOptionElement.style.display = 'none';
 				}
 			}
 		} else if (mode === 'realbattery') {
-			let realBatteryOptionElement = document.getElementById('RealbatteryOption');
+			let realBatteryOptionElement = document.getElementById('RealbatteryOption2');
 			if (realBatteryOptionElement) {
 				realBatteryOptionElement.style.display = 'block';
-				let simulationOptionElement = document.getElementById('SimulationOption');
+				let simulationOptionElement = document.getElementById('SimulationOption2');
 				if (simulationOptionElement) {
 					simulationOptionElement.style.display = 'none';
 				}
 			}
 		}
 	}
+        var __detachBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/ac-source`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Detached Battery");
+                                }
+                        }
+                });
+        };
+var __attachSimulatedBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/simulated`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Attached Simulated Battery");
+                                }
+                        }
+                });
+        };
+        var __attachRealBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/real`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Attached Real Battery");
+                                }
+                        }
+                });
+        };
+
 	var __applyState = function (state) {
 		if (state) {
 			tools.feature.setEnabled($("stream-quality2"), state.features.quality && (state.streamer === null || state.streamer.encoder.quality > 0));
@@ -680,14 +1688,14 @@ export function Streamer2() {
 		}
 	};
 	var __setActive = function () {
-		$("stream-led2").className = "led-green";
-		$("stream-led2").title = "Stream is active";
+		$("stream-led").className = "led-green";
+		$("stream-led").title = "Stream is active";
 		tools.el.setEnabled($("stream-screenshot-button2"), true);
 		tools.el.setEnabled($("stream-reset-button2"), true);
 	};
 	var __setInactive = function () {
-		$("stream-led2").className = "led-gray";
-		$("stream-led2").title = "Stream inactive";
+		$("stream-led").className = "led-gray";
+		$("stream-led").title = "Stream inactive";
 		tools.el.setEnabled($("stream-screenshot-button2"), false);
 		tools.el.setEnabled($("stream-reset-button2"), false);
 	};
@@ -696,6 +1704,11 @@ export function Streamer2() {
 		let el_grab = document.querySelector("#stream-window-header2 .window-grab");
 		let el_info = $("stream-info2");
 		let title = `${__streamer2.getName()} &ndash; `;
+                let el_grab2 = document.querySelector("#stream-window-header2 .window-postcode");
+                let title2 = "Postcode :";
+                let currentIndex = 0;
+                let postcodeValues = [];
+
 		if (is_active) {
 			if (!online) {
 				title += "No signal / ";
@@ -787,7 +1800,7 @@ export function Streamer3() {
 	var __resolution = { "width": 640, "height": 480 };
 	var __init__ = function () {
 		__streamer = new MjpegStreamer3(__setActive, __setInactive, __setInfo);
-		$("stream-led3").title = "Stream inactive";
+		$("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider3"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value3").innerHTML = `${value}%`;
 		});
@@ -918,14 +1931,14 @@ export function Streamer3() {
 		}
 	};
 	var __setActive = function () {
-		$("stream-led3").className = "led-green";
-		$("stream-led3").title = "Stream is active";
+		$("stream-led").className = "led-green";
+		$("stream-led").title = "Stream is active";
 		tools.el.setEnabled($("stream-screenshot-button3"), true);
 		tools.el.setEnabled($("stream-reset-button3"), true);
 	};
 	var __setInactive = function () {
-		$("stream-led3").className = "led-gray";
-		$("stream-led3").title = "Stream inactive";
+		$("stream-led").className = "led-gray";
+		$("stream-led").title = "Stream inactive";
 		tools.el.setEnabled($("stream-screenshot-button3"), false);
 		tools.el.setEnabled($("stream-reset-button3"), false);
 	};
@@ -1024,9 +2037,16 @@ export function Streamer4() {
 	var __resolution = { "width": 640, "height": 480 };
 	var __init__ = function () {
 		__streamer = new MjpegStreamer4(__setActive, __setInactive, __setInfo);
-		tools.radio.setOnClick("Battery-options", __clickSimulationButton, false);
-		tools.el.setOnClick($("battery-link"), __applyBatteryStatus);
-		$("stream-led4").title = "Stream inactive";
+		tools.radio.setOnClick("Battery-options4", __clickSimulationButton, false);
+		tools.el.setOnClick($("battery-link4"), __applyBatteryStatus);
+                tools.el.setOnClick($("attachRealBattery4"), __attachRealBattery);
+                tools.el.setOnClick($("detachBattery4"), __detachBattery);
+                tools.el.setOnClick($("attachSimulatedBattery4"), __attachSimulatedBattery);
+                tools.el.setOnClick($("detachRealBattery4"), __detachBattery);
+                tools.el.setOnClick($("postcode4"), __show_postcode);
+
+                __applyBatteryStatus("Unavailable");
+		$("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider4"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value4").innerHTML = `${value}%`;
 		});
@@ -1060,12 +2080,109 @@ export function Streamer4() {
 		tools.el.setOnClick($("stream-reset-button4"), __clickResetButton);
 		$("stream-window4").show_hook = () => __applyState(__state);
 		$("stream-window4").close_hook = () => __applyState(null);
+                self.runInBackground();
+                self.updateText();
+
 	};
 	/************************************************************************/
-	var __applyBatteryStatus = function () {
-		let msg = "Unavailable";
-		$("battery-status").innerHTML = msg;
-	}
+        self.runInBackground = async function() {
+                while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        __setPostcode();
+                }
+        };
+        self.updateText = function() {
+                console.log("Update Text called");
+                let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                const el_grab2 = document.querySelector("#stream-window-header4 .window-postcode");
+                let el_info = $("stream-info");
+                if (dataArray.length > 0) {
+                        sessionStorage.setItem('last_item', dataArray[0])
+                        const newText = 'Postcode: ' + sessionStorage.getItem('last_item');
+                        el_grab2.innerHTML = el_info.innerHTML = newText;
+                        dataArray.shift();
+                        console.log(dataArray);
+                        sessionStorage.setItem('hexdata', JSON.stringify(dataArray));
+                        setTimeout(() => {self.updateText();}, 100);
+                } else {
+                        console.log("Hex Data deleted");
+                        const lastItem = sessionStorage.getItem('last_item');
+        if (lastItem) {
+            const newText = 'Postcode: ' + lastItem;
+            el_grab2.innerHTML = el_info.innerHTML = newText; // Display the last item
+        } else {
+            console.log("No last item found in session storage.");
+            el_grab2.innerHTML = el_info.innerHTML = 'No postcode available'; // Fallback message
+        }
+                        sessionStorage.removeItem('hexdata');
+                        sessionStorage.setItem('updating', '0');
+                }
+        };
+        var __show_postcode = function(){
+                   let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
+                           if (http.readyState === 4) {
+                                   if (http.status === 200) {
+                                            let response = JSON.parse(http.responseText);
+                                            let logs = response.result.Logs;
+                                            let logsString = logs.join("<br>");
+                                           wm.info("Postcode Logs:<br>" + logsString);
+                                   }
+                               }
+                            });
+
+                        };
+        var __setPostcode = async function() {
+                let postcodeValues = [];
+                function handleResponse() {
+                    if (http.readyState === 4 && http.status === 200) {
+                        const data = JSON.parse(http.responseText);
+                        if (data && data.result && data.result.hexdata) {
+                            sessionStorage.setItem("lastline",data.result.Linenumber);
+                            postcodeValues = data.result.hexdata;
+                            let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
+                            let full_data = dataArray.concat(postcodeValues);
+                            if (full_data.length > 0) {
+                                    sessionStorage.setItem('hexdata', JSON.stringify(dataArray.concat(postcodeValues)));
+                                    if (sessionStorage.getItem('updating') || '0' === '0') {
+                                            self.updateText();
+                                            sessionStorage.setItem('updating', '1');
+                                    }
+                            }
+                        }
+                    }
+                }
+                let http = tools.makeRequest("GET", "/api/postcode/get_data?lastline=" + sessionStorage.getItem('lastline'), handleResponse);
+        };
+
+
+	var __applyBatteryStatus = function (status) {
+                //      let msg = "Unavailable";
+                $("battery-status4").innerHTML = status;
+        }
+        var __detachBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/ac-source`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Detached Battery");
+                                }
+                        }
+                });
+        };
+var __attachSimulatedBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/simulated`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Attached Simulated Battery");
+                                }
+                        }
+                });
+        };
 	self.getGeometry = function () {
 		// Первоначально обновление геометрии считалось через ResizeObserver.
 		// Но оно не ловило некоторые события, например в последовательности:
@@ -1119,27 +2236,39 @@ export function Streamer4() {
 		}
 	};
 	var __clickSimulationButton = function () {
-		let mode = tools.radio.getValue("Battery-options");
+		let mode = tools.radio.getValue("Battery-options4");
 		if (mode === 'simulation') {
-			let simulationOptionElement = document.querySelector('#SimulationOption');
+			let simulationOptionElement = document.querySelector('#SimulationOption4');
 			if (simulationOptionElement) {
 				simulationOptionElement.style.display = 'block';
-				let realBatteryOptionElement = document.querySelector('#RealbatteryOption');
+				let realBatteryOptionElement = document.querySelector('#RealbatteryOption4');
 				if (realBatteryOptionElement) {
 					realBatteryOptionElement.style.display = 'none';
 				}
 			}
 		} else if (mode === 'realbattery') {
-			let realBatteryOptionElement = document.getElementById('RealbatteryOption');
+			let realBatteryOptionElement = document.getElementById('RealbatteryOption4');
 			if (realBatteryOptionElement) {
 				realBatteryOptionElement.style.display = 'block';
-				let simulationOptionElement = document.getElementById('SimulationOption');
+				let simulationOptionElement = document.getElementById('SimulationOption4');
 				if (simulationOptionElement) {
 					simulationOptionElement.style.display = 'none';
 				}
 			}
 		}
 	}
+        var __attachRealBattery = function () {
+                let http = tools.makeRequest("POST", `/api/battery/real`, function () {
+                        if (http.readyState === 4) {
+                                if (http.status !== 200) {
+                                        wm.error("Click error:<br>", http.responseText);
+                                }
+                                else {
+                                        __applyBatteryStatus("Attached Real Battery");
+                                }
+                        }
+                });
+        };
 	var __applyState = function (state) {
 		if (state) {
 			tools.feature.setEnabled($("stream-quality4"), state.features.quality && (state.streamer === null || state.streamer.encoder.quality > 0));
@@ -1183,14 +2312,14 @@ export function Streamer4() {
 		}
 	};
 	var __setActive = function () {
-		$("stream-led4").className = "led-green";
-		$("stream-led4").title = "Stream is active";
+		$("stream-led").className = "led-green";
+		$("stream-led").title = "Stream is active";
 		tools.el.setEnabled($("stream-screenshot-button4"), true);
 		tools.el.setEnabled($("stream-reset-button4"), true);
 	};
 	var __setInactive = function () {
-		$("stream-led4").className = "led-gray";
-		$("stream-led4").title = "Stream inactive";
+		$("stream-led").className = "led-gray";
+		$("stream-led").title = "Stream inactive";
 		tools.el.setEnabled($("stream-screenshot-button4"), false);
 		tools.el.setEnabled($("stream-reset-button4"), false);
 	};
@@ -1199,6 +2328,10 @@ export function Streamer4() {
 		let el_grab = document.querySelector("#stream-window-header4 .window-grab");
 		let el_info = $("stream-info4");
 		let title = `${__streamer.getName()} &ndash; `;
+                let el_grab2 = document.querySelector("#stream-window-header4 .window-postcode");
+                let title2 = "Postcode :";
+                let currentIndex = 0;
+                let postcodeValues = [];
 		if (is_active) {
 			if (!online) {
 				title += "No signal / ";

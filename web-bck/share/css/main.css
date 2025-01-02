@@ -33,9 +33,7 @@ body.body-no-select {
 	user-select: none;
 	touch-action: manipulation;
 }
-button#postcode{	
-	width: 55px;
-}
+
 a {
 	color: var(--cs-page-default-fg);
 }
@@ -179,7 +177,7 @@ input[type=text], input[type=password] {
 	color: var(--cs-code-default-fg);
 	background-color: var(--cs-code-default-bg);
 	padding: 2px;
-	height: 30px;
+	height: 19.5px;
 }
 
 div.buttons-row {

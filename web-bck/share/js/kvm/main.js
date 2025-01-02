@@ -35,7 +35,7 @@ export function main() {
 		tools.storage.bindSimpleSwitch($("page-close-ask-switch"), "page.close.ask", true, function(value) {
 			if (value) {
 				window.onbeforeunload = function(event) {
-					let text = "Are you sure you want to close Rutomatrix session?";
+					let text = "Are you sure you want to close PiKVM session?";
 					if (event) {
 						event.returnValue = text;
 					}
@@ -56,10 +56,10 @@ export function main() {
 			wm.toggleFullTabWindow($("stream-window3"), true);
 			wm.toggleFullTabWindow($("stream-window4"), true);
 		}
-		wm.showWindow($("stream-window"));
-        wm.showWindow($("stream-window2"));
-		wm.showWindow($("stream-window3"));
 		wm.showWindow($("stream-window4"));
+        wm.showWindow($("stream-window3"));
+		wm.showWindow($("stream-window2"));
+		wm.showWindow($("stream-window"));
 		new Session();
 	}
 }

@@ -46,7 +46,7 @@ from .server import KvmdServer
 def main(argv: (list[str] | None)=None) -> None:
     config = init(
         prog="kvmd",
-        description="The main PiKVM daemon",
+        description="The main Rutomatrix daemon",
         argv=argv,
         check_run=True,
         load_auth=True,
@@ -99,7 +99,22 @@ def main(argv: (list[str] | None)=None) -> None:
         **config.streamer4.h264_bitrate._unpack(),
         **config.streamer4.h264_gop._unpack(),
     )
-
+	# Modified code block for MSD initialization
+    try:
+        msd = get_msd_class(config.msd.type)(**msd_kwargs)
+    except RuntimeError as e:
+        if "Can't find 'otgmsd' mountpoint" in str(e):
+            # Log the error or handle it as per your requirement
+            get_logger(0).warning("MSD mountpoint 'otgmsd' not found. MSD functionality will be disabled.")
+            msd = None
+        else:
+            # Log other RuntimeError exceptions
+            get_logger(0).error(f"Error initializing MSD: {e}")
+            msd = None
+    except Exception as e:
+        # Log other exceptions
+        get_logger(0).error(f"Error initializing MSD: {e}")
+        msd = None
     KvmdServer(
         auth_manager=AuthManager(
             enabled=config.auth.enabled,
@@ -125,7 +140,7 @@ def main(argv: (list[str] | None)=None) -> None:
 
         hid=hid,
         atx=get_atx_class(config.atx.type)(**config.atx._unpack(ignore=["type"])),
-        msd=get_msd_class(config.msd.type)(**msd_kwargs),
+        msd=msd,
         streamer=streamer,
         streamer2 = streamer2,
         streamer3 = streamer3,
@@ -148,4 +163,3 @@ def main(argv: (list[str] | None)=None) -> None:
     ).run(**config.server._unpack())
 
     get_logger(0).info("Bye-bye")
-

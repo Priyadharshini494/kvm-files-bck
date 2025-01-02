@@ -26,6 +26,7 @@ import argparse
 
 from ...validators.basic import valid_bool
 from ...validators.basic import valid_int_f0
+from ...validators.os import valid_abs_file, valid_abs_device
 from ...validators.os import valid_abs_file
 
 from ... import usb
@@ -74,6 +75,8 @@ def main(argv: (list[str] | None)=None) -> None:
                         metavar="<1|0|yes|no>", help="Set RW flag")
     parser.add_argument("--set-image", default=None, type=valid_abs_file,
                         metavar="<path>", help="Set the image file")
+    parser.add_argument("--set-device", default=None, type=valid_abs_device,
+                        metavar="<path>", help="Set the block device path")
     parser.add_argument("--eject", action="store_true",
                         help="Eject the image")
     parser.add_argument("--unlock", action="store_true",
@@ -100,6 +103,11 @@ def main(argv: (list[str] | None)=None) -> None:
         if not os.path.isfile(options.set_image):
             raise SystemExit(f"Not a file: {options.set_image}")
         set_param("file", options.set_image)
+    if options.set_device:
+        if not os.path.exists(options.set_device):
+            raise SystemExit(f"Not a valid block device: {options.set_device}")
+        set_param("file", options.set_device)
+
 
     print("Image file: ", (get_param("file") or "<none>"))
     print("CD-ROM flag:", ("yes" if int(get_param("cdrom")) else "no"))

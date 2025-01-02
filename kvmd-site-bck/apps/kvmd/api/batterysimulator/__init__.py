@@ -146,7 +146,7 @@ def taskRead():
 def write(tag, value, propety):
     global port
     global prefix
-    port = serial.Serial("/dev/ttyAMA3", baudrate=115200, timeout=2, xonxoff=False)
+    port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=2, xonxoff=False)
 
     #headerdata = header('RPI', 'RP2040')
     headerdata = None
@@ -186,7 +186,7 @@ def write(tag, value, propety):
 
 def read():
     global port
-    port = serial.Serial("/dev/ttyAMA3", baudrate=115200, timeout=2, xonxoff=False)
+    port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=2, xonxoff=False)
     #print("reading from port /dev/ttyAMA3.....")
     #taskRead();
     port.close()

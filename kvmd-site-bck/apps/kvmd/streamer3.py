@@ -451,7 +451,8 @@ class Streamer3:  # pylint: disable=too-many-instance-attributes
                 await asyncio.sleep(1)
 
     def __make_cmd(self, cmd: list[str]) -> list[str]:
-        return [
+        # Start with libcamerify and then append formatted parts
+        formatted_cmd = ["libcamerify"] + [
             part.format(
                 unix=self.__unix_path,
                 process_name_prefix=self.__process_name_prefix,
@@ -459,6 +460,7 @@ class Streamer3:  # pylint: disable=too-many-instance-attributes
             )
             for part in cmd
         ]
+        return formatted_cmd
 
     async def __run_hook(self, name: str, cmd: list[str]) -> None:
         logger = get_logger()

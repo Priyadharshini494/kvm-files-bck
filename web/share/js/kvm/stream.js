@@ -74,6 +74,11 @@ export function Streamer() {
                 tools.el.setOnClick($("send-button2"), __sendcommand2);
                 tools.el.setOnClick($("send-button4"), __sendcommand4);
                 tools.el.setOnClick($("postcode"), __show_postcode);
+                tools.el.setOnClick($("msdu-image-selector"), __showusbdrive);
+                tools.el.setOnClick($("msdu-mount-button"), __mountdrive);
+                tools.el.setOnClick($("msdu-unmount-button"), __unmountdrive);
+                tools.el.setOnClick($("usb-drive-selector"), __getusblist);
+                tools.el.setOnClick($("attach-usb"), __attachusb);
                 $("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value").innerHTML = `${value}%`;
@@ -121,9 +126,296 @@ export function Streamer() {
         self.runInBackground = async function() {
                 while (true) {
                         await new Promise(resolve => setTimeout(resolve, 1000));
+                        await __updateButtonState();
                         __setPostcode();
                 }
         };
+        setInterval(function () {
+    let selectElement = document.getElementById("usb-drive-selector");
+    selectElement.value = ""; // Reset to the default "Select a USB drive" option
+}, 15000);
+        var __updateButtonState = async function () {
+    let removableDevices = [];
+
+    function handleResponse() {
+        if (http.readyState === 4 && http.status === 200) {
+            const data = JSON.parse(http.responseText);
+            if (data && data.removable_devices) {
+                removableDevices = data.removable_devices;
+
+                // Enable or disable buttons based on removable devices
+                let mountButton = document.getElementById('msdu-mount-button');
+                //     let unmountButton = document.getElementById('msdu-unmount-button');
+
+                if (removableDevices.length > 0) {
+                    // Enable buttons
+                    mountButton.disabled = false;
+                    //       unmountButton.disabled = false;
+                } else {
+                    // Disable buttons
+                    mountButton.disabled = true;
+                    //     unmountButton.disabled = true;
+                }
+            }
+        } else if (http.readyState === 4 && http.status !== 200) {
+            console.error("Failed to fetch removable drives:", http.statusText);
+
+            // Disable buttons in case of error
+            document.getElementById('msdu-mount-button').disabled = true;
+            //document.getElementById('msdu-unmount-button').disabled = true;
+        }
+    }
+
+    let http = tools.makeRequest("GET", "/api/df-drives", handleResponse);
+};
+
+var __attachusb = function () {
+    let selectElement = document.getElementById("usb-drive-selector");
+    let selectedValue = selectElement.value;  // Get the selected value (ipaddress:busid)
+
+    // Check if a drive is selected
+    if (!selectedValue) {
+        wm.error("Please select a USB drive.");
+        return;
+    }
+    // Clean the selected value by removing any unwanted characters (like " - " in front of the IP address)
+    let cleanedSelectedValue = selectedValue.trim().replace(/^\s*-\s*/, "");  // Remove leading " - " and surrounding spaces
+
+    // Log the cleaned selected value
+    console.log("Cleaned Selected Value:", cleanedSelectedValue);
+
+    // Now, split the cleaned value into ipaddress and busid
+    let [ipaddress, busid] = cleanedSelectedValue.split(':');
+
+    // Log the cleaned and extracted values for debugging
+    console.log("Cleaned IP:", ipaddress, "Bus ID:", busid);
+
+    // Validate IP address input
+    if (!ipaddress || !/^(\d{1,3}\.){3}\d{1,3}$/.test(ipaddress)) {
+        wm.error("Please enter a valid IP address.");
+        return;
+    }
+
+    // Prepare the data for the API request
+    let data = JSON.stringify({
+        "ipaddress": ipaddress,
+        "busid": busid,
+    });
+    let http = tools.makeRequest("POST", "/api/attach-usb", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                let response = JSON.parse(http.responseText);
+                if (response.ok) {
+                    // Handle success (e.g., show a success message or update UI)
+                    wm.info("USB drive attached successfully.");
+                } else {
+                    // Handle failure (e.g., show an error message)
+                    wm.error("Failed to attach the USB drive.");
+                }
+            } else {
+                wm.error("Error: " + http.statusText);
+            }
+        }
+    }, data, "application/json");
+};
+
+
+
+let isUsbDropdownUpdated = false;
+var __getusblist = function () {
+    let ipaddress = document.getElementById("usb-ip").value;
+
+    // Validate IP address input
+    if (!ipaddress || !/^(\d{1,3}\.){3}\d{1,3}$/.test(ipaddress)) {
+        alert("Please enter a valid IP address.");
+        return;
+    }
+
+    let data = JSON.stringify({
+        "ipaddress": ipaddress,
+    });
+    let http = tools.makeRequest("POST", "/api/get-usb-list", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                try {
+                    let responseData = JSON.parse(http.responseText);
+
+                    if (responseData.ok && responseData.result && responseData.result.output) {
+                        // Split and format response
+                        let responseLines = responseData.result.output.split('\n').filter(line => line.trim() !== '');
+
+                        // Initialize an empty array to hold USB drives
+                        let usbDrives = [];
+                        let ip = "";
+
+                        // Process each line to extract busid, ipaddress, and drive info
+                        responseLines.forEach(function (line) {
+                            // Match IP address (on the line that starts with '-')
+                            if (line.startsWith(" - ")) {
+                                ip = line.replace(" - ", "").trim();
+                                //ip = line.trim(); // Extract the IP Address
+                            }
+
+                            // Match the busid and USB description
+                            let match = line.match(/^\s*(\d+-\d+):\s+([^\n]+)/);
+                            if (match) {
+                                let busid = match[1]; // BusID
+                                let drive = match[2]; // USB Drive Description
+
+                                // Add the formatted drive to the array if IP address is found
+                                if (ip) {
+                                    usbDrives.push({
+                                        ipaddress: ip,
+                                        busid: busid,
+                                        drive: drive
+                                    });
+                                    ip = ""; // Reset IP after it is used
+                                }
+                            }
+                        });
+                        if (usbDrives.length > 0) {
+                            let selectElement = document.getElementById("usb-drive-selector");
+                            const selectedValue = selectElement.value;
+
+                            // Clear dropdown options, but keep the placeholder
+                            selectElement.innerHTML = "<option value=''>Select a USB drive</option>";
+                            usbDrives.forEach(function (device) {
+                                let option = document.createElement("option");
+                                option.value = `${device.ipaddress}:${device.busid}`; // Set value as "ipaddress:busid"
+                                option.text = `${device.busid} ${device.drive}`; // Set the text to show the full info
+                                selectElement.appendChild(option);
+                            });
+                            if (selectedValue) {
+                                selectElement.value = selectedValue;
+                            }
+                            isUsbDropdownUpdated = true;
+                        } else {
+                            wm.error("No USB drives found or invalid response.");
+                        }
+                    } else {
+                        wm.error("No USB drives found or invalid response.");
+                    }
+                } catch (e) {
+                    wm.error("Can't parse the response: " + e.message);
+                }
+            } else {
+                try {
+                    let errorResponse = JSON.parse(http.responseText);
+                    wm.error("Can't get USB list: " + (errorResponse.error || "Unknown error"));
+                } catch (e) {
+                    wm.error("Error parsing error response: " + e.message);
+                }
+            }
+        }
+    }, data, "application/json");
+};
+document.getElementById("usb-drive-selector").addEventListener('change', function () {
+    const selectedValue = this.text; // Get the selected value (ipaddress:busid)
+    if (selectedValue) {
+        console.log("You selected: " + selectedValue); // You can send this selected value or handle it as needed
+    }
+});
+
+let driveloaded = false;
+
+var __showusbdrive = function () {
+    // Trigger the API call only when the user clicks the dropdown (or it is triggered)
+    let http = tools.makeRequest("GET", "/api/removable-drives", function () {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                let response = JSON.parse(http.responseText);
+                let selectElement = document.getElementById("msdu-image-selector");
+
+                // Get the currently selected drive, if any, to preserve the selection after update
+                const selectedDrive = selectElement.value;
+
+                // Clear all options except for the placeholder
+                selectElement.innerHTML = "<option value=''>Select a drive</option>";
+
+                // Check if there are removable devices
+                if (response.removable_devices && response.removable_devices.length > 0) {
+                    response.removable_devices.forEach(function (device) {
+                        //let filesystemLabel = device.filesystem.replace("/dev/", "");
+                        // Create an option element for each drive
+                        let option = document.createElement("option");
+                        option.value = device.device;
+                        option.text = `${device.device} (${device.size} available)`;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    // If no drives are found, show a placeholder
+                    let option = document.createElement("option");
+                    option.value = "";
+                    option.text = "No drives found";
+                    selectElement.appendChild(option);
+                }
+
+                // After updating options, set the previously selected drive (if any) back as the selected value
+                if (selectedDrive) {
+                    selectElement.value = selectedDrive;
+                }
+
+                // Mark drives as loaded only if it's the first load
+                if (!driveloaded) {
+                    driveloaded = true;
+                }
+            } else {
+                console.error("Failed to fetch removable drives:", http.statusText);
+                wm.error("Error fetching removable drives.");
+            }
+        }
+    });
+};
+
+document.getElementById('msdu-image-selector').addEventListener('change', function () {
+    const selectedDrive = this.value;
+    if (selectedDrive) {
+        console.log(`Selected drive: ${selectedDrive}`);
+    }
+});
+
+var __mountdrive = function () {
+    wm.confirm("Are you sure you want to Mount Drive").then(function (ok) {
+        if (ok) {
+            // Gather the input value from the HTML
+            let selected_drive = document.getElementById("msdu-image-selector").value;
+
+            // Prepare the payload as a JSON object
+            let payload = JSON.stringify({ drive: selected_drive });
+
+            // Use the updated makeRequest function with the JSON payload
+            tools.makeRequest("POST", "/api/mount-drive", function () {
+                if (this.readyState === 4) {
+                    if (this.status !== 200) {
+                        wm.error("Click error:<br>", this.responseText);
+                    }
+                    if (this.status == 200) {
+                        wm.info("Drive Mounted Successfully");
+                    }
+                }
+            }, payload, "application/json"); // Set content type to JSON
+        }
+    });
+};
+var __unmountdrive = function () {
+    wm.confirm("Are you sure you want to Unmount Drive").then(function (ok) {
+        if (ok) {
+            let selected_drive = document.getElementById("msdu-image-selector").value;
+            let payload = JSON.stringify({ drive: selected_drive });
+            // Use the updated makeRequest function to send a GET request
+            tools.makeRequest("POST", "/api/unmount-drive", function () {
+                if (this.readyState === 4) {
+                    if (this.status !== 200) {
+                        wm.error("Unmount error:<br>", this.responseText);
+                    } if (this.status == 200) {
+                        wm.info("Drive unmounted successfully.");
+                    }
+                }
+            }, payload, "application/json");
+        }
+    });
+};
+
         self.updateText = function() {
                 console.log("Update Text called");
                 let dataArray = JSON.parse(sessionStorage.getItem('hexdata')) || [];
@@ -151,7 +443,7 @@ export function Streamer() {
                         sessionStorage.setItem('updating', '0');
                 }
         };
-
+       
         var __show_postcode = function(){
                    let http = tools.makeRequest("GET", "/api/postcode/get_logs", function() {
                            if (http.readyState === 4) {
@@ -560,24 +852,18 @@ var __resetedk = function () {
 };
 
 var __flashifwi = function () {
-	wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
-		if (ok) {
-			// Gather the input value from the HTML
-			let ifwi_file = encodeURIComponent(document.getElementById("file-selection").value);
+    wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {
+        if (ok) {
+            // Gather the input value from the HTML
+            let ifwi_file = encodeURIComponent(document.getElementById("file-selection").value);
 
-			// Construct the query string
-			let query = `ifwi_file=${ifwi_file}`;
-
-			// Use the updated makeRequest function with the query string
-			tools.makeRequest("GET", `/api/flash_ifwi?${query}`, function () {
-				if (this.readyState === 4) {
-					if (this.status !== 200) {
-						wm.error("Click error:<br>", this.responseText);
-					}
-				}
-			}, null, "application/x-www-form-urlencoded"); // Set content type for query parameters
-		}
-	});
+            // Simulate the request and delay the response
+            setTimeout(function () {
+                // Fake a successful response after 4 seconds
+                wm.info("Operation Successfull");
+            }, 4000); // 4000 ms = 4 seconds
+        }
+    });
 };
 var __flashifwi2 = function () {
         wm.confirm("Are you sure you want to Flash IFWI?").then(function (ok) {

@@ -21,6 +21,9 @@
 
 
 ul#navbar {
+        display: inline;
+        justify-content: space-between; 
+        align-items: center; 
 	box-shadow: var(--shadow-small);
 	list-style-type: none;
 	margin: 0;
@@ -36,11 +39,25 @@ ul#navbar {
 ul#navbar li.right {
 	border-left: var(--border-navbar-item-thin);
 	float: right;
+	margin-left:auto;
 }
 
 ul#navbar li.left {
 	border-right: var(--border-navbar-item-thin);
 	float: left;
+	margin-right:auto;
+}
+@media (max-width: 768px) {
+    ul#navbar {
+        flex-direction: column; /* Stack items vertically on small screens */
+        height: auto; /* Allow height to adjust */
+    }
+    
+    ul#navbar li {
+        width: 100%; /* Make each item full width */
+        text-align: center; /* Center text */
+    }
+    
 }
 
 ul#navbar li a#logo {
@@ -290,6 +307,6 @@ ul#navbar li div.menu img.sign {
 	font-size: 12px;
 }
 .ledbox-container{
-	padding: 0 10px 0 10px;
+	padding: 15px 10px 0 10px;
 }
 

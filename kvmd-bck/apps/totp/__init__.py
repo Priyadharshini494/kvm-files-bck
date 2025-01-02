@@ -60,7 +60,7 @@ def _cmd_show(config: Section, options: argparse.Namespace) -> None:
         raise SystemExit("Error: TOTP secret is not configured")
     uri = pyotp.totp.TOTP(secret).provisioning_uri(
         name=(options.name or socket.getfqdn()),
-        issuer_name="Rutomatrix",
+        issuer_name="PiKVM",
     )
     qr = qrcode.QRCode()
     qr.add_data(uri)
@@ -93,11 +93,11 @@ def main(argv: (list[str] | None)=None) -> None:
 
     cmd_setup_parser = subparsers.add_parser("init", help="Generate and show TOTP secret with QR code")
     cmd_setup_parser.add_argument("-f", "--force", action="store_true", help="Overwrite an existing secret")
-    cmd_setup_parser.add_argument("-n", "--name", default="", help="The Rutomatrix instance name, FQDN by default")
+    cmd_setup_parser.add_argument("-n", "--name", default="", help="The PiKVM instance name, FQDN by default")
     cmd_setup_parser.set_defaults(cmd=_cmd_init)
 
     cmd_show_parser = subparsers.add_parser("show", help="Show the current TOTP secret with QR code")
-    cmd_show_parser.add_argument("-n", "--name", default="", help="The Rutomatrix instance name, FQDN by default")
+    cmd_show_parser.add_argument("-n", "--name", default="", help="The PiKVM instance name, FQDN by default")
     cmd_show_parser.set_defaults(cmd=_cmd_show)
 
     cmd_delete_parser = subparsers.add_parser("del", help="Remove TOTP secret and disable 2FA auth")

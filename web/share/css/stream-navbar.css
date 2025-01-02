@@ -299,3 +299,41 @@ ul#stream-navbar li div.menu div.input-row input#boot-id {
    /* word-wrap: break-word; /* Allow long text to wrap within the input field */
    /* text-align: left; /* Align text to the left (instead of center) */
 }
+
+.usb-selector-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+.usb-selector-container button {
+    width: 60px; /* Make the button smaller */
+    padding: 6px;
+    font-size: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.usb-selector-container button:hover {
+    background-color: #45a049;
+}
+.usb-selector-container label {
+  width: 200px; /* Fixed width for labels */
+  margin-right: 10px;
+}
+.usb-selector-container input,
+.usb-selector-container select {
+  width: 200px; /* Fixed width for input and select fields */
+  padding: 5px;
+  font-size: 14px;
+}
+ul#stream-navbar li div.menu div.input-row input#usb-ip {
+  width: 100px; /* Reduced width for the IP Address input */
+  padding: 5px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

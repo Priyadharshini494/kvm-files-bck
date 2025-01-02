@@ -110,12 +110,12 @@ class Plugin(BaseHid):  # pylint: disable=too-many-instance-attributes
     @classmethod
     def get_plugin_options(cls) -> dict:
         return {
-            "manufacturer": Option("Rutomatrix"),
+            "manufacturer": Option("PiKVM"),
             "product":      Option("HID Device"),
             "description":  Option("Bluetooth Keyboard & Mouse"),
 
             "iface": Option("hci0", type=valid_stripped_string_not_empty),
-            "alias": Option("Rutomatrix HID"),
+            "alias": Option("PiKVM HID"),
 
             "pairing_required": Option(True,  type=valid_bool),
             "auth_required":    Option(False, type=valid_bool),

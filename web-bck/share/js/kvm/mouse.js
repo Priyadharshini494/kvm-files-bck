@@ -163,7 +163,7 @@ export function Mouse(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, Rutomatrix offline";
+				title = "Mouse captured, PiKVM offline";
 			}
 		}
 		$("hid-mouse-led").className = led;
@@ -384,7 +384,7 @@ export function Mouse2(__getGeometry, __recordWsEvent) {
 	var __init__ = function() {
 		__keypad = new Keypad("div#stream-mouse-buttons", __sendButton, false);
 
-		$("hid-mouse-led2").title = "Mouse free";
+		$("hid-mouse-led").title = "Mouse free";
 
 		document.onpointerlockchange = __relativeCapturedHandler; // Only for relative
 		document.onpointerlockerror = __relativeCapturedHandler;
@@ -495,11 +495,11 @@ export function Mouse2(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, Rutomatrix offline";
+				title = "Mouse captured, PiKVM offline";
 			}
 		}
-		$("hid-mouse-led2").className = led;
-		$("hid-mouse-led2").title = title;
+		$("hid-mouse-led").className = led;
+		$("hid-mouse-led").title = title;
 	};
 
 	var __isRelativeCaptured = function() {
@@ -715,7 +715,7 @@ export function Mouse3(__getGeometry, __recordWsEvent) {
 	var __init__ = function() {
 		__keypad = new Keypad("div#stream-mouse-buttons", __sendButton, false);
 
-		$("hid-mouse-led3").title = "Mouse free";
+		$("hid-mouse-led").title = "Mouse free";
 
 		document.onpointerlockchange = __relativeCapturedHandler; // Only for relative
 		document.onpointerlockerror = __relativeCapturedHandler;
@@ -826,11 +826,11 @@ export function Mouse3(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, Rutomatrix offline";
+				title = "Mouse captured, PiKVM offline";
 			}
 		}
-		$("hid-mouse-led3").className = led;
-		$("hid-mouse-led3").title = title;
+		$("hid-mouse-led").className = led;
+		$("hid-mouse-led").title = title;
 	};
 
 	var __isRelativeCaptured = function() {
@@ -1046,7 +1046,7 @@ export function Mouse4(__getGeometry, __recordWsEvent) {
 	var __init__ = function() {
 		__keypad = new Keypad("div#stream-mouse-buttons", __sendButton, false);
 
-		$("hid-mouse-led4").title = "Mouse free";
+		$("hid-mouse-led").title = "Mouse free";
 
 		document.onpointerlockchange = __relativeCapturedHandler; // Only for relative
 		document.onpointerlockerror = __relativeCapturedHandler;
@@ -1157,11 +1157,11 @@ export function Mouse4(__getGeometry, __recordWsEvent) {
 			}
 		} else {
 			if (is_captured) {
-				title = "Mouse captured, Rutomatrix offline";
+				title = "Mouse captured, PiKVM offline";
 			}
 		}
-		$("hid-mouse-led4").className = led;
-		$("hid-mouse-led4").title = title;
+		$("hid-mouse-led").className = led;
+		$("hid-mouse-led").title = title;
 	};
 
 	var __isRelativeCaptured = function() {

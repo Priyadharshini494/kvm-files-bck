@@ -27,9 +27,7 @@ import {tools, $, $$$} from "../tools.js";
 import {wm} from "../wm.js";
 
 import {Keyboard} from "./keyboard.js";
-import {Keyboard2} from "./keyboard.js";
-import {Keyboard3} from "./keyboard.js";
-import {Keyboard4} from "./keyboard.js";
+
 import {Mouse} from "./mouse.js";
 import {Mouse2} from "./mouse.js";
 import {Mouse3} from "./mouse.js";
@@ -350,7 +348,7 @@ export function Hid2(__getGeometry, __recorder) {
 	var __mouse = null;
 
 	var __init__ = function() {
-		__keyboard = new Keyboard2(__recorder.recordWsEvent);
+		__keyboard = new Keyboard(__recorder.recordWsEvent);
 		__mouse = new Mouse2(__getGeometry, __recorder.recordWsEvent);
 
 		let hidden_attr = null;
@@ -656,7 +654,7 @@ export function Hid3(__getGeometry, __recorder) {
 	var __mouse = null;
 
 	var __init__ = function() {
-		__keyboard = new Keyboard3(__recorder.recordWsEvent);
+		__keyboard = new Keyboard(__recorder.recordWsEvent);
 		__mouse = new Mouse3(__getGeometry, __recorder.recordWsEvent);
 
 		let hidden_attr = null;
@@ -962,7 +960,7 @@ export function Hid4(__getGeometry, __recorder) {
 	var __mouse = null;
 
 	var __init__ = function() {
-		__keyboard = new Keyboard4(__recorder.recordWsEvent);
+		__keyboard = new Keyboard(__recorder.recordWsEvent);
 		__mouse = new Mouse4(__getGeometry, __recorder.recordWsEvent);
 
 		let hidden_attr = null;

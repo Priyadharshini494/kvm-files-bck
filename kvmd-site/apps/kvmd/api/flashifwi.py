@@ -14,7 +14,7 @@ from ....htserver import make_json_response
 from ....htserver import WsSession
 from ....logging import get_logger
 from ....validators import raise_error
-
+import shutil
 class FlashifwiApi:
     def __init__(self) -> None:
         pass
@@ -56,19 +56,26 @@ class FlashifwiApi:
         async with aiofiles.open(file_path, 'a') as f:
             await f.write(content + '\n')
 
+    async def has_enough_space(self, path, required_space_mb):
+        total, used, free= shutil.disk_usage(path)
+        return free // (1024 * 1024) >= required_space_mb
+
     # Exposed endpoint for flashing IFWI
     @exposed_http('GET', '/flash_ifwi')
     async def flash_ifwi(self, request):
         try:
+            #log_dir= "/binfile"
+            #if not await self.has_enough_space(log_dir, 10):
+            #    raise Exception("no enough space in dir")
             # Extract the IFWI file path from the GET request query parameters
             firmware_file = request.query.get('ifwi_file')
 
             # Programmer setup
-            programmer = "linux_spi:dev=/dev/spidev0.0,spispeed=11000"
+            programmer = "linux_spi:dev=/dev/spidev0.0,spispeed=5000"
 
             # Create a timestamped log file
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_log = f"/binfile/output_log_{timestamp}.txt"
+            output_log = f"/home/kvmd-webterm/output_log_{timestamp}.txt"
 
             # Check if the firmware file exists
             if not os.path.exists(firmware_file):
@@ -88,13 +95,17 @@ class FlashifwiApi:
             await self.reset_spi()  # Reset SPI interface before identifying the flash chip
             ret_code, output, error = await self.identify_flash_chip(programmer)
             await self.save_output_to_file(output_log, output)
+            if "unknown SPI chip" in output or "NOT WORKING" in output:
+                error_message = "Error: Unknown or unsupported SPI chip detected."
+                await self.save_output_to_file(output_log, error_message)
+                return make_json_response({"error": error_message}, status=400)
             if ret_code != 0:
                 error_message = f"Error identifying flash chip: {error}"
                 await self.save_output_to_file(output_log, error_message)
                 return make_json_response({"error": error_message}, status=500)
-
-            # Flash IFWI Firmware until "Erase/write done" is encountered
-            ''' flash_successful = False
+            await self.save_output_to_file(output_log, "Flash chip identified successfully.")
+            '''# Flash IFWI Firmware until "Erase/write done" is encountered
+            flash_successful = False
             while not flash_successful:
                 await self.reset_spi()  # Reset SPI interface before flashing the firmware
                 await asyncio.sleep(5)  # Additional delay to ensure SPI is ready
@@ -134,4 +145,4 @@ class FlashifwiApi:
             return make_json_response({"message": "Operation successful"}, status=200)
 
         except Exception as e:
-            return make_json_response({"error": str(e)}, status=500)
+            return make_json_response({"Space error": str(e)}, status=500)

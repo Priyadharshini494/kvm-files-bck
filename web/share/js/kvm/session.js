@@ -33,7 +33,7 @@ import {Hid} from "./hid.js";
 import {Hid2} from "./hid.js";
 import {Hid3} from "./hid.js";
 import {Hid4} from "./hid.js";
-
+import {Hid5} from "./hid.js";
 import {Atx} from "./atx.js";
 import {Atx2} from "./atx.js";
 import {Atx4} from "./atx.js";
@@ -45,6 +45,7 @@ import {Streamer} from "./stream.js";
 import {Streamer2} from "./stream.js";
 import {Streamer3} from "./stream.js";
 import {Streamer4} from "./stream.js";
+import {Streamer5} from "./stream.js";
 
 import {Gpio} from "./gpio.js";
 import {Ocr} from "./ocr.js";
@@ -64,6 +65,7 @@ export function Session() {
 	var __streamer2 = new Streamer2();
 	var __streamer3 = new Streamer3();
 	var __streamer4 = new Streamer4();
+    var __streamer5 = new Streamer5();
 	var __recorder = new Recorder();
 	var __recorder2 = new Recorder2();
 	var __recorder4 = new Recorder4();
@@ -71,6 +73,7 @@ export function Session() {
 	var __hid2 = new Hid2(__streamer2.getGeometry, __recorder2);
 	var __hid3 = new Hid3(__streamer3.getGeometry, __recorder);
 	var __hid4 = new Hid4(__streamer4.getGeometry, __recorder4);
+    var __hid5 = new Hid5(__streamer5.getGeometry, __recorder);
 	var __atx = new Atx(__recorder);
 	var __atx2 = new Atx2(__recorder2);
 	var __atx4 = new Atx4(__recorder4);
@@ -308,6 +311,10 @@ export function Session() {
 			(state.janus && (state.janus.enabled || state.janus.started))
 			|| (state.janus_static && (state.janus_static.enabled || state.janus_static.started))
 		);
+        __streamer5.setJanusEnabled(
+			(state.janus && (state.janus.enabled || state.janus.started))
+			|| (state.janus_static && (state.janus_static.enabled || state.janus_static.started))
+		);
 	};
 
 	var __startSession = function() {
@@ -319,6 +326,8 @@ export function Session() {
 		$("link-led3").title = "Connecting...";
 		$("link-led4").className = "led-yellow";
 		$("link-led4").title = "Connecting...";
+        $("link-led5").className = "led-yellow";
+		$("link-led5").title = "Connecting...";
 
 		let http = tools.makeRequest("GET", "/api/auth/check", function() {
 			if (http.readyState === 4) {
@@ -392,6 +401,8 @@ export function Session() {
 		$("link-led3").title = "Connected";
 		$("link-led4").className = "led-green";
 		$("link-led4").title = "Connected";
+        $("link-led5").className = "led-green";
+		$("link-led5").title = "Connected";
 
 		__recorder.setSocket(__ws);
 		__recorder2.setSocket(__ws);
@@ -400,6 +411,7 @@ export function Session() {
 		__hid2.setSocket(__ws);
 		__hid3.setSocket(__ws);
 		__hid4.setSocket(__ws);
+        __hid5.setSocket(__ws);
 		__missed_heartbeats = 0;
 		__ping_timer = setInterval(__pingServer, 1000);
 	};
@@ -421,7 +433,7 @@ export function Session() {
 			case "hid_state": __hid.setState(data.event);__hid2.setState(data.event);__hid3.setState(data.event);__hid4.setState(data.event); break;
 			case "atx_state": __atx.setState(data.event); __atx2.setState(data.event);__atx4.setState(data.event);break;
 			case "msd_state": __msd.setState(data.event); __msd2.setState(data.event); __msd4.setState(data.event); break;
-			case "streamer_state": __streamer.setState(data.event);console.log(data.event);__streamer2.setState(data.event);console.log(data.event);__streamer3.setState(data.event); __streamer4.setState(data.event); break;
+			case "streamer_state": __streamer.setState(data.event);console.log(data.event);__streamer2.setState(data.event);console.log(data.event);__streamer3.setState(data.event); __streamer4.setState(data.event); __streamer5.setState(data.event);break;
 		        
 			case "streamer_ocr_state": __ocr.setState(data.event); break;
 		}
@@ -442,7 +454,8 @@ export function Session() {
 		$("link-led").className = "led-gray";
 		$("link-led2").className = "led-gray";
 		$("link-led3").className = "led-gray";
-		$("link-led3").className = "led-gray";
+		$("link-led4").className = "led-gray";
+        $("link-led5").className = "led-gray";
 		
 
 		if (__ping_timer) {
@@ -456,6 +469,7 @@ export function Session() {
 		__hid2.setSocket(null);
 		__hid3.setSocket(null);
 		__hid4.setSocket(null);
+        __hid5.setSocket(null);
 		__recorder.setSocket(null);
 		__recorder2.setSocket(null);
 		__recorder4.setSocket(null);
@@ -469,6 +483,7 @@ export function Session() {
 		__streamer2.setState(null);
 		__streamer3.setState(null);
 		__streamer4.setState(null);
+        __streamer5.setState(null);
 		__ws = null;
 
 		setTimeout(function() {
@@ -476,6 +491,7 @@ export function Session() {
 			$("link-led2").className = "led-yellow";
 			$("link-led3").className = "led-yellow";
 			$("link-led4").className = "led-yellow";
+            $("link-led5").className = "led-yellow";
 			setTimeout(__startSession, 500);
 		}, 500);
 	};

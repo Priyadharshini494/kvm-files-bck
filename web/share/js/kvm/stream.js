@@ -27,6 +27,8 @@ import { MjpegStreamer } from "./stream_mjpeg.js";
 import { MjpegStreamer2 } from "./stream_mjpeg.js";
 import { MjpegStreamer3 } from "./stream_mjpeg.js";
 import { MjpegStreamer4 } from "./stream_mjpeg.js";
+import { MjpegStreamer5 } from "./stream_mjpeg.js";
+
 export function Streamer() {
 	var self = this;
 	/************************************************************************/
@@ -1343,15 +1345,15 @@ const query = `reqcmd=${command}`;
 		$("battery-status").innerHTML = status;
 	}
 	self.getGeometry = function () {
-		// Первоначально обновление геометрии считалось через ResizeObserver.
-		// Но оно не ловило некоторые события, например в последовательности:
-		//   - Находять в HD переходим в фулскрин
-		//   - Меняем разрешение на маленькое
-		//   - Убираем фулскрин
-		//   - Переходим в HD
-		//   - Видим нарушение пропорций
-		// Так что теперь используются быстре рассчеты через offset*
-		// вместо getBoundingClientRect().
+		// ÐŸÐµÑ€Ð²Ð¾Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð³ÐµÐ¾Ð¼ÐµÑ‚Ñ€Ð¸Ð¸ ÑÑ‡Ð¸Ñ‚Ð°Ð»Ð¾ÑÑŒ Ñ‡ÐµÑ€ÐµÐ· ResizeObserver.
+		// ÐÐ¾ Ð¾Ð½Ð¾ Ð½Ðµ Ð»Ð¾Ð²Ð¸Ð»Ð¾ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸:
+		//   - ÐÐ°Ñ…Ð¾Ð´ÑÑ‚ÑŒ Ð² HD Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐœÐµÐ½ÑÐµÐ¼ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¾Ðµ
+		//   - Ð£Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐŸÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² HD
+		//   - Ð’Ð¸Ð´Ð¸Ð¼ Ð½Ð°Ñ€ÑƒÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿Ð¾Ñ€Ñ†Ð¸Ð¹
+		// Ð¢Ð°Ðº Ñ‡Ñ‚Ð¾ Ñ‚ÐµÐ¿ÐµÑ€ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð±Ñ‹ÑÑ‚Ñ€Ðµ Ñ€Ð°ÑÑÑ‡ÐµÑ‚Ñ‹ Ñ‡ÐµÑ€ÐµÐ· offset*
+		// Ð²Ð¼ÐµÑÑ‚Ð¾ getBoundingClientRect().
 		let res = __streamer.getResolution();
 		let ratio = Math.min(res.view_width / res.real_width, res.view_height / res.real_height);
 		return {
@@ -1821,15 +1823,15 @@ export function Streamer2() {
         };
 
 	self.getGeometry = function () {
-		// Первоначально обновление геометрии считалось через ResizeObserver.
-		// Но оно не ловило некоторые события, например в последовательности:
-		//   - Находять в HD переходим в фулскрин
-		//   - Меняем разрешение на маленькое
-		//   - Убираем фулскрин
-		//   - Переходим в HD
-		//   - Видим нарушение пропорций
-		// Так что теперь используются быстре рассчеты через offset*
-		// вместо getBoundingClientRect().
+		// ÐŸÐµÑ€Ð²Ð¾Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð³ÐµÐ¾Ð¼ÐµÑ‚Ñ€Ð¸Ð¸ ÑÑ‡Ð¸Ñ‚Ð°Ð»Ð¾ÑÑŒ Ñ‡ÐµÑ€ÐµÐ· ResizeObserver.
+		// ÐÐ¾ Ð¾Ð½Ð¾ Ð½Ðµ Ð»Ð¾Ð²Ð¸Ð»Ð¾ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸:
+		//   - ÐÐ°Ñ…Ð¾Ð´ÑÑ‚ÑŒ Ð² HD Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐœÐµÐ½ÑÐµÐ¼ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¾Ðµ
+		//   - Ð£Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐŸÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² HD
+		//   - Ð’Ð¸Ð´Ð¸Ð¼ Ð½Ð°Ñ€ÑƒÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿Ð¾Ñ€Ñ†Ð¸Ð¹
+		// Ð¢Ð°Ðº Ñ‡Ñ‚Ð¾ Ñ‚ÐµÐ¿ÐµÑ€ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð±Ñ‹ÑÑ‚Ñ€Ðµ Ñ€Ð°ÑÑÑ‡ÐµÑ‚Ñ‹ Ñ‡ÐµÑ€ÐµÐ· offset*
+		// Ð²Ð¼ÐµÑÑ‚Ð¾ getBoundingClientRect().
 		let res = __streamer2.getResolution();
 		let ratio = Math.min(res.view_width / res.real_width, res.view_height / res.real_height);
 		return {
@@ -2123,15 +2125,15 @@ export function Streamer3() {
 	};
 	/************************************************************************/
 	self.getGeometry = function () {
-		// Первоначально обновление геометрии считалось через ResizeObserver.
-		// Но оно не ловило некоторые события, например в последовательности:
-		//   - Находять в HD переходим в фулскрин
-		//   - Меняем разрешение на маленькое
-		//   - Убираем фулскрин
-		//   - Переходим в HD
-		//   - Видим нарушение пропорций
-		// Так что теперь используются быстре рассчеты через offset*
-		// вместо getBoundingClientRect().
+		// ÐŸÐµÑ€Ð²Ð¾Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð³ÐµÐ¾Ð¼ÐµÑ‚Ñ€Ð¸Ð¸ ÑÑ‡Ð¸Ñ‚Ð°Ð»Ð¾ÑÑŒ Ñ‡ÐµÑ€ÐµÐ· ResizeObserver.
+		// ÐÐ¾ Ð¾Ð½Ð¾ Ð½Ðµ Ð»Ð¾Ð²Ð¸Ð»Ð¾ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸:
+		//   - ÐÐ°Ñ…Ð¾Ð´ÑÑ‚ÑŒ Ð² HD Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐœÐµÐ½ÑÐµÐ¼ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¾Ðµ
+		//   - Ð£Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐŸÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² HD
+		//   - Ð’Ð¸Ð´Ð¸Ð¼ Ð½Ð°Ñ€ÑƒÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿Ð¾Ñ€Ñ†Ð¸Ð¹
+		// Ð¢Ð°Ðº Ñ‡Ñ‚Ð¾ Ñ‚ÐµÐ¿ÐµÑ€ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð±Ñ‹ÑÑ‚Ñ€Ðµ Ñ€Ð°ÑÑÑ‡ÐµÑ‚Ñ‹ Ñ‡ÐµÑ€ÐµÐ· offset*
+		// Ð²Ð¼ÐµÑÑ‚Ð¾ getBoundingClientRect().
 		let res = __streamer.getResolution();
 		let ratio = Math.min(res.view_width / res.real_width, res.view_height / res.real_height);
 		return {
@@ -2470,15 +2472,15 @@ var __attachSimulatedBattery = function () {
                 });
         };
 	self.getGeometry = function () {
-		// Первоначально обновление геометрии считалось через ResizeObserver.
-		// Но оно не ловило некоторые события, например в последовательности:
-		//   - Находять в HD переходим в фулскрин
-		//   - Меняем разрешение на маленькое
-		//   - Убираем фулскрин
-		//   - Переходим в HD
-		//   - Видим нарушение пропорций
-		// Так что теперь используются быстре рассчеты через offset*
-		// вместо getBoundingClientRect().
+		// ÐŸÐµÑ€Ð²Ð¾Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð³ÐµÐ¾Ð¼ÐµÑ‚Ñ€Ð¸Ð¸ ÑÑ‡Ð¸Ñ‚Ð°Ð»Ð¾ÑÑŒ Ñ‡ÐµÑ€ÐµÐ· ResizeObserver.
+		// ÐÐ¾ Ð¾Ð½Ð¾ Ð½Ðµ Ð»Ð¾Ð²Ð¸Ð»Ð¾ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸:
+		//   - ÐÐ°Ñ…Ð¾Ð´ÑÑ‚ÑŒ Ð² HD Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐœÐµÐ½ÑÐµÐ¼ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¾Ðµ
+		//   - Ð£Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ñ„ÑƒÐ»ÑÐºÑ€Ð¸Ð½
+		//   - ÐŸÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ð² HD
+		//   - Ð’Ð¸Ð´Ð¸Ð¼ Ð½Ð°Ñ€ÑƒÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿Ð¾Ñ€Ñ†Ð¸Ð¹
+		// Ð¢Ð°Ðº Ñ‡Ñ‚Ð¾ Ñ‚ÐµÐ¿ÐµÑ€ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð±Ñ‹ÑÑ‚Ñ€Ðµ Ñ€Ð°ÑÑÑ‡ÐµÑ‚Ñ‹ Ñ‡ÐµÑ€ÐµÐ· offset*
+		// Ð²Ð¼ÐµÑÑ‚Ð¾ getBoundingClientRect().
 		let res = __streamer.getResolution();
 		let ratio = Math.min(res.view_width / res.real_width, res.view_height / res.real_height);
 		return {
@@ -2687,6 +2689,244 @@ var __attachSimulatedBattery = function () {
 	};
 	var __sendParam = function (name, value) {
 		let http = tools.makeRequest("POST", `/api/streamer4/set_params?${name}=${value}`, function () {
+			if (http.readyState === 4) {
+				if (http.status !== 200) {
+					wm.error("Can't configure stream:<br>", http.responseText);
+				}
+			}
+		});
+	};
+	var __makeStringResolution = function (resolution) {
+		return `${resolution.width}x${resolution.height}`;
+	};
+	__init__();
+}
+export function Streamer5() {
+	var self = this;
+	
+	/************************************************************************/
+	var __janus_enabled = null;
+	var __streamer = null;
+	var __state = null;
+	var __resolution = { "width": 640, "height": 480 };
+	var __init__ = function () {
+		__streamer = new MjpegStreamer5(__setActive, __setInactive, __setInfo);
+		$("stream-led").title = "Stream inactive";
+		tools.slider.setParams($("stream-quality-slider5"), 5, 100, 5, 80, function (value) {
+			$("stream-quality-value5").innerHTML = `${value}%`;
+		});
+		tools.slider.setOnUpDelayed($("stream-quality-slider5"), 1000, (value) => __sendParam("quality", value));
+		tools.slider.setParams($("stream-h264-bitrate-slider5"), 25, 20000, 25, 5000, function (value) {
+			$("stream-h264-bitrate-value5").innerHTML = value;
+		});
+		tools.slider.setOnUpDelayed($("stream-h264-bitrate-slider5"), 1000, (value) => __sendParam("h264_bitrate", value));
+		tools.slider.setParams($("stream-h264-gop-slider5"), 0, 60, 1, 30, function (value) {
+			$("stream-h264-gop-value5").innerHTML = value;
+		});
+		tools.slider.setOnUpDelayed($("stream-h264-gop-slider5"), 1000, (value) => __sendParam("h264_gop", value));
+		tools.slider.setParams($("stream-desired-fps-slider5"), 0, 120, 1, 0, function (value) {
+			$("stream-desired-fps-value5").innerHTML = (value === 0 ? "Unlimited" : value);
+		});
+		tools.slider.setOnUpDelayed($("stream-desired-fps-slider5"), 1000, (value) => __sendParam("desired_fps", value));
+		$("stream-resolution-selector5").onchange = (() => __sendParam("resolution", $("stream-resolution-selector5").value));
+		tools.radio.setOnClick("stream-mode-radio5", __clickModeRadio, false);
+		tools.slider.setParams($("stream-audio-volume-slider5"), 0, 100, 1, 0, function (value) {
+			$("stream-video5").muted = !value;
+			$("stream-video5").volume = value / 100;
+			$("stream-audio-volume-value5").innerHTML = value + "%";
+			if (__streamer.getMode() === "janus") {
+				let allow_audio = !$("stream-video5").muted;
+				if (__streamer.isAudioAllowed() !== allow_audio) {
+					__resetStream();
+				}
+			}
+		});
+		tools.el.setOnClick($("stream-screenshot-button5"), __clickScreenshotButton);
+		//tools.el.setOnClick($("stream-reset-button5"), __clickResetButton);
+		$("stream-window5").show_hook = () => __applyState(__state);
+		$("stream-window5").close_hook = () => __applyState(null);
+	};
+	/************************************************************************/
+	self.getGeometry = function () {
+		// Первоначально обновление геометрии считалось через ResizeObserver.
+		// Но оно не ловило некоторые события, например в последовательности:
+		//   - Находять в HD переходим в фулскрин
+		//   - Меняем разрешение на маленькое
+		//   - Убираем фулскрин
+		//   - Переходим в HD
+		//   - Видим нарушение пропорций
+		// Так что теперь используются быстре рассчеты через offset*
+		// вместо getBoundingClientRect().
+		let res = __streamer.getResolution();
+		let ratio = Math.min(res.view_width / res.real_width, res.view_height / res.real_height);
+		return {
+			"x": Math.round((res.view_width - ratio * res.real_width) / 2),
+			"y": Math.round((res.view_height - ratio * res.real_height) / 2),
+			"width": Math.round(ratio * res.real_width),
+			"height": Math.round(ratio * res.real_height),
+			"real_width": res.real_width,
+			"real_height": res.real_height,
+		};
+	};
+	self.setJanusEnabled = function (enabled) {
+		let has_webrtc = JanusStreamer.is_webrtc_available();
+		let has_h264 = JanusStreamer.is_h264_available();
+		let set_enabled = function (imported) {
+			tools.hidden.setVisible($("stream-message-no-webrtc5"), enabled && !has_webrtc);
+			tools.hidden.setVisible($("stream-message-no-h2645"), enabled && !has_h264);
+			__janus_enabled = (enabled && has_webrtc && imported); // Don't check has_h264 for sure
+			tools.feature.setEnabled($("stream-mode"), __janus_enabled);
+			tools.info(
+				`Stream: Janus WebRTC state: enabled=${enabled},`
+				+ ` webrtc=${has_webrtc}, h264=${has_h264}, imported=${imported}`
+			);
+			let mode = (__janus_enabled ? tools.storage.get("stream.mode", "janus") : "mjpeg");
+			tools.radio.clickValue("stream-mode-radio5", mode);
+			if (!__janus_enabled) {
+				tools.feature.setEnabled($("stream-audio5"), false); // Enabling in stream_janus.js
+			}
+			self.setState(__state);
+		};
+		if (enabled && has_webrtc) {
+			JanusStreamer.ensure_janus(set_enabled);
+		} else {
+			set_enabled(false);
+		}
+	};
+	self.setState = function (state) {
+		__state = state;
+		if (__janus_enabled !== null) {
+			__applyState(wm.isWindowVisible($("stream-window5")) ? __state : null);
+		}
+	};
+	var __applyState = function (state) {
+		if (state) {
+			tools.feature.setEnabled($("stream-quality5"), state.features.quality && (state.streamer === null || state.streamer.encoder.quality > 0));
+			tools.feature.setEnabled($("stream-h264-bitrate5"), state.features.h264 && __janus_enabled);
+			tools.feature.setEnabled($("stream-h264-gop5"), state.features.h264 && __janus_enabled);
+			tools.feature.setEnabled($("stream-resolution5"), state.features.resolution);
+			if (state.streamer) {
+				tools.el.setEnabled($("stream-quality-slider5"), true);
+				tools.slider.setValue($("stream-quality-slider5"), state.streamer.encoder.quality);
+				if (state.features.h264 && __janus_enabled) {
+					__setLimitsAndValue($("stream-h264-bitrate-slider5"), state.limits.h264_bitrate, state.streamer.h264.bitrate);
+					tools.el.setEnabled($("stream-h264-bitrate-slider5"), true);
+					__setLimitsAndValue($("stream-h264-gop-slider5"), state.limits.h264_gop, state.streamer.h264.gop);
+					tools.el.setEnabled($("stream-h264-gop-slider5"), true);
+				}
+				__setLimitsAndValue($("stream-desired-fps-slider5"), state.limits.desired_fps, state.streamer.source.desired_fps);
+				tools.el.setEnabled($("stream-desired-fps-slider5"), true);
+				let resolution_str = __makeStringResolution(state.streamer.source.resolution);
+				if (__makeStringResolution(__resolution) !== resolution_str) {
+					__resolution = state.streamer.source.resolution;
+				}
+				if (state.features.resolution) {
+					let el = $("stream-resolution-selector5");
+					if (!state.limits.available_resolutions.includes(resolution_str)) {
+						state.limits.available_resolutions.push(resolution_str);
+					}
+					tools.selector.setValues(el, state.limits.available_resolutions);
+					tools.selector.setSelectedValue(el, resolution_str);
+					tools.el.setEnabled(el, true);
+				}
+			} else {
+				tools.el.setEnabled($("stream-quality-slider5"), false);
+				tools.el.setEnabled($("stream-h264-bitrate-slider5"), false);
+				tools.el.setEnabled($("stream-h264-gop-slider5"), false);
+				tools.el.setEnabled($("stream-desired-fps-slider5"), false);
+				tools.el.setEnabled($("stream-resolution-selector5"), false);
+			}
+			__streamer.ensureStream(state.streamer);
+		} else {
+			__streamer.stopStream();
+		}
+	};
+	var __setActive = function () {
+		$("stream-led").className = "led-green";
+		$("stream-led").title = "Stream is active";
+		tools.el.setEnabled($("stream-screenshot-button5"), true);
+		//tools.el.setEnabled($("stream-reset-button5"), true);
+	};
+	var __setInactive = function () {
+		$("stream-led").className = "led-gray";
+		$("stream-led").title = "Stream inactive";
+		tools.el.setEnabled($("stream-screenshot-button5"), false);
+		//tools.el.setEnabled($("stream-reset-button5"), false);
+	};
+	var __setInfo = function (is_active, online, text) {
+		$("stream-box5").classList.toggle("stream-box-offline", !online);
+		let el_grab = document.querySelector("#stream-window-header5 .window-grab");
+		let el_info = $("stream-info5");
+		let title = `${__streamer.getName()} &ndash; `;
+		if (is_active) {
+			if (!online) {
+				title += "No signal / ";
+			}
+			title += __makeStringResolution(__resolution);
+			if (text.length > 0) {
+				title += " / " + text;
+			}
+		} else {
+			if (text.length > 0) {
+				title += text;
+			} else {
+				title += "Inactive";
+			}
+		}
+		el_grab.innerHTML = el_info.innerHTML = title;
+	};
+	var __setLimitsAndValue = function (el, limits, value) {
+		tools.slider.setRange(el, limits.min, limits.max);
+		tools.slider.setValue(el, value);
+	};
+	var __resetStream = function (mode = null) {
+		if (mode === null) {
+			mode = __streamer.getMode();
+		}
+		__streamer.stopStream();
+		if (mode === "janus") {
+			__streamer = new JanusStreamer(__setActive, __setInactive, __setInfo, !$("stream-video5").muted);
+		} else { // mjpeg
+			__streamer = new MjpegStreamer3(__setActive, __setInactive, __setInfo);
+			tools.feature.setEnabled($("stream-audio5"), false); // Enabling in stream_janus.js
+		}
+		if (wm.isWindowVisible($("stream-window5"))) {
+			__streamer.ensureStream(__state);
+		}
+	};
+	var __clickModeRadio = function () {
+		let mode = tools.radio.getValue("stream-mode-radio5");
+		tools.storage.set("stream.mode", mode);
+		if (mode !== __streamer.getMode()) {
+			tools.hidden.setVisible($("stream-image5"), (mode !== "janus"));
+			tools.hidden.setVisible($("stream-video5"), (mode === "janus"));
+			__resetStream(mode);
+		}
+	};
+	var __clickScreenshotButton = function () {
+		let el = document.createElement("a");
+		el.href = "/api/streamer3/snapshot?allow_offline=1";
+		el.target = "_blank";
+		document.body.appendChild(el);
+		el.click();
+		setTimeout(() => document.body.removeChild(el), 0);
+	};
+	var __clickResetButton = function () {
+		wm.confirm("Are you sure you want to reset stream?").then(function (ok) {
+			if (ok) {
+				__resetStream();
+				let http = tools.makeRequest("POST", "/api/streamer3/reset", function () {
+					if (http.readyState === 4) {
+						if (http.status !== 200) {
+							wm.error("Can't reset stream:<br>", http.responseText);
+						}
+					}
+				});
+			}
+		});
+	};
+	var __sendParam = function (name, value) {
+		let http = tools.makeRequest("POST", `/api/streamer3/set_params?${name}=${value}`, function () {
 			if (http.readyState === 4) {
 				if (http.status !== 200) {
 					wm.error("Can't configure stream:<br>", http.responseText);

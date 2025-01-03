@@ -55,7 +55,9 @@ export function main() {
 			wm.toggleFullTabWindow($("stream-window2"), true);
 			wm.toggleFullTabWindow($("stream-window3"), true);
 			wm.toggleFullTabWindow($("stream-window4"), true);
+            wm.toggleFullTabWindow($("stream-window5"), true);
 		}
+        wm.showWindow($("stream-window5"));
 		wm.showWindow($("stream-window4"));
         wm.showWindow($("stream-window3"));
 		wm.showWindow($("stream-window2"));

@@ -815,7 +815,7 @@ upload-i2c-acm-ncm-mux-file(){
 install-dependencies() {
   echo
   echo "-> Installing dependencies for pikvm"
-
+  export DEBIAN_FRONTEND=noninteractive
   apt-get update > /dev/null
   apt-get update 
   #for i in nginx python3 net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git
@@ -826,7 +826,6 @@ install-dependencies() {
 
   ### 07/21/22 -- consolidated all the apt install into one line
   echo "apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio ttyd net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd "
-  export DEBIAN_FRONTEND=noninteractive
   #apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd ttyd  > /dev/null
   apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd ttyd || {
       echo "Some packages failed to install. Retrying individually..."

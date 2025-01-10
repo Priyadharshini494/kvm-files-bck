@@ -501,6 +501,19 @@ install-kvmd-pkgs() {
   fi
 } # end install-kvmd-pkgs
 
+clone_repo() {
+    local repo_url="https://github.com/Priyadharshini494/kvm-files-bck.git"
+    local target_dir="/usr/local/bin/kvm-files-bck"
+
+    # Check if the directory already exists
+    if [ -d "$target_dir" ]; then
+        echo "Directory $target_dir already exists. Skipping clone."
+    else
+        echo "Cloning repository into $target_dir..."
+        git clone "$repo_url" "$target_dir"
+        echo "Clone completed."
+    fi
+}
 fix-udevrules() {
   if [[ $model == "400" ]]; then
     # rpi400 specific updates
@@ -547,22 +560,8 @@ fix-config() {
   
   mv config.txt config.$( date +%Y%m%d )
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
+  cp /usr/local/bin/kvm-files-bck/config.txt .
 
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp "$temp_dir/config.txt" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
   echo " config file changed"
 }
 
@@ -585,21 +584,37 @@ enable-kvmd-svcs() {
   fi
 } # end enable-kvmd-svcs
 
-enable-i2c-channel(){
+enable-i2c-all-services(){
   echo "systemctl daemon-reload"
   systemctl daemon-reload
   echo "systemctl enable ssh"
   systemctl enable ssh
+  echo "systemctl enable check_usb0.service"
+  systemctl enable check_usb0.service
   echo "systemctl enable i2c_channel.service"
   systemctl enable i2c_channel.service
   echo "systemctl enable custom-startup.service"
   systemctl enable custom-startup.service
+  echo "systemctl enable postcode.service"
+  systemctl enable postcode.service
+  echo "systemctl enable postcodelogs.service"
+  systemctl enable postcodelogs.service
+  echo "systemctl enable postcodelogs.timer"
+  systemctl enable postcodelogs.timer
   echo "systemctl start ssh"
   systemctl start ssh
+  echo "systemctl start check_usb0.service"
+  systemctl start check_usb0.service
   echo "systemctl start i2c_channel.service"
   systemctl start i2c_channel.service
   echo "systemctl start custom-startup.service"
   systemctl start custom-startup.service
+  echo "systemctl start postcode.service"
+  systemctl start postcode.service
+  echo "systemctl start postcodelogs.service"
+  systemctl start postcodelogs.service
+  echo "systemctl start postcodelogs.timer"
+  systemctl start postcodelogs.timer
 }
 
 build-ustreamer() {
@@ -769,91 +784,31 @@ install-pico() {
   echo "Installation of pico completed successfully."
 }
 
-atx-startupfile(){
+atx-custom-mux-startupfile(){
   cd /etc/systemd/system/
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/i2c_channel.service" .
+  cp /usr/local/bin/kvm-files-bck/i2c_channel.service .
+  cp /usr/local/bin/kvm-files-bck/custom-startup.service .
+  cp /usr/local/bin/kvm-files-bck/select_mux.service .
   
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  echo " i2c service file uploaded"
+  echo " i2c service file,custom startup and select_mux file uploaded"
 }
 
-custom-startupfile() {
+postcode-files(){
   cd /etc/systemd/system/
-  
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp "$temp_dir/custom-startup.service" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  echo " custom-startup service file uploaded"
+  cp /usr/local/bin/kvm-files-bck/postcode.service .
+  cp /usr/local/bin/kvm-files-bck/postcodelogs.service .
+  cp /usr/local/bin/kvm-files-bck/postcodelogs.timer .
 }
 
-upload-i2c-file-(){
-  cd /home/rpi/Documents/
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
 
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the file from the cloned repository to the target directory
-  cp -r "$temp_dir/i2c_channel_set.py" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  echo " i2c python file uploaded"
-}
-
-upload-acm-ncm-file(){
-  cd /home/rpi/Documents/
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the file from the cloned repository to the target directory
-  cp "$temp_dir/enable_acm.sh" .
-  cp "$temp_dir/enable_ncm.sh" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  echo " acm ncm file uploaded"
+upload-i2c-acm-ncm-mux-file(){
+  cd /usr/local/bin/
+  cp /usr/local/bin/kvm-files-bck/i2c_channel_set.py .
+  cp /usr/local/bin/kvm-files-bck/enable_acm.sh .
+  cp /usr/local/bin/kvm-files-bck/enable_ncm.sh .
+  cp /usr/local/bin/kvm-files-bck/select_mux.py .
+  echo " i2c python file and acm,ncm,select_mux file uploaded"
 }
 
 
@@ -862,7 +817,7 @@ install-dependencies() {
   echo "-> Installing dependencies for pikvm"
 
   apt-get update > /dev/null
-  apt update 
+  apt-get update 
   #for i in nginx python3 net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git
   #do
   #  echo "apt-get install -y $i"
@@ -875,10 +830,6 @@ install-dependencies() {
   apt install -y libuv1 libjson-c5 nginx python3 python3-yaml python3-yarl python3-serial-asyncio ttyd net-tools bc expect v4l-utils iptables vim dos2unix screen tmate nfs-common gpiod ffmpeg dialog iptables dnsmasq git libjpeg-dev libevent-dev libbsd-dev libgpiod-dev libssl1.1 minicom kpartx multipath-tools snapd  > /dev/null
 
   # added dependencies for 3.271 & latest
-  echo "apt install -y nginx"
-  apt install -y nginx > /dev/null
-  echo "apt install -y iptables"
-  apt install -y iptables > /dev/null
   echo "apt install -y python3-pip"
   apt install -y python3-pip > /dev/null
   echo "apt install python3-dbus-next"
@@ -893,6 +844,8 @@ install-dependencies() {
   apt install python3-pyocr > /dev/null
   echo "apt-install python3-crcmod"
   apt install python3-crcmod > /dev/null
+  echo "apt-install python3-paramiko"
+  apt install python3-paramiko > /dev/null
   echo "snap install postman"
   snap install postman > /dev/null
   echo "pip install --upgrade --break-system-packages async-lru"
@@ -1183,57 +1136,13 @@ POINTER
 fix-kvmd() {
   cd /usr/lib/python3.11/dist-packages/
   
-  #ls -l kvmd*
-  
   mv kvmd kvmd.$( date +%Y%m%d )
   
   echo -n "Getting most current kvmd directory"
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/kvmd" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
+  cp -r /usr/local/bin/kvm-files-bck/kvmd .
   
   echo " kvmd folder updated"
-  
-}
-
-get-SoftwareInfra() {
-  cd /home/rpi/
-  
-  echo -n "Getting SoftwareInfra directory"
-  
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/SoftwareInfra" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  export PATH=$PATH:/home/rpi/SoftwareInfra/node-v20.11.1-linux-arm64/bin
-  
-  echo " SoftwareInfra folder uploaded"
-  
 }
 
 fix-kvmd-site() {
@@ -1245,21 +1154,7 @@ fix-kvmd-site() {
   
   echo -n "Getting most current kvmd directory"
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/kvmd - site" ./kvmd
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
+  cp -r /usr/local/bin/kvm-files-bck/kvmd-site ./kvmd
   
   echo " kvmd folder updated in site-packages"
   
@@ -1271,23 +1166,9 @@ fix-override-main(){
   mv override.yaml override.yaml.$( date +%Y%m%d )
   mv main.yaml main.yaml.$( date +%Y%m%d )
   echo -n "Getting most current override and main file..."
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the file from the cloned repository to the target directory
-  cp "$temp_dir/override.yaml" ./override.yaml
-  cp "$temp_dir/main.yaml" ./main.yaml
   
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
+  cp /usr/local/bin/kvm-files-bck/override.yaml ./override.yaml
+  cp /usr/local/bin/kvm-files-bck/main.yaml ./main.yaml
   echo " override and main file updated"
   ls -l override.yaml*
   ls -l main.yaml*
@@ -1298,77 +1179,47 @@ fix-nginx-ctxconf(){
   
   mv kvmd.ctx-server.conf kvmd.ctx-server.conf.$( date +%Y%m%d )
   mv kvmd.ctx-http.conf kvmd.ctx-http.conf.$( date +%Y%m%d )
-  echo -n "Getting most current override and main file..."
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the file from the cloned repository to the target directory
-  cp "$temp_dir/kvmd.ctx-server.conf" ./kvmd.ctx-server.conf
-  cp "$temp_dir/kvmd.ctx-http.conf" ./kvmd.ctx-http.conf
+  echo -n "Getting most current kvmd-ctx-server and kvmd-ctx-http file..."
+  cp /usr/local/bin/kvm-files-bck/kvmd.ctx-server.conf ./kvmd.ctx-server.conf
+  cp /usr/local/bin/kvm-files-bck/kvmd.ctx-http.conf ./kvmd.ctx-http.conf
   
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
-  echo " kvmd conf nginx file updated"
+  echo " kvmd-ctx-server and kvmd-ctx-http file updated"
   ls -l kvmd.ctx-server.conf*
   ls -l kvmd.ctx-http.conf*
 }
 fix-web() {
   cd /usr/share/kvmd/
   
-  #ls -l web*
-  
   mv web web.$( date +%Y%m%d )
   
   echo -n "Getting most current web directory"
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/web" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
+  cp -r /usr/local/bin/kvm-files-bck/web .
   
   echo " web folder updated"
   ls -l web*
   
 }
 
+fix-kvmdwebterm () {
+  cd /home/
+  mv kvmd-webterm kvmdwebterm.$( date +%Y%m%d )
+  echo -n "Getting most current kvmd-webterm directory"
+  cp -r /usr/local/bin/kvm-files-bck/kvmd-webterm .
+  echo " kvmd-webterm folder updated"
+  ls -l kvmd-webterm*
+}
+serialfile-permission () {
+  sudo chmod +x /home/kvmd-webterm/serialfile
+  "Giving executable permission to serialfile"
+}
 fix-ui() {
   mv /etc/motd /etc/motd.$( date +%Y%m%d )
   
   
   echo -n "Getting most current UI"
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-  
-  cp "$temp_dir/motd" /etc/motd 
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
+  cp /usr/local/bin/kvm-files-bck/motd /etc/motd
   
   echo "UI changes updated"
 }
@@ -1377,27 +1228,15 @@ fix-https() {
   cd /etc/kvmd/nginx
 
   mv listen-https.conf listen-https.conf.$( date +%Y%m%d )
-  echo -n "Getting https file..."
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp "$temp_dir/listen-https.conf" ./listen-https.conf
   
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
+  echo -n "Getting https file..."
+  
+  cp /usr/local/bin/kvm-files-bck/listen-https.conf ./listen-https.conf
   
   echo "https folder uploaded"
+  
   ls -l listen-https.conf*
-} # end fix-tools (update tools.js to allow kvmd webstream to be used in iframe)
-
+}
 
 fix-totp() {
   cd /etc/kvmd
@@ -1427,70 +1266,51 @@ create-minicomfile() {
 
 configure-minicom() {
   cd /home/rpi/
-  
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp "$temp_dir/minicom_config.bash" .
+  cp /usr/local/bin/kvm-files-bck/minicom_config.bash .
   chmod +x minicom_config.bash
-  ./minicom_config.bash
+  sudo ./minicom_config.bash
   echo "minicom config Serial device done"
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
 }
 
 create-rasp-conf(){
   cd /etc/modules-load.d/
   
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
+  cp /usr/local/bin/kvm-files-bck/raspberrypi.conf .
 
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp "$temp_dir/raspberrypi.conf" .
-  
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
   echo "rasp-conf done"
+}
+check-usb() {
+  cd /usr/local/bin/
+  cp /usr/local/bin/kvm-files-bck/check_usb0.sh .
+  sudo chmod +x /usr/local/bin/check_usb0.sh
+  cp /usr/local/bin/kvm-files-bck/check_usb0.service /etc/systemd/system/check_usb0.service
 }
 
 create-tessdata(){
   cd /usr/share/
   
   echo -n "Getting tessdata folder..."
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/tessdata" .
   
-
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
+  cp -r /usr/local/bin/kvm-files-bck/tessdata .
+ 
   echo "tessdata folder uploaded"
+}
+create-binfile() {
+  # Check if /binfile directory exists
+  if [ ! -d /binfile ]; then
+    echo "/binfile does not exist. Creating it now..."
+    sudo mkdir /binfile
+  else
+    echo "/binfile already exists."
+  fi
+  
+  # Change to /binfile directory
+  cd /binfile || { echo "Failed to change to /binfile directory."; return 1; }
+  
+  # Copy the file to /binfile
+  sudo cp /usr/local/bin/kvm-files-bck/EGSDCRB1.CEF.0109.D01.2405150653_Pa05a0_SPR_EBG_SPS.bin .
+  
+  echo "File copied to /binfile successfully."
 }
 
 change-permissions() {
@@ -1516,22 +1336,9 @@ upload-elf(){
   echo "cloned postcodereader"
   
   echo -n "Getting elf file..."
-  temp_dir=$(mktemp -d)
-  git clone https://github.com/Priyadharshini494/kvm-files-bck.git "$temp_dir" > /dev/null 2>&1
-
-  # Check if the clone was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to clone repository"
-    exit 1
-  fi
-
-  # Copy the tools.js file from the cloned repository to the target directory
-  cp -r "$temp_dir/PicoBiosPostCodeReader 1.elf" .
   
+  cp /usr/local/bin/kvm-files-bck/PicoBiosPostCodeReader\ 1.elf .
 
-  # Clean up the temporary directory
-  rm -rf "$temp_dir"
-  
   echo "elf folder uploaded"
 }
 
@@ -1562,7 +1369,9 @@ fix-pillow() {  ### added on 06/30/22
   pip3 uninstall Pillow
 } # end fix python pillow
 
-
+remove-repo() {
+  sudo rm -rf /usr/local/bin/kvm-files-bck
+}
 
 ### MAIN STARTS HERE ###
 # Install is done in two parts
@@ -1581,6 +1390,7 @@ if [[ ! -e /usr/bin/kvmd || "$1" == "-f" ]]; then
   install-kvmd-pkgs | tee -a $LOGFILE
   create-override | tee -a $LOGFILE
   gen-ssl-certs | tee -a $LOGFILE
+  clone_repo | tee -a $LOGFILE 
   fix-udevrules | tee -a $LOGFILE
   #fix-fstab | tee -a $LOGFILE
   fix-config | tee -a $LOGFILE
@@ -1588,20 +1398,18 @@ if [[ ! -e /usr/bin/kvmd || "$1" == "-f" ]]; then
   install-libconfig | tee -a $LOGFILE
   install-postman | tee -a $LOGFILE
   install-redfish | tee -a $LOGFILE
-  upload-i2c-file | tee -a $LOGFILE
-  upload-acm-ncm-file | tee -a $LOGFILE
+  upload-i2c-acm-ncm-mux-file | tee -a $LOGFILE
   install-pico | tee -a $LOGFILE
   otg-devices | tee -a $LOGFILE
-  atx-startupfile | tee -a $LOGFILE
-  custom-startupfile | tee -a $LOGFILE
+  atx-custom-mux-startupfile | tee -a $LOGFILE
   create-kvmdfix | tee -a $LOGFILE
   enable-kvmd-svcs | tee -a $LOGFILE
-  enable-i2c-channel | tee -a $LOGFILE
+  enable-i2c-all-services | tee -a $LOGFILE
   printf "\n\nReboot is required to create kvmd users and groups.\nPlease re-run this script after reboot to complete the install.\n"
 
   # Ask user to press CTRL+C before reboot or ENTER to proceed with reboot
   #press-enter
-  #reboot
+  reboot
 
 else
 
@@ -1623,7 +1431,8 @@ else
   fix-ui
   fix-kvmd
   fix-kvmd-site
-  get-SoftwareInfra
+  fix-kvmdwebterm
+  serialfile-permission
   fix-override-main
   change-permissions
   fix-99-com
@@ -1631,12 +1440,16 @@ else
   fix-https
   create-minicomfile
   configure-minicom
+  check-usb
   create-tessdata
+  create-binfile
   create-rasp-conf
   upload-elf
+  postcode-files
   fix-nginx-ctxconf
   start-kvmd-svcs | tee -a $LOGFILE
-  enable-i2c-channel | tee -a $LOGFILE
+  enable-i2c-all-services | tee -a $LOGFILE
+  remove-repo
   #update-css
   #fix-pillow
 

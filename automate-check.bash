@@ -622,8 +622,8 @@ build-ustreamer() {
   echo "apt --fix-broken install -y"
   apt --fix-broken install -y
   # Install packages needed for building ustreamer source
-  echo "apt install -y build-essential libssl-dev libevent-dev libjpeg-dev libbsd-dev libraspberrypi-dev libgpiod-dev libsystemd-dev"
-  apt install -y build-essential cmake libssl-dev libevent-dev libjpeg-dev libbsd-dev libraspberrypi-dev libgpiod-dev libsystemd-dev libjson-c-dev libwebsockets-dev > /dev/null
+  echo "apt install -y build-essential libssl-dev libevent-dev libjpeg-dev libbsd-dev libraspberrypi-dev libgpiod-dev libsystemd-dev libspeexdsp-dev libopus-dev libglib2.0-dev libjansson-dev"
+  apt install -y build-essential cmake libssl-dev libevent-dev libjpeg-dev libbsd-dev libraspberrypi-dev libgpiod-dev libsystemd-dev libjson-c-dev libwebsockets-dev libasound2-dev libspeexdsp-dev libopus-dev libglib2.0-dev libjansson-dev > /dev/null
 
   KERNELVER=$( uname -r | cut -d'.' -f1,2 )
   case "$KERNELVER" in
@@ -849,9 +849,9 @@ install-dependencies() {
   apt install python3-async-lru > /dev/null
   echo "apt install python3-pyocr"
   apt install python3-pyocr > /dev/null
-  echo "apt-install python3-crcmod"
+  echo "apt install python3-crcmod"
   apt install python3-crcmod > /dev/null
-  echo "apt-install python3-paramiko"
+  echo "apt install python3-paramiko"
   apt install python3-paramiko > /dev/null
   echo "snap install postman"
   snap install postman > /dev/null
@@ -1348,6 +1348,10 @@ upload-elf(){
 
   echo "elf folder uploaded"
 }
+upload-cfg(){
+  cd /usr/local/share/openocd/scripts/interface/
+  cp /usr/local/bin/kvm-files-bck/raspberrypi-swd.cfg .
+}
 
 update-css() {  ### added on 04/30/22
   printf "Updating CSS files as per pikvm/pikvm#599: fixed webui windows oversizing\n\n"
@@ -1406,12 +1410,12 @@ if [[ ! -e /usr/bin/kvmd || "$1" == "-f" ]]; then
   install-postman | tee -a $LOGFILE
   install-redfish | tee -a $LOGFILE
   upload-i2c-acm-ncm-mux-file | tee -a $LOGFILE
+  postcode-files | tee -a $LOGFILE
   install-pico | tee -a $LOGFILE
   otg-devices | tee -a $LOGFILE
   atx-custom-mux-startupfile | tee -a $LOGFILE
   create-kvmdfix | tee -a $LOGFILE
   enable-kvmd-svcs | tee -a $LOGFILE
-  enable-i2c-all-services | tee -a $LOGFILE
   printf "\n\nReboot is required to create kvmd users and groups.\nPlease re-run this script after reboot to complete the install.\n"
 
   # Ask user to press CTRL+C before reboot or ENTER to proceed with reboot
@@ -1452,7 +1456,7 @@ else
   create-binfile
   create-rasp-conf
   upload-elf
-  postcode-files
+  upload-cfg
   fix-nginx-ctxconf
   start-kvmd-svcs | tee -a $LOGFILE
   enable-i2c-all-services | tee -a $LOGFILE

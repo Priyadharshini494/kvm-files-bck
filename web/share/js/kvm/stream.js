@@ -79,6 +79,8 @@ export function Streamer() {
                 tools.el.setOnClick($("msdu-unmount-button"), __unmountdrive);
                 tools.el.setOnClick($("usb-drive-selector"), __getusblist);
                 tools.el.setOnClick($("attach-usb"), __attachusb);
+		tools.el.setOnClick($("mount-info"), __clickUsbInfoButton);
+
                 $("stream-led").title = "Stream inactive";
 		tools.slider.setParams($("stream-quality-slider"), 5, 100, 5, 80, function (value) {
 			$("stream-quality-value").innerHTML = `${value}%`;
@@ -397,6 +399,33 @@ var __mountdrive = function () {
         }
     });
 };
+
+var __clickUsbInfoButton = function() {
+    wm.info("<div class='selectable-text'><b>Windows Users:</b><br><br>"+
+	    "1. Open Windows PowerShell with administrator permissions on your local PC, and connect the pendrive to the USB port to PC.<br>" +
+            "2. Provide the below commands:<br><br>" +
+            "   <t><i>winget install usbipd</i></t><br>" +
+            "   <i>usbipd list</i><br><br>" +
+            "   The devices which are connected to the local PC will be listed along with BUSID, VID:PID, STATE.<br>" +
+            "   Execute the below command:<br>" +
+            "   <i>usbipd bind --busid=&lt;BUSID&gt</i> (replace &lt;BUSID&gt with the original BUSID of the device which you want to share)<br><br>" +
+            "<b>Linux users:</b><br><br>" +
+            "1. Open the command prompt on your local PC, and connect the pendrive to the USB port of your local PC.<br>" +
+            "2. Provide the below commands:<br><br>" +
+            "   <i>sudo apt install linux-tools-6.5.0-35-generic</i><br><br>" +
+	    "	<i>sudo modprobe usbip_host</i><br>"+
+	    "	<i>sudo nano /etc/modules (add the below lines)</i><br>"+
+	    " 	<i>i2c-dev</i><br>"+
+	    "	<i>usbip_host</i><br>"+
+	    "	<i>usbip list -p -l</i><br><br>"+
+            "   The devices which are connected to the local PC will be listed along with BUSID, VID:PID, STATE.<br>" +
+            "   Execute the below command:<br><br>" +
+            "   <i>sudo usbip bind --busid=&lt;BUSID&gt</i> (replace &lt;BUSID&gt with the original BUSID of the device which you want to share)<br>" +
+            "   Finally, execute the below to start the daemon:<br><br>" +
+            "   <i>sudo usbipd</i><br></div>"
+    )
+};
+
 var __unmountdrive = function () {
     wm.confirm("Are you sure you want to Unmount Drive").then(function (ok) {
         if (ok) {

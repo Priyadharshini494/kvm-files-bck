@@ -37,6 +37,22 @@ body.body-no-select {
 a {
 	color: var(--cs-page-default-fg);
 }
+ #mount-info {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+	    width:30%;
+        }
+.mount{
+        display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .text {
+            font-weight: bold;
+        }
 
 hr {
 	border: none;

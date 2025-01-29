@@ -71,6 +71,8 @@ def valid_abs_file(arg: Any, name: str="") -> str:
 def valid_abs_dir(arg: Any, name: str="") -> str:
     return valid_abs_path(arg, type="dir", name=name)
 
+def valid_abs_device(arg: Any, name: str="") -> str:
+    return valid_abs_path(arg, type="block", name=name)
 
 def valid_printable_filename(arg: Any, name: str="") -> str:
     if not name:
